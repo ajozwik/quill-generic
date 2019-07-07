@@ -27,12 +27,12 @@ ThisBuild / licenses := Seq("MIT License" -> url("http://www.opensource.org/lice
 
 val organizationUrl = "https://github.com/ajozwik"
 
-val projectUrl = s"$organizationUrl/akka-smtp-server"
+val projectUrl = s"$organizationUrl/quill-generic"
 
 ThisBuild / scmInfo := Option(
   ScmInfo(
     url(projectUrl),
-    "scm:git@github.com:ajozwik/akka-smtp-server.git"
+    "scm:git@github.com:ajozwik/quill-generic.git"
   )
 )
 
