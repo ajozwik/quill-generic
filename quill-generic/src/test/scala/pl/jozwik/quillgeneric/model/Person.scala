@@ -1,5 +1,5 @@
 package pl.jozwik.quillgeneric.model
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
-final case class Person(id: Int, firstName: String, lastDate: String, birthDate: LocalDateTime)
+final case class Person(id: Int, firstName: String, lastName: String, birthDate: LocalDate)

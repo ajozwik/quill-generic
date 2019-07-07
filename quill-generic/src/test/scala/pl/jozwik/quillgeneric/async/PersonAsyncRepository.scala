@@ -2,13 +2,17 @@ package pl.jozwik.quillgeneric.async
 
 import io.getquill.{ MysqlAsyncContext, SnakeCase }
 import pl.jozwik.quillgeneric.model.Person
+import pl.jozwik.quillgeneric.sync.Repository
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class PersonRepository {
+class PersonAsyncRepository extends AsyncRepository[Int, Person] {
   private val ctx = new MysqlAsyncContext(SnakeCase, "async.mysql") with QueriesAsync
 
   import ctx._
+
+  def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
+    ctx.all[Person]
 
   def create(person: Person)(implicit ex: ExecutionContext): Future[Long] =
     ctx.create[Person](person)

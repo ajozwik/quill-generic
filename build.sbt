@@ -35,6 +35,8 @@ ThisBuild / scalacOptions ++= Seq(
 
 val quillVersion = "3.2.2"
 
+val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
+
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
 val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
@@ -42,6 +44,8 @@ val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1
 val `io.getquill_quill-async` = "io.getquill" %% "quill-async" % quillVersion
 
 val `io.getquill_quill-async-mysql` = "io.getquill" %% "quill-async-mysql" % quillVersion
+
+val `io.getquill_quill-jdbc` = "io.getquill" %% "quill-jdbc" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
@@ -58,7 +62,9 @@ lazy val `macro-quill` = projectName("macro-quill", file("macro-quill")).setting
 lazy val `quill-generic` = projectName("quill-generic", file("quill-generic")).settings(
   libraryDependencies ++= Seq(
     `io.getquill_quill-async`,
-    `io.getquill_quill-async-mysql` % Test
+    `io.getquill_quill-async-mysql` % Test,
+    `io.getquill_quill-jdbc` % Test,
+    `com.h2database_h2` % Test
   )
 )
   .dependsOn(`macro-quill`)

@@ -2,11 +2,11 @@ package pl.jozwik.quillgeneric.quillmacro
 
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
 
-class AllAsyncMacro(val c: MacroContext) {
+class QuillAsyncMacro(val c: MacroContext) {
 
   import c.universe._
 
-  def all[T](tblName: Tree)(ex: Tree)(t: WeakTypeTag[T]): Tree =
+  def all[T](ex: Tree)(t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       run(quote {
@@ -43,11 +43,11 @@ class AllAsyncMacro(val c: MacroContext) {
       })
     """
 
-  def mergeByFilter[T](filter: Tree, action: Tree, actions: Tree)(ex: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def mergeByFilter[T](filter: Tree, action: Tree, actions: Tree*)(ex: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       run(${c.prefix}.quote {
-        ${c.prefix}.query[$t].filter($filter).update(action, actions)
+        ${c.prefix}.query[$t].filter($filter).update(action, actions:_*)
       })
     """
 
