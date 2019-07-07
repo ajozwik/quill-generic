@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.async
 
-import pl.jozwik.quillgeneric.{ AbstractAsyncSpec, AbstractSpec }
+import pl.jozwik.quillgeneric.AbstractAsyncSpec
 
 import scala.concurrent.Future
 

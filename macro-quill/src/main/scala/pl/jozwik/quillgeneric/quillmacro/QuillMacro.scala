@@ -11,7 +11,7 @@ class QuillMacro(val c: MacroContext) {
       import ${c.prefix}._
       run(quote {
         query[$t]
-      }) 
+      })
     """
 
   def insertOrUpdate[T](entity: Tree, filter: Tree)(implicit t: WeakTypeTag[T]): Tree =
