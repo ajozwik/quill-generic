@@ -14,6 +14,8 @@ trait Queries {
 
   def create[K, T](entity: T): Try[K] = macro QuillMacro.create[T]
 
+  def createAndGenerateId[K, T](entity: T): Try[K] = macro QuillMacro.createAndGenerateId[T]
+
   def update[T](entity: T): Try[Long] = macro QuillMacro.update[T]
 
   def read[K, T](id: K): Try[Option[T]] = macro QuillMacro.read[T]

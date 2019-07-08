@@ -5,7 +5,7 @@ import scala.util.Try
 trait Repository[K, T] {
   def all: Try[Seq[T]]
 
-  def create(entity: T): Try[K]
+  def create(entity: T, generateId: Boolean = false): Try[K]
 
   def createOrUpdate(entity: T): Try[K]
 
