@@ -1,4 +1,4 @@
-# quill-generic
+# quill-generic support
 Library of generic CRUD operation for quill library
 
 [![Build Status](https://travis-ci.org/ajozwik/quill-generic.svg?branch=master)](https://travis-ci.org/ajozwik/quill-generic)
