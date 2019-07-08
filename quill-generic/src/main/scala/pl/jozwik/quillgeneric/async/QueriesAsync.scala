@@ -10,9 +10,9 @@ trait QueriesAsync {
   this: AsyncContext[_, _, _] =>
   def all[T](implicit ex: ExecutionContext): Future[List[T]] = macro QuillAsyncMacro.all[T]
 
-  def insertOrUpdate[T](entity: T, filter: T => Boolean)(ex: ExecutionContext): Future[Long] = macro QuillAsyncMacro.insertOrUpdate[T]
+  def create[K, T](entity: T)(implicit ex: ExecutionContext): Future[K] = macro QuillAsyncMacro.create[T]
 
-  def create[T](entity: T)(implicit ex: ExecutionContext): Future[Long] = macro QuillAsyncMacro.create[T]
+  def createOrUpdate[K, T](entity: T)(implicit ex: ExecutionContext): Future[K] = macro QuillAsyncMacro.createOrUpdate[T]
 
   def merge[T](entity: T)(implicit ex: ExecutionContext): Future[Long] = macro QuillAsyncMacro.merge[T]
 
@@ -21,5 +21,5 @@ trait QueriesAsync {
     action: Function[T, (Any, Any)],
     actions: Function[T, (Any, Any)]*)(implicit ex: ExecutionContext): Future[Long] = macro QuillAsyncMacro.mergeByFilter[T]
 
-  def deleteByFilter[T](filter: (T) => Boolean)(implicit ex: ExecutionContext): Future[Long] = macro QuillAsyncMacro.deleteByFilter[T]
+  def deleteByFilter[T](filter: (T) => Boolean)(implicit ex: ExecutionContext): Future[Boolean] = macro QuillAsyncMacro.deleteByFilter[T]
 }

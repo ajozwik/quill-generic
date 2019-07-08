@@ -1,27 +1,35 @@
 package pl.jozwik.quillgeneric.sync
 
 import io.getquill.{ H2JdbcContext, SnakeCase }
-import pl.jozwik.quillgeneric.model.Person
+import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 
-class PersonRepository(ctx: H2JdbcContext[SnakeCase.type] with Queries) extends Repository[Int, Person] {
+import scala.util.Try
+
+class PersonRepository(ctx: H2JdbcContext[SnakeCase.type] with Queries) extends Repository[PersonId, Person] {
 
   import ctx._
 
-  override def all: Seq[Person] =
+  override def all: Try[Seq[Person]] =
     ctx.all[Person]
 
-  override def create(person: Person): Long =
-    ctx.create[Person](person)
+  override def create(person: Person): Try[PersonId] =
+    ctx.create[PersonId, Person](person)
 
-  override def read(id: Int): Seq[Person] =
-    ctx.run(query[Person].filter(_.id == lift(id)))
+  override def read(id: PersonId): Try[Option[Person]] =
+    ctx.read[PersonId, Person](id)
 
-  override def update(person: Person): Long =
-    ctx.merge[Person](person)
+  override def createOrUpdate(entity: Person): Try[PersonId] =
+    ctx.insertOrUpdate[PersonId, Person](entity)
 
-  override def update(id: Int, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Long =
-    ctx.mergeById[Person](_.id == lift(id), action, actions: _*)
+  override def update(person: Person): Try[Long] =
+    ctx.update[Person](person)
 
-  override def delete(id: Int): Long =
-    ctx.deleteByFilter[Person](_.id == lift(id))
+  override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Try[Long] =
+    ctx.updateById[Person](_.id == lift(id), action, actions: _*)
+
+  override def delete(id: PersonId): Try[Boolean] =
+    ctx.deleteByFilter[Person](_.id == ctx.lift(id))
+
+  override def toId(t: Person): PersonId = t.id
+
 }

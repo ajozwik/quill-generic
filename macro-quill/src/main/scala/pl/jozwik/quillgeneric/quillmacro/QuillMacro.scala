@@ -9,53 +9,79 @@ class QuillMacro(val c: MacroContext) {
   def all[T](t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
-      run(quote {
-        query[$t]
-      })
+      util.Try {
+        run(quote {
+          query[$t]
+        })
+      }
     """
 
-  def insertOrUpdate[T](entity: Tree, filter: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def insertOrUpdate[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
-      if (run(${c.prefix}.quote {
-        ${c.prefix}.query[$t].filter($filter).update(lift($entity))
-      }) == 0) {
-          run(quote {
-            query[$t].insert(lift($entity))
+      util.Try {
+       transaction{
+          val result = run(quote {
+            query[$t].filter(_.id == lift(entity.id)).update(lift($entity))
           })
+          if (result == 0) {
+              run(quote {
+                query[$t].insert(lift($entity)).returning(_.id)
+              })
+          } else {
+            ${entity}.id
+          }
+        }
       }
-      ()
     """
 
   def create[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
+      util.Try {
           run(quote {
-            query[$t].insert(lift($entity))
+            query[$t].insert(lift($entity)).returning(_.id)
           })
+       }
     """
 
-  def merge[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def update[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
-      run(${c.prefix}.quote {
-        ${c.prefix}.query[$t].update(lift($entity))
-      })
+      util.Try {
+        run(quote {
+          query[$t].update(lift($entity))
+        })
+      }
+    """
+
+  def read[T](id: Tree)(implicit t: WeakTypeTag[T]): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+        run(quote {
+          query[$t].filter(_.id == lift(${id}))
+        }).headOption
+      }
     """
 
   def mergeByFilter[T](filter: Tree, action: Tree, actions: Tree*)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
-      run(${c.prefix}.quote {
-        ${c.prefix}.query[$t].filter($filter).update(action, actions:_*)
-      })
+      util.Try {
+        run(quote {
+          query[$t].filter($filter).update(action, actions:_*)
+        })
+      }
     """
 
   def deleteByFilter[T](filter: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
-      run(${c.prefix}.quote {
-        ${c.prefix}.query[$t].filter($filter).delete
-      })
+      util.Try {
+        run(quote {
+          query[$t].filter($filter).delete
+        }) > 0
+      }
     """
 }

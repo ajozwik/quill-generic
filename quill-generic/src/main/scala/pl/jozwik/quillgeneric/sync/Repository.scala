@@ -1,10 +1,21 @@
 package pl.jozwik.quillgeneric.sync
 
+import scala.util.Try
+
 trait Repository[K, T] {
-  def all: Seq[T]
-  def create(entity: T): Long
-  def read(id: Int): Seq[T]
-  def update(T: T): Long
-  def update(id: Int, action: T => (Any, Any), actions: Function[T, (Any, Any)]*): Long
-  def delete(id: Int): Long
+  def all: Try[Seq[T]]
+
+  def create(entity: T): Try[K]
+
+  def createOrUpdate(entity: T): Try[K]
+
+  def read(id: K): Try[Option[T]]
+
+  def update(T: T): Try[Long]
+
+  def update(id: K, action: T => (Any, Any), actions: Function[T, (Any, Any)]*): Try[Long]
+
+  def delete(id: K): Try[Boolean]
+
+  def toId(t: T): K
 }
