@@ -1,13 +1,20 @@
 package pl.jozwik.quillgeneric.async
 
-import io.getquill.{ MysqlAsyncContext, SnakeCase }
+import io.getquill.{ MysqlAsyncContext, NamingStrategy, SnakeCase }
+import io.getquill.context.async.AsyncContext
+import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.QueriesAsync
+import com.github.mauricio.async.db.Connection
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class PersonAsyncRepository extends AsyncRepository[PersonId, Person] {
-  private val ctx = new MysqlAsyncContext(SnakeCase, "async.mysql") with QueriesAsync
+object AsyncObject {
+  lazy val personAsyncRepository = new PersonAsyncRepository(new MysqlAsyncContext(SnakeCase, "async.mysql") with QueriesAsync)
+}
+
+class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection](ctx: AsyncContext[D, N, C] with QueriesAsync)
+  extends AsyncRepository[PersonId, Person] {
 
   import ctx._
 

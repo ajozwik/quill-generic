@@ -1,12 +1,15 @@
 package pl.jozwik.quillgeneric.sync
 
-import io.getquill.{ H2JdbcContext, SnakeCase }
+import io.getquill.NamingStrategy
+import io.getquill.context.jdbc.JdbcContext
+import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.Queries
 
 import scala.util.Try
 
-class PersonRepository(ctx: H2JdbcContext[SnakeCase.type] with Queries) extends Repository[PersonId, Person] {
+class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](ctx: JdbcContext[Dialect, Naming] with Queries)
+  extends Repository[PersonId, Person] {
 
   import ctx._
 
