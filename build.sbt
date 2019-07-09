@@ -50,7 +50,7 @@ val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
 
 
-lazy val `macro-quill` = projectName("macro-quill", file(".")).settings(
+lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
   libraryDependencies ++= Seq(
     `io.getquill_quill-async`,
     `ch.qos.logback_logback-classic`,
@@ -64,7 +64,7 @@ lazy val `macro-quill` = projectName("macro-quill", file(".")).settings(
 
 
 
-def projectName(name: String, file: File): Project = Project(name, file).settings(
+def projectWithName(name: String, file: File): Project = Project(name, file).settings(
   libraryDependencies ++= Seq(
     `org.scalatest_scalatest`,
     `org.scalacheck_scalacheck`
