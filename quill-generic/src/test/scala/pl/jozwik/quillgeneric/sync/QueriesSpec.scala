@@ -22,7 +22,7 @@ class QueriesSpec extends AbstractSpec {
     "Call all operations " in {
       val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now)
       repository.all shouldBe Success(Seq())
-      repository.create(person)
+      repository.create(person) shouldBe 'success
       repository.all shouldBe Success(Seq(person))
     }
   }

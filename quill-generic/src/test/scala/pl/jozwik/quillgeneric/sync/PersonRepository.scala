@@ -12,8 +12,12 @@ class PersonRepository(ctx: H2JdbcContext[SnakeCase.type] with Queries) extends 
   override def all: Try[Seq[Person]] =
     ctx.all[Person]
 
-  override def create(person: Person): Try[PersonId] =
-    ctx.create[PersonId, Person](person)
+  override def create(person: Person, generateId: Boolean = false): Try[PersonId] =
+    if (generateId) {
+      ctx.createAndGenerateId[PersonId, Person](person)
+    } else {
+      ctx.create[PersonId, Person](person)
+    }
 
   override def read(id: PersonId): Try[Option[Person]] =
     ctx.read[PersonId, Person](id)

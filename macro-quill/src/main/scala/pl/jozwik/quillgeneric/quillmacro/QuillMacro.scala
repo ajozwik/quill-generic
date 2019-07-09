@@ -40,6 +40,17 @@ class QuillMacro(val c: MacroContext) {
       import ${c.prefix}._
       util.Try {
           run(quote {
+            query[$t].insert(lift($entity))
+          })
+          ${entity}.id
+       }
+    """
+
+  def createAndGenerateId[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+          run(quote {
             query[$t].insert(lift($entity)).returning(_.id)
           })
        }
