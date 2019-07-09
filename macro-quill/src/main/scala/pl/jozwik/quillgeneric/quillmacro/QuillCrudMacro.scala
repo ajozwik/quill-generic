@@ -2,7 +2,7 @@ package pl.jozwik.quillgeneric.quillmacro
 
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
 
-class QuillMacro(val c: MacroContext) {
+class QuillCrudMacro(val c: MacroContext) {
 
   import c.universe._
 

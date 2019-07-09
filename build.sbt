@@ -54,6 +54,7 @@ val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % 
 
 lazy val `macro-quill` = projectName("macro-quill", file("macro-quill")).settings(
   libraryDependencies ++= Seq(
+    `io.getquill_quill-async`,
     `ch.qos.logback_logback-classic`,
     `com.typesafe.scala-logging_scala-logging`
   )
@@ -61,7 +62,6 @@ lazy val `macro-quill` = projectName("macro-quill", file("macro-quill")).setting
 
 lazy val `quill-generic` = projectName("quill-generic", file("quill-generic")).settings(
   libraryDependencies ++= Seq(
-    `io.getquill_quill-async`,
     `io.getquill_quill-async-mysql` % Test,
     `io.getquill_quill-jdbc` % Test,
     `com.h2database_h2` % Test

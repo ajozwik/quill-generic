@@ -2,6 +2,7 @@ package pl.jozwik.quillgeneric.sync
 
 import io.getquill.{ H2JdbcContext, SnakeCase }
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
+import pl.jozwik.quillgeneric.quillmacro.Queries
 
 import scala.util.Try
 
@@ -33,7 +34,5 @@ class PersonRepository(ctx: H2JdbcContext[SnakeCase.type] with Queries) extends 
 
   override def delete(id: PersonId): Try[Boolean] =
     ctx.deleteByFilter[Person](_.id == ctx.lift(id))
-
-  override def toId(t: Person): PersonId = t.id
 
 }

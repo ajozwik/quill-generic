@@ -2,6 +2,7 @@ package pl.jozwik.quillgeneric.async
 
 import io.getquill.{ MysqlAsyncContext, SnakeCase }
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
+import pl.jozwik.quillgeneric.quillmacro.QueriesAsync
 
 import scala.concurrent.{ ExecutionContext, Future }
 

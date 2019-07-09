@@ -17,5 +17,4 @@ trait Repository[K, T] {
 
   def delete(id: K): Try[Boolean]
 
-  def toId(t: T): K
 }
