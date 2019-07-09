@@ -16,8 +16,6 @@ ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 ThisBuild / organization := "com.github.ajozwik"
 
-name := "quill-generic-parent"
-
 ThisBuild / scalacOptions ++= Seq(
   "-target:jvm-1.8",
   "-encoding", "UTF-8",
@@ -52,22 +50,18 @@ val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
 
 
-lazy val `macro-quill` = projectName("macro-quill", file("macro-quill")).settings(
+lazy val `macro-quill` = projectName("macro-quill", file(".")).settings(
   libraryDependencies ++= Seq(
     `io.getquill_quill-async`,
     `ch.qos.logback_logback-classic`,
-    `com.typesafe.scala-logging_scala-logging`
-  )
-)
-
-lazy val `quill-generic` = projectName("quill-generic", file("quill-generic")).settings(
-  libraryDependencies ++= Seq(
+    `com.typesafe.scala-logging_scala-logging`,
     `io.getquill_quill-async-mysql` % Test,
     `io.getquill_quill-jdbc` % Test,
     `com.h2database_h2` % Test
   )
 )
-  .dependsOn(`macro-quill`)
+
+
 
 
 def projectName(name: String, file: File): Project = Project(name, file).settings(

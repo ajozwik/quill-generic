@@ -4,7 +4,7 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.Queries
+import pl.jozwik.quillgeneric.quillmacro.sync.{ Queries, Repository }
 
 import scala.util.Try
 

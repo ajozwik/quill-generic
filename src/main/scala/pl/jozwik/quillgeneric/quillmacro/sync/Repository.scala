@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.quillmacro.sync
 
 import scala.util.Try
 

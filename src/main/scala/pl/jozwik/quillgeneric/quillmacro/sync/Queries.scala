@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.quillmacro
+package pl.jozwik.quillgeneric.quillmacro.sync
 
 import io.getquill.context.Context
 

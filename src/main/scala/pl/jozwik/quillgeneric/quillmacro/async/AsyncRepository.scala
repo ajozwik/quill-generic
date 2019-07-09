@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.async
+package pl.jozwik.quillgeneric.quillmacro.async
 
 import scala.concurrent.{ ExecutionContext, Future }
 

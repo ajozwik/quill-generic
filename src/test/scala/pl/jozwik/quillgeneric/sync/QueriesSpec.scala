@@ -5,7 +5,7 @@ import java.time.LocalDate
 import io.getquill.{ H2Dialect, H2JdbcContext, SnakeCase }
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.Queries
+import pl.jozwik.quillgeneric.quillmacro.sync.Queries
 
 import scala.util.Success
 

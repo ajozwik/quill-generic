@@ -4,8 +4,8 @@ import io.getquill.{ MysqlAsyncContext, NamingStrategy, SnakeCase }
 import io.getquill.context.async.AsyncContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.QueriesAsync
 import com.github.mauricio.async.db.Connection
+import pl.jozwik.quillgeneric.quillmacro.async.{ AsyncRepository, QueriesAsync }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
