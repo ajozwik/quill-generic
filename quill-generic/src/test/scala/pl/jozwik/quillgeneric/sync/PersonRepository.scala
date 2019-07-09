@@ -8,34 +8,35 @@ import pl.jozwik.quillgeneric.quillmacro.Queries
 
 import scala.util.Try
 
-class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](ctx: JdbcContext[Dialect, Naming] with Queries)
+trait PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
   extends Repository[PersonId, Person] {
+  val context: JdbcContext[Dialect, Naming] with Queries
 
-  import ctx._
+  import context._
 
   override def all: Try[Seq[Person]] =
-    ctx.all[Person]
+    context.all[Person]
 
   override def create(person: Person, generateId: Boolean = false): Try[PersonId] =
     if (generateId) {
-      ctx.createAndGenerateId[PersonId, Person](person)
+      context.createAndGenerateId[PersonId, Person](person)
     } else {
-      ctx.create[PersonId, Person](person)
+      context.create[PersonId, Person](person)
     }
 
   override def read(id: PersonId): Try[Option[Person]] =
-    ctx.read[PersonId, Person](id)
+    context.read[PersonId, Person](id)
 
   override def createOrUpdate(entity: Person): Try[PersonId] =
-    ctx.insertOrUpdate[PersonId, Person](entity)
+    context.insertOrUpdate[PersonId, Person](entity)
 
   override def update(person: Person): Try[Long] =
-    ctx.update[Person](person)
+    context.update[Person](person)
 
   override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Try[Long] =
-    ctx.updateById[Person](_.id == lift(id), action, actions: _*)
+    context.updateById[Person](_.id == lift(id), action, actions: _*)
 
   override def delete(id: PersonId): Try[Boolean] =
-    ctx.deleteByFilter[Person](_.id == ctx.lift(id))
+    context.deleteByFilter[Person](_.id == context.lift(id))
 
 }

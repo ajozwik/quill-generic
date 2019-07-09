@@ -2,7 +2,7 @@ package pl.jozwik.quillgeneric.sync
 
 import java.time.LocalDate
 
-import io.getquill.{ H2JdbcContext, SnakeCase }
+import io.getquill.{ H2Dialect, H2JdbcContext, SnakeCase }
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.Queries
@@ -12,7 +12,9 @@ import scala.util.Success
 class QueriesSpec extends AbstractSpec {
 
   private lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with Queries
-  private lazy val repository = new PersonRepository(ctx)
+  private lazy val repository = new PersonRepository[H2Dialect, SnakeCase.type] {
+    val context: H2JdbcContext[SnakeCase.type] with Queries = ctx
+  }
 
   override def afterAll(): Unit = {
     ctx.close()
