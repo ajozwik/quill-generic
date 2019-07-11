@@ -56,7 +56,7 @@ lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
     `ch.qos.logback_logback-classic`,
     `com.typesafe.scala-logging_scala-logging`,
     `io.getquill_quill-async-mysql` % Test,
-    `io.getquill_quill-jdbc` % Test,
+    `io.getquill_quill-jdbc`,
     `com.h2database_h2` % Test
   )
 )
