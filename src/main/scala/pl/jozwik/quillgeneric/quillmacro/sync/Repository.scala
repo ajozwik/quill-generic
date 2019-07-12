@@ -6,10 +6,6 @@ import scala.util.Try
 
 trait Repository[K, T <: WithId[K]] {
 
-  implicit val tableName: String = tableNameImpl
-
-  def tableNameImpl: String
-
   def all: Try[Seq[T]]
 
   def create(entity: T, generateId: Boolean = false): Try[K]
