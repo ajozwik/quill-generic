@@ -1,13 +1,15 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
+import pl.jozwik.quillgeneric.quillmacro.WithId
+
 import scala.util.Try
 
-trait Repository[K, T] {
+trait Repository[K, T <: WithId[K]] {
   def all: Try[Seq[T]]
 
   def create(entity: T, generateId: Boolean = false): Try[K]
 
-  def createOrUpdate(entity: T): Try[K]
+  def createOrUpdate(entity: T, generateId: Boolean = false): Try[K]
 
   def read(id: K): Try[Option[T]]
 

@@ -14,7 +14,7 @@ class QuillCrudAsyncMacro(val c: MacroContext) {
       })
     """
 
-  def createOrUpdate[T](entity: Tree)(ex: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def createOrUpdate[T](entity: Tree, generateId: Tree)(ex: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
         run(quote {
@@ -36,6 +36,14 @@ class QuillCrudAsyncMacro(val c: MacroContext) {
           run(quote {
             query[$t].insert(lift($entity)).returning(_.id)
           })
+    """
+
+  def createAndGenerateId[T](entity: Tree)(ex: Tree)(implicit t: WeakTypeTag[T]): Tree =
+    q"""
+      import ${c.prefix}._
+      run(quote {
+        query[$t].insert(lift($entity)).returning(_.id)
+      })
     """
 
   def merge[T](entity: Tree)(ex: Tree)(implicit t: WeakTypeTag[T]): Tree =

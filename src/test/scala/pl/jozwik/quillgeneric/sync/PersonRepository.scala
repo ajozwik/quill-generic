@@ -27,8 +27,8 @@ trait PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
   override def read(id: PersonId): Try[Option[Person]] =
     context.read[PersonId, Person](id)
 
-  override def createOrUpdate(entity: Person): Try[PersonId] =
-    context.insertOrUpdate[PersonId, Person](entity)
+  override def createOrUpdate(entity: Person, generateId: Boolean = false): Try[PersonId] =
+    context.createOrUpdate[PersonId, Person](entity, generateId)
 
   override def update(person: Person): Try[Long] =
     context.update[Person](person)

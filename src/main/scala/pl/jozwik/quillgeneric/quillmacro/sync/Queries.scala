@@ -9,7 +9,7 @@ trait Queries {
   this: Context[_, _] =>
   def all[T]: Try[Seq[T]] = macro QuillCrudMacro.all[T]
 
-  def insertOrUpdate[K, T](entity: T): Try[K] = macro QuillCrudMacro.insertOrUpdate[T]
+  def createOrUpdate[K, T](entity: T, generateId: Boolean): Try[K] = macro QuillCrudMacro.createOrUpdate[T]
 
   def create[K, T](entity: T): Try[K] = macro QuillCrudMacro.create[T]
 

@@ -1,10 +1,10 @@
 package pl.jozwik.quillgeneric.async
 
-import io.getquill.{ MysqlAsyncContext, NamingStrategy, SnakeCase }
+import com.github.mauricio.async.db.Connection
 import io.getquill.context.async.AsyncContext
 import io.getquill.context.sql.idiom.SqlIdiom
+import io.getquill.{ MysqlAsyncContext, NamingStrategy, SnakeCase }
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import com.github.mauricio.async.db.Connection
 import pl.jozwik.quillgeneric.quillmacro.async.{ AsyncRepository, QueriesAsync }
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -18,24 +18,28 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
 
   import ctx._
 
-  def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
+  override def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
     ctx.all[Person]
 
-  def create(person: Person)(implicit ex: ExecutionContext): Future[PersonId] =
-    ctx.create[PersonId, Person](person)
+  override def createOrUpdate(entity: Person, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[PersonId] =
+    ctx.createOrUpdate[PersonId, Person](entity, generateId)
 
-  def createOrUpdate(entity: Person)(implicit ex: ExecutionContext): Future[PersonId] =
-    ctx.createOrUpdate[PersonId, Person](entity)
+  override def create(person: Person, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[PersonId] =
+    if (generateId) {
+      ctx.createAndGenerateId[PersonId, Person](person)
+    } else {
+      ctx.create[PersonId, Person](person)
+    }
 
-  def read(id: PersonId)(implicit ex: ExecutionContext): Future[Seq[Person]] =
+  override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Seq[Person]] =
     ctx.run(query[Person].filter(_.id == lift(id)))
 
-  def update(person: Person)(implicit ex: ExecutionContext): Future[Long] =
+  override def update(person: Person)(implicit ex: ExecutionContext): Future[Long] =
     ctx.merge[Person](person)
 
-  def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*)(implicit ex: ExecutionContext): Future[Long] =
+  override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*)(implicit ex: ExecutionContext): Future[Long] =
     ctx.mergeById[Person](_.id == lift(id), action, actions: _*)
 
-  def delete(id: PersonId)(implicit ex: ExecutionContext): Future[Boolean] =
+  override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[Boolean] =
     ctx.deleteByFilter[Person](_.id == lift(id))
 }

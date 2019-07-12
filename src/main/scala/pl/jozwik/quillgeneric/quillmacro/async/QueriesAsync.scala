@@ -11,7 +11,11 @@ trait QueriesAsync {
 
   def create[K, T](entity: T)(implicit ex: ExecutionContext): Future[K] = macro QuillCrudAsyncMacro.create[T]
 
-  def createOrUpdate[K, T](entity: T)(implicit ex: ExecutionContext): Future[K] = macro QuillCrudAsyncMacro.createOrUpdate[T]
+  def createAndGenerateId[K, T](entity: T)(implicit ex: ExecutionContext): Future[K] = macro QuillCrudAsyncMacro.createAndGenerateId[T]
+
+  def createOrUpdate[K, T](
+    entity: T,
+    generateId: Boolean)(implicit ex: ExecutionContext): Future[K] = macro QuillCrudAsyncMacro.createOrUpdate[T]
 
   def merge[T](entity: T)(implicit ex: ExecutionContext): Future[Long] = macro QuillCrudAsyncMacro.merge[T]
 

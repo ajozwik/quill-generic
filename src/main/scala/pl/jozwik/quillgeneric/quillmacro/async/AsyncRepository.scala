@@ -1,13 +1,15 @@
 package pl.jozwik.quillgeneric.quillmacro.async
 
+import pl.jozwik.quillgeneric.quillmacro.WithId
+
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait AsyncRepository[K, T] {
+trait AsyncRepository[K, T <: WithId[K]] {
   def all(implicit ex: ExecutionContext): Future[Seq[T]]
 
-  def create(entity: T)(implicit ex: ExecutionContext): Future[K]
+  def create(entity: T, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[K]
 
-  def createOrUpdate(entity: T)(implicit ex: ExecutionContext): Future[K]
+  def createOrUpdate(entity: T, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[K]
 
   def read(id: K)(implicit ex: ExecutionContext): Future[Seq[T]]
 

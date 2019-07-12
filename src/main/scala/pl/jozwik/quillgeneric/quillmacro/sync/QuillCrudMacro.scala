@@ -16,7 +16,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def insertOrUpdate[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def createOrUpdate[T](entity: Tree, generateId: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
