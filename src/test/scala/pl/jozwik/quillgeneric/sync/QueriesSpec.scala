@@ -14,6 +14,8 @@ class QueriesSpec extends AbstractSpec {
   private lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with Queries
   private lazy val repository = new PersonRepository[H2Dialect, SnakeCase.type] {
     val context: H2JdbcContext[SnakeCase.type] with Queries = ctx
+
+    override def tableNameImpl: String = "PERSON"
   }
 
   override def afterAll(): Unit = {
@@ -26,6 +28,7 @@ class QueriesSpec extends AbstractSpec {
       val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now)
       repository.all shouldBe Success(Seq())
       repository.create(person) shouldBe 'success
+      repository.create(person, true) shouldBe 'success
       repository.all shouldBe Success(Seq(person))
     }
   }

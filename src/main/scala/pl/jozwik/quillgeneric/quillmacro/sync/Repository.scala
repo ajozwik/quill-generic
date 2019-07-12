@@ -5,6 +5,11 @@ import pl.jozwik.quillgeneric.quillmacro.WithId
 import scala.util.Try
 
 trait Repository[K, T <: WithId[K]] {
+
+  implicit val tableName: String = tableNameImpl
+
+  def tableNameImpl: String
+
   def all: Try[Seq[T]]
 
   def create(entity: T, generateId: Boolean = false): Try[K]
@@ -13,7 +18,7 @@ trait Repository[K, T <: WithId[K]] {
 
   def read(id: K): Try[Option[T]]
 
-  def update(T: T): Try[Long]
+  def update(t: T): Try[Long]
 
   def update(id: K, action: T => (Any, Any), actions: Function[T, (Any, Any)]*): Try[Long]
 

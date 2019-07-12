@@ -34,7 +34,7 @@ trait PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
     context.update[Person](person)
 
   override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Try[Long] =
-    context.updateById[Person](_.id == lift(id), action, actions: _*)
+    context.updateByFilter[Person](_.id == lift(id), action, actions: _*)
 
   override def delete(id: PersonId): Try[Boolean] =
     context.deleteByFilter[Person](_.id == context.lift(id))

@@ -46,12 +46,12 @@ class QuillCrudMacro(val c: MacroContext) {
        }
     """
 
-  def createAndGenerateId[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def createAndGenerateId[K, T](entity: Tree)(implicit k: WeakTypeTag[K], t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
           run(quote {
-            query[$t].insert(lift($entity)).returning(_.id)
+            query[$t].insert(lift($entity)).returning(e => e.id)
           })
        }
     """
