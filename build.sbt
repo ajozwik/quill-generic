@@ -1,5 +1,4 @@
-import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
-import scalariform.formatter.preferences._
+
 
 
 val `scalaVersion_2.13` = "2.13.0"
@@ -31,6 +30,8 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ydelambdafy:method"
 )
 
+ThisBuild / resolvers ++= Seq("spring" at "https://repo.spring.io/plugins-release/")
+
 val quillVersion = "3.2.2"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
@@ -49,6 +50,8 @@ val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
 
+val `org.adbcj_h2-async-driver` = "org.adbcj" % "h2-async-driver" % "0.8"
+
 
 lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
   libraryDependencies ++= Seq(
@@ -57,7 +60,8 @@ lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
     `com.typesafe.scala-logging_scala-logging`,
     `io.getquill_quill-async-mysql` % Test,
     `io.getquill_quill-jdbc`,
-    `com.h2database_h2` % Test
+    `com.h2database_h2` % Test,
+    `org.adbcj_h2-async-driver` % Test
   )
 )
 

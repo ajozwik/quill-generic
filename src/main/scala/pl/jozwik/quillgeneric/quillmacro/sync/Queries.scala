@@ -8,22 +8,22 @@ import scala.util.Try
 
 trait Queries {
   this: Context[_, _] =>
-  def all[T]: Try[Seq[T]] = macro QuillCrudMacro.all[T]
+  def all[T](implicit tableName: String): Try[Seq[T]] = macro QuillCrudMacro.all[T]
 
-  def createOrUpdate[K, T <: WithId[K]](entity: T, generateId: Boolean): Try[K] = macro QuillCrudMacro.createOrUpdate[T]
+  def createOrUpdate[K, T <: WithId[K]](entity: T, generateId: Boolean)(implicit tableName: String): Try[K] = macro QuillCrudMacro.createOrUpdate[T]
 
-  def create[K, T <: WithId[K]](entity: T): Try[K] = macro QuillCrudMacro.create[T]
+  def create[K, T <: WithId[K]](entity: T)(implicit tableName: String): Try[K] = macro QuillCrudMacro.create[T]
 
-  def createAndGenerateId[K, T <: WithId[K]](entity: T): Try[K] = macro QuillCrudMacro.createAndGenerateId[K, T]
+  def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit tableName: String): Try[K] = macro QuillCrudMacro.createAndGenerateId[K, T]
 
-  def update[T](entity: T): Try[Long] = macro QuillCrudMacro.update[T]
+  def update[T](entity: T)(implicit tableName: String): Try[Long] = macro QuillCrudMacro.update[T]
 
-  def read[K, T <: WithId[K]](id: K): Try[Option[T]] = macro QuillCrudMacro.read[T]
+  def read[K, T <: WithId[K]](id: K)(implicit tableName: String): Try[Option[T]] = macro QuillCrudMacro.read[T]
 
   def updateByFilter[T](
     filter: T => Boolean,
     action: Function[T, (Any, Any)],
-    actions: Function[T, (Any, Any)]*): Try[Long] = macro QuillCrudMacro.mergeByFilter[T]
+    actions: Function[T, (Any, Any)]*)(implicit tableName: String): Try[Long] = macro QuillCrudMacro.mergeByFilter[T]
 
-  def deleteByFilter[T](filter: T => Boolean): Try[Boolean] = macro QuillCrudMacro.deleteByFilter[T]
+  def deleteByFilter[T](filter: T => Boolean)(implicit tableName: String): Try[Boolean] = macro QuillCrudMacro.deleteByFilter[T]
 }

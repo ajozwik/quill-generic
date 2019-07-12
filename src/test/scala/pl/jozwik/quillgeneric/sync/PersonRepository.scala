@@ -14,6 +14,14 @@ trait PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
 
   import context._
 
+  def allBySchema: Try[Seq[Person]] =
+    Try {
+      val dynamic = dynamicQuerySchema[Person](tableName)
+      context.run {
+        dynamic
+      }
+    }
+
   override def all: Try[Seq[Person]] =
     context.all[Person]
 

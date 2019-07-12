@@ -13,33 +13,35 @@ object AsyncObject {
   lazy val personAsyncRepository = new PersonAsyncRepository(new MysqlAsyncContext(SnakeCase, "async.mysql") with QueriesAsync)
 }
 
-class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection](ctx: AsyncContext[D, N, C] with QueriesAsync)
+class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection](context: AsyncContext[D, N, C] with QueriesAsync)
   extends AsyncRepository[PersonId, Person] {
 
-  import ctx._
+  import context._
 
   override def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
-    ctx.all[Person]
+    context.all[Person]
 
   override def createOrUpdate(entity: Person, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[PersonId] =
-    ctx.createOrUpdate[PersonId, Person](entity, generateId)
+    context.createOrUpdate[PersonId, Person](entity, generateId)
 
   override def create(person: Person, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[PersonId] =
     if (generateId) {
-      ctx.createAndGenerateId[PersonId, Person](person)
+      context.createAndGenerateId[PersonId, Person](person)
     } else {
-      ctx.create[PersonId, Person](person)
+      context.create[PersonId, Person](person)
     }
 
-  override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Seq[Person]] =
-    ctx.run(query[Person].filter(_.id == lift(id)))
+  override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Option[Person]] =
+    context.read[PersonId, Person](id)
 
   override def update(person: Person)(implicit ex: ExecutionContext): Future[Long] =
-    ctx.merge[Person](person)
+    context.merge[Person](person)
 
   override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*)(implicit ex: ExecutionContext): Future[Long] =
-    ctx.mergeById[Person](_.id == lift(id), action, actions: _*)
+    context.mergeById[Person](_.id == lift(id), action, actions: _*)
 
   override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[Boolean] =
-    ctx.deleteByFilter[Person](_.id == lift(id))
+    context.deleteByFilter[Person](_.id == lift(id))
+
+  override protected val tableName: String = "Person"
 }

@@ -6,28 +6,28 @@ class QuillCrudMacro(val c: MacroContext) {
 
   import c.universe._
 
-  def all[T](t: WeakTypeTag[T]): Tree =
+  def all[T](tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        run(quote {
-          query[$t]
-        })
+        run(
+          dynamicQuerySchema[$t]($tableName)
+        )
       }
     """
 
-  def createOrUpdate[T](entity: Tree, generateId: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def createOrUpdate[T](entity: Tree, generateId: Tree)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
        transaction{
-          val result = run(quote {
-            query[$t].filter(_.id == lift(entity.id)).update(lift($entity))
-          })
+          val result = run(
+            dynamicQuerySchema[$t]($tableName).filter(_.id == entity.id).updateValue($entity)
+          )
           if (result == 0) {
-              run(quote {
-                query[$t].insert(lift($entity)).returning(_.id)
-              })
+              run(
+                dynamicQuerySchema[$t]($tableName).insertValue($entity).returning(_.id)
+              )
           } else {
             ${entity}.id
           }
@@ -35,64 +35,64 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def create[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def create[T](entity: Tree)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-          run(quote {
-            query[$t].insert(lift($entity))
-          })
+          run(
+            dynamicQuerySchema[$t]($tableName).insertValue($entity)
+          )
           ${entity}.id
        }
     """
 
-  def createAndGenerateId[K, T](entity: Tree)(implicit k: WeakTypeTag[K], t: WeakTypeTag[T]): Tree =
+  def createAndGenerateId[K, T](entity: Tree)(tableName: Tree)(implicit k: WeakTypeTag[K], t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-          run(quote {
-            query[$t].insert(lift($entity)).returning(e => e.id)
-          })
+          run(
+           dynamicQuerySchema[$t]($tableName).insertValue($entity).returning(e => e.id)
+          )
        }
     """
 
-  def update[T](entity: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def update[T](entity: Tree)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        run(quote {
-          query[$t].update(lift($entity))
-        })
+        run(
+            dynamicQuerySchema[$t]($tableName).updateValue($entity)
+        )
       }
     """
 
-  def read[T](id: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def read[T](id: Tree)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        run(quote {
-          query[$t].filter(_.id == lift(${id}))
-        }).headOption
+        run(
+           dynamicQuerySchema[$t]($tableName).filter(_.id == lift(${id}))
+        ).headOption
       }
     """
 
-  def mergeByFilter[T](filter: Tree, action: Tree, actions: Tree*)(implicit t: WeakTypeTag[T]): Tree =
+  def mergeByFilter[T](filter: Tree, action: Tree, actions: Tree*)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        run(quote {
-          query[$t].filter($filter).update(action, actions:_*)
-        })
+        run(
+           dynamicQuerySchema[$t]($tableName).filter($filter).update(action, actions:_*)
+        )
       }
     """
 
-  def deleteByFilter[T](filter: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def deleteByFilter[T](filter: Tree)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        run(quote {
-          query[$t].filter($filter).delete
-        }) > 0
+        run(
+           dynamicQuerySchema[$t]($tableName).filter($filter).delete
+        ) > 0
       }
     """
 }

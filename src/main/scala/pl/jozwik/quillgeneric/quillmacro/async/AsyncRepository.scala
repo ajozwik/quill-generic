@@ -5,13 +5,18 @@ import pl.jozwik.quillgeneric.quillmacro.WithId
 import scala.concurrent.{ ExecutionContext, Future }
 
 trait AsyncRepository[K, T <: WithId[K]] {
+
+  protected val tableName: String
+
+  implicit protected final def tableNameImpl: String = tableName
+
   def all(implicit ex: ExecutionContext): Future[Seq[T]]
 
   def create(entity: T, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[K]
 
   def createOrUpdate(entity: T, generateId: Boolean = false)(implicit ex: ExecutionContext): Future[K]
 
-  def read(id: K)(implicit ex: ExecutionContext): Future[Seq[T]]
+  def read(id: K)(implicit ex: ExecutionContext): Future[Option[T]]
 
   def update(T: T)(implicit ex: ExecutionContext): Future[Long]
 
