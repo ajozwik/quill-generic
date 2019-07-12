@@ -1,5 +1,5 @@
-
-
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
+import scalariform.formatter.preferences._
 
 val `scalaVersion_2.13` = "2.13.0"
 
