@@ -29,7 +29,7 @@ class QuillCrudMacro(val c: MacroContext) {
                 dynamicQuerySchema[$t]($tableName).insertValue($entity).returning(_.id)
               )
           } else {
-            ${entity}.id
+            $entity.id
           }
         }
       }
@@ -42,11 +42,11 @@ class QuillCrudMacro(val c: MacroContext) {
           run(
             dynamicQuerySchema[$t]($tableName).insertValue($entity)
           )
-          ${entity}.id
+          $entity.id
        }
     """
 
-  def createAndGenerateId[K, T](entity: Tree)(tableName: Tree)(implicit k: WeakTypeTag[K], t: WeakTypeTag[T]): Tree =
+  def createAndGenerateId[T](entity: Tree)(tableName: Tree)(implicit t: WeakTypeTag[T]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -71,7 +71,7 @@ class QuillCrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       util.Try {
         run(
-           dynamicQuerySchema[$t]($tableName).filter(_.id == lift(${id}))
+           dynamicQuerySchema[$t]($tableName).filter(_.id == lift($id))
         ).headOption
       }
     """

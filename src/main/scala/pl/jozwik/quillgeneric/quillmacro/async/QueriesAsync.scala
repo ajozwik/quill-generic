@@ -2,11 +2,9 @@ package pl.jozwik.quillgeneric.quillmacro.async
 
 import io.getquill.context.async.AsyncContext
 import pl.jozwik.quillgeneric.quillmacro.WithId
-import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudMacro
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.experimental.macros
-import scala.util.Try
 
 trait QueriesAsync {
   this: AsyncContext[_, _, _] =>
@@ -41,7 +39,7 @@ trait QueriesAsync {
     action: Function[T, (Any, Any)],
     actions: Function[T, (Any, Any)]*)(implicit tableName: String, ex: ExecutionContext): Future[Long] = macro QuillCrudAsyncMacro.mergeByFilter[T]
 
-  def deleteByFilter[T](filter: (T) => Boolean)(implicit
+  def deleteByFilter[T](filter: T => Boolean)(implicit
     tableName: String,
     ex: ExecutionContext): Future[Boolean] = macro QuillCrudAsyncMacro.deleteByFilter[T]
 }

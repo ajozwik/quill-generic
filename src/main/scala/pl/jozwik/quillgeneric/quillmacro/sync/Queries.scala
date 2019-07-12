@@ -14,7 +14,7 @@ trait Queries {
 
   def create[K, T <: WithId[K]](entity: T)(implicit tableName: String): Try[K] = macro QuillCrudMacro.create[T]
 
-  def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit tableName: String): Try[K] = macro QuillCrudMacro.createAndGenerateId[K, T]
+  def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit tableName: String): Try[K] = macro QuillCrudMacro.createAndGenerateId[T]
 
   def update[T](entity: T)(implicit tableName: String): Try[Long] = macro QuillCrudMacro.update[T]
 

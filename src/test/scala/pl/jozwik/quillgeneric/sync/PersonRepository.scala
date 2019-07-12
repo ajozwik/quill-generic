@@ -8,19 +8,10 @@ import pl.jozwik.quillgeneric.quillmacro.sync.{ Queries, Repository }
 
 import scala.util.Try
 
-trait PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
+final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
+    protected val context: JdbcContext[Dialect, Naming] with Queries,
+    protected val tableName: String)
   extends Repository[PersonId, Person] {
-  val context: JdbcContext[Dialect, Naming] with Queries
-
-  import context._
-
-  def allBySchema: Try[Seq[Person]] =
-    Try {
-      val dynamic = dynamicQuerySchema[Person](tableName)
-      context.run {
-        dynamic
-      }
-    }
 
   override def all: Try[Seq[Person]] =
     context.all[Person]
@@ -42,9 +33,9 @@ trait PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
     context.update[Person](person)
 
   override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Try[Long] =
-    context.updateByFilter[Person](_.id == lift(id), action, actions: _*)
+    context.updateByFilter[Person](_.id == id, action, actions: _*)
 
   override def delete(id: PersonId): Try[Boolean] =
-    context.deleteByFilter[Person](_.id == context.lift(id))
+    context.deleteByFilter[Person](_.id == id)
 
 }
