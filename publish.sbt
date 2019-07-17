@@ -7,15 +7,7 @@ ThisBuild / developers := List(
   )
 )
 
-ThisBuild / publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value) {
-    Option("snapshots" at nexus + "content/repositories/snapshots")
-  }
-  else {
-    Option("releases" at nexus + "service/local/staging/deploy/maven2")
-  }
-}
+ThisBuild / publishTo := sonatypePublishTo.value
 
 ThisBuild / publishMavenStyle := true
 
