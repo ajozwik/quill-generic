@@ -62,7 +62,8 @@ lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
     `io.getquill_quill-jdbc`,
     `com.h2database_h2` % Test,
     `org.adbcj_h2-async-driver` % Test
-  )
+  ),
+  scapegoatIgnoredFiles := Seq(".*/*Macro.*.scala",".*/.*Queries.*.scala")
 )
 
 
