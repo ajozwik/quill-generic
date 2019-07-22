@@ -14,6 +14,8 @@ final class AddressRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
 )
   extends Repository[AddressId, Address] {
 
+  private implicit val dSchema: context.DynamicEntityQuery[Address] = context.dynamicQuerySchema[Address](tableName)
+
   override def all: Try[Seq[Address]] =
     context.all[Address]
 
