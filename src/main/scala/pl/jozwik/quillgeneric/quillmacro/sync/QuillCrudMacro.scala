@@ -6,7 +6,7 @@ class QuillCrudMacro(val c: MacroContext) {
 
   import c.universe._
 
-  def all[T](dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def all(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -16,7 +16,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def createOrUpdate[T](entity: Tree, generateId: Tree)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def createOrUpdate(entity: Tree, generateId: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -35,7 +35,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def create[T](entity: Tree)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def create(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -46,7 +46,7 @@ class QuillCrudMacro(val c: MacroContext) {
        }
     """
 
-  def createAndGenerateId[T](entity: Tree)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def createAndGenerateId(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -56,7 +56,7 @@ class QuillCrudMacro(val c: MacroContext) {
        }
     """
 
-  def update[T](entity: Tree)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def update(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -66,7 +66,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def read[T](id: Tree)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def read(id: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -76,7 +76,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def mergeByFilter[T](filter: Tree, action: Tree, actions: Tree*)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def mergeByFilter(filter: Tree, action: Tree, actions: Tree*)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -86,7 +86,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def deleteByFilter[T](filter: Tree)(dSchema: Tree)(implicit t: WeakTypeTag[T]): Tree =
+  def deleteByFilter(filter: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
