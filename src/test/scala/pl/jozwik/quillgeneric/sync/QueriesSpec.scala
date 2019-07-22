@@ -40,6 +40,7 @@ class QueriesSpec extends AbstractSpec {
     }
 
     "Call all operations on Person2 with auto generated id" in {
+      logger.debug("generated id")
       val person = Person(PersonId(2), "firstName", "lastName", LocalDate.now)
       repositoryAutoIncrement.all shouldBe Try(Seq())
       val personId = repositoryAutoIncrement.create(person, generate)
