@@ -17,11 +17,11 @@ final class AddressRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def all: Try[Seq[Address]] =
     context.all[Address]
 
-  override def create(Address: Address, generateId: Boolean = false): Try[AddressId] =
+  override def create(entity: Address, generateId: Boolean = false): Try[AddressId] =
     if (generateId) {
-      context.createAndGenerateId[AddressId, Address](Address)
+      context.createAndGenerateId[AddressId, Address](entity)
     } else {
-      context.create[AddressId, Address](Address)
+      context.create[AddressId, Address](entity)
     }
 
   override def read(id: AddressId): Try[Option[Address]] =
@@ -30,8 +30,8 @@ final class AddressRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def createOrUpdate(entity: Address, generateId: Boolean = false): Try[AddressId] =
     context.createOrUpdate[AddressId, Address](entity, generateId)
 
-  override def update(Address: Address): Try[Long] =
-    context.update[Address](Address)
+  override def update(entity: Address): Try[Long] =
+    context.update[Address](entity)
 
   override def update(id: AddressId, action: Address => (Any, Any), actions: Function[Address, (Any, Any)]*): Try[Long] =
     context.updateByFilter[Address](_.id == id, action, actions: _*)

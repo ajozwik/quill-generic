@@ -13,14 +13,17 @@ final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val tableName: String)
   extends Repository[PersonId, Person] {
 
+  val aliases = List(context.alias[Person](_.firstName, "firstName"), context.alias[Person](_.lastName, "lastName"))
+  implicit val dSchema: context.DynamicEntityQuery[Person] = context.dynamicQuerySchema[Person]("aaa", aliases: _*)
+
   override def all: Try[Seq[Person]] =
     context.all[Person]
 
-  override def create(person: Person, generateId: Boolean = false): Try[PersonId] =
+  override def create(entity: Person, generateId: Boolean = false): Try[PersonId] =
     if (generateId) {
-      context.createAndGenerateId[PersonId, Person](person)
+      context.createAndGenerateId[PersonId, Person](entity)
     } else {
-      context.create[PersonId, Person](person)
+      context.create[PersonId, Person](entity)
     }
 
   override def read(id: PersonId): Try[Option[Person]] =
@@ -29,8 +32,8 @@ final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def createOrUpdate(entity: Person, generateId: Boolean = false): Try[PersonId] =
     context.createOrUpdate[PersonId, Person](entity, generateId)
 
-  override def update(person: Person): Try[Long] =
-    context.update[Person](person)
+  override def update(entity: Person): Try[Long] =
+    context.update[Person](entity)
 
   override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Try[Long] =
     context.updateByFilter[Person](_.id == id, action, actions: _*)

@@ -16,11 +16,11 @@ final class Person2Repository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def all: Try[Seq[Person2]] =
     context.all[Person2]
 
-  override def create(person: Person2, generateId: Boolean = false): Try[Option[PersonId]] =
+  override def create(entity: Person2, generateId: Boolean = false): Try[Option[PersonId]] =
     if (generateId) {
-      context.createAndGenerateId[Option[PersonId], Person2](person)
+      context.createAndGenerateId[Option[PersonId], Person2](entity)
     } else {
-      context.create[Option[PersonId], Person2](person)
+      context.create[Option[PersonId], Person2](entity)
     }
 
   override def read(id: Option[PersonId]): Try[Option[Person2]] =
@@ -29,8 +29,8 @@ final class Person2Repository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def createOrUpdate(entity: Person2, generateId: Boolean = false): Try[Option[PersonId]] =
     context.createOrUpdate[Option[PersonId], Person2](entity, generateId)
 
-  override def update(person: Person2): Try[Long] =
-    context.update[Person2](person)
+  override def update(entity: Person2): Try[Long] =
+    context.update[Person2](entity)
 
   override def update(id: Option[PersonId], action: Person2 => (Any, Any), actions: Function[Person2, (Any, Any)]*): Try[Long] =
     context.updateByFilter[Person2](_.id == id, action, actions: _*)
