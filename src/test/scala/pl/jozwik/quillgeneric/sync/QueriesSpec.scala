@@ -17,7 +17,7 @@ class QueriesSpec extends AbstractSpec {
 
   private lazy val personRepositoryAutoIncrement = new PersonRepository(ctx, "Person2")
 
-  private lazy val personRepositoryAutoIncrementCustom = new PersonRepository(ctx, "Person3", ((p: Person) => p.birthDate, "dob"))
+  private lazy val personRepositoryAutoIncrementCustom = new PersonCustomRepository(ctx, "Person3")
 
   private val generateId = true
 

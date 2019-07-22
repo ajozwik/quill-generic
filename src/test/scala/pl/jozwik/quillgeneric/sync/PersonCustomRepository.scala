@@ -8,13 +8,18 @@ import pl.jozwik.quillgeneric.quillmacro.sync.{ Queries, Repository }
 
 import scala.util.Try
 
-final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
+final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContext[Dialect, Naming] with Queries,
     protected val tableName: String)
   extends Repository[PersonId, Person] {
 
-  private implicit val dSchema: context.DynamicEntityQuery[Person] =
-    context.dynamicQuerySchema[Person](tableName)
+  private val aliases = {
+    import context._
+    Seq {
+      alias[Person](_.birthDate, "dob")
+    }
+  }
+  private implicit val dSchema: context.DynamicEntityQuery[Person] = context.dynamicQuerySchema[Person](tableName, aliases: _*)
 
   override def all: Try[Seq[Person]] =
     context.all[Person](dSchema)
