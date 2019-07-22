@@ -16,3 +16,10 @@ final case class Person(
     lastName: String,
     birthDate: LocalDate,
     addressId: Option[AddressId] = None) extends WithId[PersonId]
+
+final case class Person2(
+    id: Option[PersonId],
+    firstName: String,
+    lastName: String,
+    birthDate: LocalDate,
+    addressId: Option[AddressId] = None) extends WithId[Option[PersonId]]

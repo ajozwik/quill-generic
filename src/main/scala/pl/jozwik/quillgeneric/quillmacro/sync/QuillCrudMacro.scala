@@ -51,7 +51,7 @@ class QuillCrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       util.Try {
           run(
-           dynamicQuerySchema[$t]($tableName).insertValue($entity).returning(e => e.id)
+           dynamicQuerySchema[$t]($tableName).insertValue($entity).returningGenerated(_.id)
           )
        }
     """

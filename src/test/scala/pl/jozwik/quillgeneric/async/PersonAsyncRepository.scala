@@ -16,8 +16,6 @@ object AsyncObject {
 class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection](context: AsyncContext[D, N, C] with QueriesAsync)
   extends AsyncRepository[PersonId, Person] {
 
-  import context._
-
   override def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
     context.all[Person]
 
@@ -38,10 +36,10 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
     context.merge[Person](person)
 
   override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*)(implicit ex: ExecutionContext): Future[Long] =
-    context.mergeById[Person](_.id == lift(id), action, actions: _*)
+    context.mergeById[Person](_.id == id, action, actions: _*)
 
   override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[Boolean] =
-    context.deleteByFilter[Person](_.id == lift(id))
+    context.deleteByFilter[Person](_.id == id)
 
   override protected val tableName: String = "Person"
 }
