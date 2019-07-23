@@ -14,7 +14,7 @@ jdk:
   - openjdk8
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION -Dquill.macro.log=false -Dquill.binds.log=true clean coverage test coverageReport scalastyle
+  - sbt ++$TRAVIS_SCALA_VERSION  -Dfile.encoding=UTF8 -Dquill.macro.log=false -Dquill.binds.log=true clean coverage test coverageReport scalastyle
   - sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 
 after_success:
