@@ -10,7 +10,7 @@ import scala.util.Try
 
 final class AddressRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContext[Dialect, Naming] with Queries,
-    protected val tableName: String
+    tableName: String
 )
   extends Repository[AddressId, Address] {
 
