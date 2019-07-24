@@ -6,13 +6,13 @@ import io.getquill.{ H2JdbcContext, SnakeCase }
 import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.Queries
+import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.Try
 
 class QueriesSpec extends AbstractSpec {
 
-  lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with Queries
+  lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext
   private lazy val personRepository = new PersonRepository(ctx, "Person")
 
   private lazy val personRepositoryAutoIncrement = new PersonRepository(ctx, "Person2")

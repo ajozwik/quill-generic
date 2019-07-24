@@ -6,7 +6,7 @@ import pl.jozwik.quillgeneric.quillmacro.WithId
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.experimental.macros
 
-trait QueriesAsync {
+trait QuillCrudWithAsyncContext {
   this: AsyncContext[_, _, _] =>
   def all[T](implicit
     tableName: String,

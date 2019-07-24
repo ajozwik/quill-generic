@@ -6,7 +6,7 @@ import pl.jozwik.quillgeneric.quillmacro.WithId
 import scala.language.experimental.macros
 import scala.util.Try
 
-trait Queries {
+trait QuillCrudWithContext {
   this: Context[_, _] =>
   def all[T](implicit dSchema: this.DynamicEntityQuery[T]): Try[Seq[T]] = macro QuillCrudMacro.all
 

@@ -4,12 +4,12 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.{ Queries, Repository }
+import pl.jozwik.quillgeneric.quillmacro.sync.{ QuillCrudWithContext, Repository }
 
 import scala.util.Try
 
 final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
-    protected val context: JdbcContext[Dialect, Naming] with Queries,
+    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext,
     tableName: String)
   extends Repository[PersonId, Person] {
 

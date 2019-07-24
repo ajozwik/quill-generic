@@ -5,15 +5,15 @@ import io.getquill.context.async.AsyncContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import io.getquill.{ MysqlAsyncContext, NamingStrategy, SnakeCase }
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.async.{ AsyncRepository, QueriesAsync }
+import pl.jozwik.quillgeneric.quillmacro.async.{ AsyncRepository, QuillCrudWithAsyncContext }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 object AsyncObject {
-  lazy val personAsyncRepository = new PersonAsyncRepository(new MysqlAsyncContext(SnakeCase, "async.mysql") with QueriesAsync)
+  lazy val personAsyncRepository = new PersonAsyncRepository(new MysqlAsyncContext(SnakeCase, "async.mysql") with QuillCrudWithAsyncContext)
 }
 
-class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection](context: AsyncContext[D, N, C] with QueriesAsync)
+class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection](context: AsyncContext[D, N, C] with QuillCrudWithAsyncContext)
   extends AsyncRepository[PersonId, Person] {
 
   override def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
