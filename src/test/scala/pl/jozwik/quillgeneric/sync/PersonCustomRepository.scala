@@ -40,9 +40,6 @@ final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy
   override def update(entity: Person): Try[Long] =
     context.update[Person](entity)(dSchema)
 
-  override def update(id: PersonId, action: Person => (Any, Any), actions: Function[Person, (Any, Any)]*): Try[Long] =
-    context.updateByFilter[Person](_.id == id, action, actions: _*)(dSchema)
-
   override def delete(id: PersonId): Try[Boolean] =
     context.deleteByFilter[Person](_.id == id)(dSchema)
 

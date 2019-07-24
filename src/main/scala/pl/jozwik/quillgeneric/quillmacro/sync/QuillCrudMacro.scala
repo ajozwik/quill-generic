@@ -76,16 +76,6 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def mergeByFilter(filter: Tree, action: Tree, actions: Tree*)(dSchema: Tree): Tree =
-    q"""
-      import ${c.prefix}._
-      util.Try {
-        run(
-           $dSchema.filter($filter).update(action, actions:_*)
-        )
-      }
-    """
-
   def deleteByFilter(filter: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._

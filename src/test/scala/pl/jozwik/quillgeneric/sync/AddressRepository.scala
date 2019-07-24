@@ -35,9 +35,6 @@ final class AddressRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def update(entity: Address): Try[Long] =
     context.update[Address](entity)
 
-  override def update(id: AddressId, action: Address => (Any, Any), actions: Function[Address, (Any, Any)]*): Try[Long] =
-    context.updateByFilter[Address](_.id == id, action, actions: _*)
-
   override def delete(id: AddressId): Try[Boolean] =
     context.deleteByFilter[Address](_.id == id)
 
