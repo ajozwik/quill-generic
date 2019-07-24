@@ -16,8 +16,6 @@ trait Repository[K, T <: WithId[K]] {
 
   def update(t: T): Try[Long]
 
-  def update(id: K, action: T => (Any, Any), actions: Function[T, (Any, Any)]*): Try[Long]
-
   def delete(id: K): Try[Boolean]
 
 }

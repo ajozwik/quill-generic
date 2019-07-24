@@ -10,7 +10,7 @@ import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.Try
 
-class QueriesSpec extends AbstractSpec {
+class QuillCrudSpec extends AbstractSpec {
 
   lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext
 
@@ -68,7 +68,8 @@ class QueriesSpec extends AbstractSpec {
       repository.update(createdPatron) shouldBe 'success
       repository.all shouldBe Try(Seq(createdPatron))
       val newBirthDate = createdPatron.birthDate.minusYears(1)
-      repository.update(createdPatron.id, p => (p.birthDate, newBirthDate)) shouldBe 'success
+      val modified = createdPatron.copy(birthDate = newBirthDate)
+      repository.update(modified) shouldBe 'success
       repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
 
       repository.delete(createdPatron.id) shouldBe 'success

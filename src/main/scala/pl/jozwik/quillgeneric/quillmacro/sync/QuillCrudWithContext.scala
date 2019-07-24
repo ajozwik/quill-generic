@@ -22,10 +22,5 @@ trait QuillCrudWithContext {
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: this.DynamicEntityQuery[T]): Try[Option[T]] = macro QuillCrudMacro.read
 
-  def updateByFilter[T](
-    filter: T => Boolean,
-    action: Function[T, (Any, Any)],
-    actions: Function[T, (Any, Any)]*)(implicit dSchema: this.DynamicEntityQuery[T]): Try[Long] = macro QuillCrudMacro.mergeByFilter
-
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: this.DynamicEntityQuery[T]): Try[Boolean] = macro QuillCrudMacro.deleteByFilter
 }
