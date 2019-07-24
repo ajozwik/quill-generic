@@ -13,11 +13,6 @@ import scala.util.Try
 class QueriesSpec extends AbstractSpec {
 
   lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext
-  private lazy val personRepository = new PersonRepository(ctx, "Person")
-
-  private lazy val personRepositoryAutoIncrement = new PersonRepository(ctx, "Person2")
-
-  private lazy val personRepositoryAutoIncrementCustom = new PersonCustomRepository(ctx, "Person3")
 
   private val generateId = true
 
@@ -28,47 +23,57 @@ class QueriesSpec extends AbstractSpec {
 
   "QueriesSync " should {
     "Call all operations on Person" in {
+      val repository = new PersonRepository(ctx, "Person")
       val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now)
       val notExisting = Person(PersonId(2), "firstName", "lastName", LocalDate.now)
-      personRepository.all shouldBe Try(Seq())
-      personRepository.create(person) shouldBe 'success
-      personRepository.read(notExisting.id).success.value shouldBe empty
-      personRepository.read(person.id).success.value shouldBe Option(person)
-      personRepository.update(person) shouldBe 'success
-      personRepository.all shouldBe Try(Seq(person))
-      personRepository.delete(person.id) shouldBe 'success
-      personRepository.all shouldBe Try(Seq())
+      repository.all shouldBe Try(Seq())
+      repository.create(person) shouldBe 'success
+      repository.read(notExisting.id).success.value shouldBe empty
+      repository.read(person.id).success.value shouldBe Option(person)
+      repository.update(person) shouldBe 'success
+      repository.all shouldBe Try(Seq(person))
+      repository.delete(person.id) shouldBe 'success
+      repository.all shouldBe Try(Seq())
 
     }
 
     "Call all operations on Person2 with auto generated id" in {
+      val repository = new PersonRepository(ctx, "Person2")
       logger.debug("generated id")
       val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
-      personRepositoryAutoIncrement.all shouldBe Try(Seq())
-      val personId = personRepositoryAutoIncrement.create(person, generateId)
+      repository.all shouldBe Try(Seq())
+      val personId = repository.create(person, generateId)
       val personIdProvided = personId.success.value
-      val createdPatron = personRepositoryAutoIncrement.read(personIdProvided).success.value.getOrElse(fail())
-      personRepositoryAutoIncrement.update(createdPatron) shouldBe 'success
-      personRepositoryAutoIncrement.all shouldBe Try(Seq(createdPatron))
+      val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
+      repository.update(createdPatron) shouldBe 'success
+      repository.all shouldBe Try(Seq(createdPatron))
+      val newBirthDate = createdPatron.birthDate.minusYears(1)
+      val modified = createdPatron.copy(birthDate = newBirthDate)
+      repository.update(modified) shouldBe 'success
+      repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
 
-      personRepositoryAutoIncrement.delete(createdPatron.id) shouldBe 'success
-      personRepositoryAutoIncrement.read(createdPatron.id).success.value shouldBe empty
-      personRepositoryAutoIncrement.all shouldBe Try(Seq())
+      repository.delete(createdPatron.id) shouldBe 'success
+      repository.read(createdPatron.id).success.value shouldBe empty
+      repository.all shouldBe Try(Seq())
     }
 
     "Call all operations on Person with auto generated id and custom field" in {
+      val repository = new PersonCustomRepository(ctx, "Person3")
       logger.debug("generated id with custom field")
       val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
-      personRepositoryAutoIncrementCustom.all shouldBe Try(Seq())
-      val personId = personRepositoryAutoIncrementCustom.create(person, generateId)
+      repository.all shouldBe Try(Seq())
+      val personId = repository.create(person, generateId)
       val personIdProvided = personId.success.value
-      val createdPatron = personRepositoryAutoIncrementCustom.read(personIdProvided).success.value.getOrElse(fail())
-      personRepositoryAutoIncrementCustom.update(createdPatron) shouldBe 'success
-      personRepositoryAutoIncrementCustom.all shouldBe Try(Seq(createdPatron))
+      val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
+      repository.update(createdPatron) shouldBe 'success
+      repository.all shouldBe Try(Seq(createdPatron))
+      val newBirthDate = createdPatron.birthDate.minusYears(1)
+      repository.update(createdPatron.id, p => (p.birthDate, newBirthDate)) shouldBe 'success
+      repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
 
-      personRepositoryAutoIncrementCustom.delete(createdPatron.id) shouldBe 'success
-      personRepositoryAutoIncrementCustom.read(createdPatron.id).success.value shouldBe empty
-      personRepositoryAutoIncrementCustom.all shouldBe Try(Seq())
+      repository.delete(createdPatron.id) shouldBe 'success
+      repository.read(createdPatron.id).success.value shouldBe empty
+      repository.all shouldBe Try(Seq())
     }
   }
 }
