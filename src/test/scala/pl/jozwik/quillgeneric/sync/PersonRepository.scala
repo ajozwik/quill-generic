@@ -11,7 +11,7 @@ import scala.util.Try
 final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext,
     tableName: String)
-  extends Repository[PersonId, Person] {
+  extends MyPersonRepository {
 
   private implicit val dSchema: context.DynamicEntityQuery[Person] =
     context.dynamicQuerySchema[Person](tableName)
