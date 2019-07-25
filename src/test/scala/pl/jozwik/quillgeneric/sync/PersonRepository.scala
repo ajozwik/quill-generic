@@ -4,14 +4,16 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.{ QuillCrudWithContext, Repository }
+import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.Try
 
 final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext,
-    tableName: String)
-  extends MyPersonRepository {
+    protected val tableName: String)
+  extends MyPersonRepository[Dialect, Naming] {
+
+  protected def dynamicSchema: context.DynamicEntityQuery[Person] = dSchema
 
   private implicit val dSchema: context.DynamicEntityQuery[Person] =
     context.dynamicQuerySchema[Person](tableName)

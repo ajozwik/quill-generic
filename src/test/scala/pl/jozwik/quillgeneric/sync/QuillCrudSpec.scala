@@ -8,7 +8,7 @@ import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
-import scala.util.Try
+import scala.util.{ Success, Try }
 
 class QuillCrudSpec extends AbstractSpec {
 
@@ -26,14 +26,15 @@ class QuillCrudSpec extends AbstractSpec {
       val repository = new PersonRepository(ctx, "Person")
       val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now)
       val notExisting = Person(PersonId(2), "firstName", "lastName", LocalDate.now)
-      repository.all shouldBe Try(Seq())
+      repository.all shouldBe Success(Seq())
       repository.create(person) shouldBe 'success
       repository.read(notExisting.id).success.value shouldBe empty
       repository.read(person.id).success.value shouldBe Option(person)
       repository.update(person) shouldBe 'success
-      repository.all shouldBe Try(Seq(person))
+      repository.all shouldBe Success(Seq(person))
+      repository.max shouldBe Success(Option(person.birthDate))
       repository.delete(person.id) shouldBe 'success
-      repository.all shouldBe Try(Seq())
+      repository.all shouldBe Success(Seq())
 
     }
 
@@ -46,7 +47,7 @@ class QuillCrudSpec extends AbstractSpec {
       val personIdProvided = personId.success.value
       val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
       repository.update(createdPatron) shouldBe 'success
-      repository.all shouldBe Try(Seq(createdPatron))
+      repository.all shouldBe Success(Seq(createdPatron))
       val newBirthDate = createdPatron.birthDate.minusYears(1)
       val modified = createdPatron.copy(birthDate = newBirthDate)
       repository.update(modified) shouldBe 'success
@@ -55,6 +56,7 @@ class QuillCrudSpec extends AbstractSpec {
       repository.delete(createdPatron.id) shouldBe 'success
       repository.read(createdPatron.id).success.value shouldBe empty
       repository.all shouldBe Try(Seq())
+      repository.max shouldBe Success(None)
     }
 
     "Call all operations on Person with auto generated id and custom field" in {
@@ -75,6 +77,7 @@ class QuillCrudSpec extends AbstractSpec {
       repository.delete(createdPatron.id) shouldBe 'success
       repository.read(createdPatron.id).success.value shouldBe empty
       repository.all shouldBe Try(Seq())
+
     }
   }
 }
