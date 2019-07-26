@@ -7,6 +7,8 @@ val `scalaVersion_2.12` = "2.12.8"
 
 ThisBuild / scapegoatVersion := "1.3.9"
 
+resolvers += Resolver.sonatypeRepo("releases")
+
 val supportedScalaVersions = Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
 ThisBuild / crossScalaVersions := supportedScalaVersions
@@ -34,7 +36,7 @@ ThisBuild / resolvers ++= Seq("spring" at "https://repo.spring.io/plugins-releas
 
 val quillVersion = "3.3.0"
 
-val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
+val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
@@ -50,14 +52,14 @@ val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
 
-val `org.adbcj_h2-async-driver` = "org.adbcj" % "h2-async-driver" % "0.8"
+val `org.adbcj_h2-async-driver` = "org.adbcj" % "h2-async-driver" % "0.9"
 
 
 lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
   libraryDependencies ++= Seq(
     `io.getquill_quill-async`,
-    `ch.qos.logback_logback-classic`,
-    `com.typesafe.scala-logging_scala-logging`,
+    `ch.qos.logback_logback-classic` % Test,
+    `com.typesafe.scala-logging_scala-logging` % Test,
     `io.getquill_quill-async-mysql` % Test,
     `io.getquill_quill-jdbc`,
     `com.h2database_h2` % Test,
