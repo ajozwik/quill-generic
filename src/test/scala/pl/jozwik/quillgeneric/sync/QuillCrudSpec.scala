@@ -12,7 +12,7 @@ import scala.util.{ Success, Try }
 
 class QuillCrudSpec extends AbstractSpec {
 
-  lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext
+  private lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext
 
   private val generateId = true
 
@@ -38,27 +38,6 @@ class QuillCrudSpec extends AbstractSpec {
 
     }
 
-    "Call all operations on Person2 with auto generated id" in {
-      val repository = new PersonRepository(ctx, "Person2")
-      logger.debug("generated id")
-      val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
-      repository.all shouldBe Try(Seq())
-      val personId = repository.create(person, generateId)
-      val personIdProvided = personId.success.value
-      val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
-      repository.update(createdPatron) shouldBe 'success
-      repository.all shouldBe Success(Seq(createdPatron))
-      val newBirthDate = createdPatron.birthDate.minusYears(1)
-      val modified = createdPatron.copy(birthDate = newBirthDate)
-      repository.update(modified) shouldBe 'success
-      repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
-
-      repository.delete(createdPatron.id) shouldBe 'success
-      repository.read(createdPatron.id).success.value shouldBe empty
-      repository.all shouldBe Try(Seq())
-      repository.max shouldBe Success(None)
-    }
-
     "Call all operations on Person with auto generated id and custom field" in {
       val repository = new PersonCustomRepository(ctx, "Person3")
       logger.debug("generated id with custom field")
@@ -77,6 +56,28 @@ class QuillCrudSpec extends AbstractSpec {
       repository.delete(createdPatron.id) shouldBe 'success
       repository.read(createdPatron.id).success.value shouldBe empty
       repository.all shouldBe Try(Seq())
+
+    }
+
+    "Call all operations on Person2 with auto generated id" in {
+      val repository = new PersonRepository(ctx, "Person2")
+      logger.debug("generated id")
+      val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
+      repository.all shouldBe Try(Seq())
+      val personId = repository.create(person, generateId)
+      val personIdProvided = personId.success.value
+      val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
+      repository.update(createdPatron) shouldBe 'success
+      repository.all shouldBe Success(Seq(createdPatron))
+      val newBirthDate = createdPatron.birthDate.minusYears(1)
+      val modified = createdPatron.copy(birthDate = newBirthDate)
+      repository.update(modified) shouldBe 'success
+      repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
+      repository.searchByFirstName(person.firstName) shouldBe Success(Seq(modified))
+      repository.delete(createdPatron.id) shouldBe 'success
+      repository.read(createdPatron.id).success.value shouldBe empty
+      repository.all shouldBe Try(Seq())
+      repository.max shouldBe Success(None)
 
     }
   }
