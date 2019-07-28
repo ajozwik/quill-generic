@@ -42,6 +42,7 @@ final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     context.update[Person](entity)(dSchema)
 
   override def delete(id: PersonId): Try[Boolean] =
-    context.deleteByFilter[Person](_.id == id)(dSchema)
+    context.delete[PersonId, Person](id)
+  
 
 }
