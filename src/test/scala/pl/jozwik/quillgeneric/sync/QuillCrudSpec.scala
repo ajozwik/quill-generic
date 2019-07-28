@@ -5,7 +5,7 @@ import java.time.LocalDate
 import io.getquill.{ H2JdbcContext, SnakeCase }
 import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.AbstractSpec
-import pl.jozwik.quillgeneric.model.{ Person, PersonId }
+import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId, Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.{ Success, Try }
@@ -27,7 +27,7 @@ class QuillCrudSpec extends AbstractSpec {
       val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now)
       val notExisting = Person(PersonId(2), "firstName", "lastName", LocalDate.now)
       repository.all shouldBe Success(Seq())
-      repository.create(person) shouldBe 'success
+      repository.create(person, false) shouldBe 'success
       repository.read(notExisting.id).success.value shouldBe empty
       repository.read(person.id).success.value shouldBe Option(person)
       repository.update(person) shouldBe 'success
@@ -64,7 +64,7 @@ class QuillCrudSpec extends AbstractSpec {
       logger.debug("generated id")
       val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
       repository.all shouldBe Try(Seq())
-      val personId = repository.create(person, generateId)
+      val personId = repository.create(person)
       val personIdProvided = personId.success.value
       val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
       repository.update(createdPatron) shouldBe 'success
@@ -79,6 +79,25 @@ class QuillCrudSpec extends AbstractSpec {
       repository.all shouldBe Try(Seq())
       repository.max shouldBe Success(None)
 
+    }
+
+    "Configuration " in {
+      val repository = new ConfigurationRepository(ctx)
+      logger.debug("configuration")
+      val entity = Configuration(ConfigurationId("firstName"), "lastName")
+      repository.all shouldBe Try(Seq())
+      val entityId = repository.create(entity)
+      val entityIdProvided = entityId.success.value
+      val createdEntity = repository.read(entityIdProvided).success.value.getOrElse(fail())
+      repository.update(createdEntity) shouldBe 'success
+      repository.all shouldBe Success(Seq(createdEntity))
+      val newValue = "newValue"
+      val modified = createdEntity.copy(value = newValue)
+      repository.update(modified) shouldBe 'success
+      repository.read(createdEntity.id).success.value.map(_.value) shouldBe Option(newValue)
+      repository.delete(createdEntity.id) shouldBe 'success
+      repository.read(createdEntity.id).success.value shouldBe empty
+      repository.all shouldBe Try(Seq())
     }
   }
 }

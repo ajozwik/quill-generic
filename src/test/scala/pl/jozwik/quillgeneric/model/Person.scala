@@ -15,4 +15,4 @@ final case class Person(
     firstName: String,
     lastName: String,
     birthDate: LocalDate,
-    addressId: Option[AddressId] = None) extends WithId[PersonId]
+    addressId: Option[AddressId] = Option(AddressId.empty)) extends WithId[PersonId]

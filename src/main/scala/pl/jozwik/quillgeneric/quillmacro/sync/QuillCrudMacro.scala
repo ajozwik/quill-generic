@@ -16,7 +16,7 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def createOrUpdate(entity: Tree, generateId: Tree)(dSchema: Tree): Tree =
+  def createAndGenerateIdOrUpdate(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -31,6 +31,24 @@ class QuillCrudMacro(val c: MacroContext) {
           } else {
             $entity.id
           }
+        }
+      }
+    """
+
+  def createOrUpdate(entity: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+       transaction{
+          val result = run(
+            $dSchema.filter(_.id == entity.id).updateValue($entity)
+          )
+          if (result == 0) {
+              run(
+                $dSchema.insertValue($entity)
+              )
+          }
+          $entity.id
         }
       }
     """
@@ -73,6 +91,16 @@ class QuillCrudMacro(val c: MacroContext) {
         run(
            $dSchema.filter(_.id == lift($id))
         ).headOption
+      }
+    """
+
+  def delete(id: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+        run(
+           $dSchema.filter(_.id == lift($id)).delete
+        ) > 0
       }
     """
 

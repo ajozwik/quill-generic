@@ -21,18 +21,22 @@ final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def all: Try[Seq[Person]] =
     context.all[Person](dSchema)
 
-  override def create(entity: Person, generateId: Boolean = false): Try[PersonId] =
+  override def create(entity: Person, generateId: Boolean = true): Try[PersonId] =
     if (generateId) {
       context.createAndGenerateId[PersonId, Person](entity)(dSchema)
     } else {
       context.create[PersonId, Person](entity)(dSchema)
     }
 
+  override def createOrUpdate(entity: Person, generateId: Boolean = true): Try[PersonId] =
+    if (generateId) {
+      context.createAndGenerateIdOrUpdate[PersonId, Person](entity)(dSchema)
+    } else {
+      context.createOrUpdate[PersonId, Person](entity)(dSchema)
+    }
+
   override def read(id: PersonId): Try[Option[Person]] =
     context.read[PersonId, Person](id)(dSchema)
-
-  override def createOrUpdate(entity: Person, generateId: Boolean = false): Try[PersonId] =
-    context.createOrUpdate[PersonId, Person](entity, generateId)(dSchema)
 
   override def update(entity: Person): Try[Long] =
     context.update[Person](entity)(dSchema)

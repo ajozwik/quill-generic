@@ -4,14 +4,14 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.{ QuillCrudWithContext, Repository }
+import pl.jozwik.quillgeneric.quillmacro.sync.{ QuillCrudWithContext, RepositoryWithGeneratedId }
 
 import scala.util.Try
 
 final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext,
     tableName: String)
-  extends Repository[PersonId, Person] {
+  extends RepositoryWithGeneratedId[PersonId, Person] {
 
   private val aliases = {
     import context._
@@ -24,7 +24,7 @@ final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy
   override def all: Try[Seq[Person]] =
     context.all[Person](dSchema)
 
-  override def create(entity: Person, generateId: Boolean = false): Try[PersonId] =
+  override def create(entity: Person, generateId: Boolean = true): Try[PersonId] =
     if (generateId) {
       context.createAndGenerateId[PersonId, Person](entity)(dSchema)
     } else {
@@ -34,13 +34,17 @@ final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy
   override def read(id: PersonId): Try[Option[Person]] =
     context.read[PersonId, Person](id)(dSchema)
 
-  override def createOrUpdate(entity: Person, generateId: Boolean = false): Try[PersonId] =
-    context.createOrUpdate[PersonId, Person](entity, generateId)(dSchema)
+  override def createOrUpdate(entity: Person, generateId: Boolean = true): Try[PersonId] =
+    if (generateId) {
+      context.createAndGenerateIdOrUpdate[PersonId, Person](entity)(dSchema)
+    } else {
+      context.createOrUpdate[PersonId, Person](entity)(dSchema)
+    }
 
   override def update(entity: Person): Try[Long] =
     context.update[Person](entity)(dSchema)
 
   override def delete(id: PersonId): Try[Boolean] =
-    context.deleteByFilter[Person](_.id == id)(dSchema)
+    context.delete[PersonId, Person](id)
 
 }

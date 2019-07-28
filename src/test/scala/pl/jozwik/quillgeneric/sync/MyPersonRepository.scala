@@ -5,12 +5,12 @@ import java.time.LocalDate
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
 import scala.util.Try
 
 trait MyPersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
-  extends JdbcRepository[PersonId, Person, Dialect, Naming] {
+  extends JdbcRepositoryWithGeneratedId[PersonId, Person, Dialect, Naming] {
 
   def searchByFirstName(name: String): Try[Seq[Person]] = Try {
     import context._
