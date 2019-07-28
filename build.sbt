@@ -36,7 +36,7 @@ ThisBuild / resolvers ++= Seq("spring" at "https://repo.spring.io/plugins-releas
 
 val quillVersion = "3.3.0"
 
-val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
+val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
