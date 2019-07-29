@@ -78,7 +78,6 @@ class QuillCrudSpec extends AbstractSpec {
       repository.read(createdPatron.id).success.value shouldBe empty
       repository.all shouldBe Try(Seq())
       repository.max shouldBe Success(None)
-
     }
 
     "Configuration " in {

@@ -34,7 +34,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / resolvers ++= Seq("spring" at "https://repo.spring.io/plugins-release/")
 
-val quillVersion = "3.3.0"
+val quillVersion = "3.4.1"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 

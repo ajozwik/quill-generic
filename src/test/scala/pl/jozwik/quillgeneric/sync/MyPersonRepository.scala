@@ -23,4 +23,5 @@ trait MyPersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
     val r = dynamicSchema.map(p => p.birthDate)
     run(r.max)
   }
+
 }
