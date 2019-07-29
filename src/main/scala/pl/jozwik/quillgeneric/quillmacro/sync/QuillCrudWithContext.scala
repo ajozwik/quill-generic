@@ -2,13 +2,12 @@ package pl.jozwik.quillgeneric.quillmacro.sync
 
 import io.getquill.context.Context
 import pl.jozwik.quillgeneric.quillmacro.WithId
-import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
 
 import scala.language.experimental.macros
 import scala.util.Try
 
 trait QuillCrudWithContext {
-  this: Context[_, _] with DateQuotes =>
+  this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 
   def all[T](implicit dSchema: dQuery[T]): Try[Seq[T]] = macro QuillCrudMacro.all
