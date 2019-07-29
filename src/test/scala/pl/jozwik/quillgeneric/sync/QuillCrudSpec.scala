@@ -2,17 +2,32 @@ package pl.jozwik.quillgeneric.sync
 
 import java.time.LocalDate
 
-import io.getquill.{ H2JdbcContext, SnakeCase }
+import io.getquill.context.jdbc.JdbcContext
+import io.getquill.context.sql.idiom.SqlIdiom
+import io.getquill.{ H2JdbcContext, NamingStrategy, SnakeCase }
 import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId, Person, PersonId }
+import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.{ Success, Try }
 
+object QuillCrudSpec {
+  def youngerThan[Dialect <: SqlIdiom, Naming <: NamingStrategy](
+    from: LocalDate,
+    ctx: JdbcContext[Dialect, Naming] with QuillCrudWithContext with DateQuotes): Try[Seq[Person]] =
+    Try {
+      import ctx._
+      ctx.run(query[Person].filter(_.birthDate > lift(from)))
+    }
+}
+
 class QuillCrudSpec extends AbstractSpec {
 
-  private lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext
+  import QuillCrudSpec._
+
+  private lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext with DateQuotes
 
   private val generateId = true
 
@@ -24,8 +39,9 @@ class QuillCrudSpec extends AbstractSpec {
   "QueriesSync " should {
     "Call all operations on Person" in {
       val repository = new PersonRepository(ctx, "Person")
-      val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now)
-      val notExisting = Person(PersonId(2), "firstName", "lastName", LocalDate.now)
+      val person = Person(PersonId(1), "firstName", "lastName", today)
+      val notExisting = Person(PersonId(2), "firstName", "lastName", today)
+      youngerThan(today, ctx)
       repository.all shouldBe Success(Seq())
       repository.create(person, false) shouldBe 'success
       repository.read(notExisting.id).success.value shouldBe empty
@@ -41,7 +57,7 @@ class QuillCrudSpec extends AbstractSpec {
     "Call all operations on Person with auto generated id and custom field" in {
       val repository = new PersonCustomRepository(ctx, "Person3")
       logger.debug("generated id with custom field")
-      val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
+      val person = Person(PersonId.empty, "firstName", "lastName", today)
       repository.all shouldBe Try(Seq())
       val personId = repository.create(person, generateId)
       val personIdProvided = personId.success.value
@@ -62,7 +78,7 @@ class QuillCrudSpec extends AbstractSpec {
     "Call all operations on Person2 with auto generated id" in {
       val repository = new PersonRepository(ctx, "Person2")
       logger.debug("generated id")
-      val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
+      val person = Person(PersonId.empty, "firstName", "lastName", today)
       repository.all shouldBe Try(Seq())
       val personId = repository.create(person)
       val personIdProvided = personId.success.value

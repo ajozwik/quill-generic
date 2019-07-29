@@ -4,12 +4,13 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
+import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.Try
 
 final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
-    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext,
+    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext with DateQuotes,
     protected val tableName: String)
   extends MyPersonRepository[Dialect, Naming] {
 
@@ -43,6 +44,5 @@ final class PersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
 
   override def delete(id: PersonId): Try[Boolean] =
     context.delete[PersonId, Person](id)
-  
 
 }
