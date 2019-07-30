@@ -9,8 +9,8 @@ import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
 import scala.util.Try
 
-trait MyPersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
-  extends JdbcRepositoryWithGeneratedId[PersonId, Person, Dialect, Naming] {
+trait MyPersonRepository[D <: SqlIdiom, N <: NamingStrategy]
+  extends JdbcRepositoryWithGeneratedId[PersonId, Person, D, N] {
 
   def searchByFirstName(name: String): Try[Seq[Person]] = Try {
     import context._

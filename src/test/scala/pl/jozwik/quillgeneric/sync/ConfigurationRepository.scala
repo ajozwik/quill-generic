@@ -1,18 +1,17 @@
 package pl.jozwik.quillgeneric.sync
 
 import io.getquill.NamingStrategy
-import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.{ JdbcRepository, QuillCrudWithContext }
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
 
 import scala.util.Try
 
-class ConfigurationRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
-    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext with DateQuotes,
+class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
+    protected val context: JdbcContextDateQuotes[D, N],
     protected val tableName: String = "Configuration")
-  extends JdbcRepository[ConfigurationId, Configuration, Dialect, Naming] {
+  extends JdbcRepository[ConfigurationId, Configuration, D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Configuration] = dSchema
 

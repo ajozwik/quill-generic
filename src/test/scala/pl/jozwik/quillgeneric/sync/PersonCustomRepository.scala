@@ -1,18 +1,17 @@
 package pl.jozwik.quillgeneric.sync
 
 import io.getquill.NamingStrategy
-import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.{ JdbcRepositoryWithGeneratedId, QuillCrudWithContext }
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
 import scala.util.Try
 
-final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
-    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext with DateQuotes,
+final class PersonCustomRepository[D <: SqlIdiom, N <: NamingStrategy](
+    protected val context: JdbcContextDateQuotes[D, N],
     tableName: String)
-  extends JdbcRepositoryWithGeneratedId[PersonId, Person, Dialect, Naming] {
+  extends JdbcRepositoryWithGeneratedId[PersonId, Person, D, N] {
 
   private val aliases = {
     import context._

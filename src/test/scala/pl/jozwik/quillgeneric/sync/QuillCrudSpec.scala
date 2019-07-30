@@ -2,21 +2,21 @@ package pl.jozwik.quillgeneric.sync
 
 import java.time.LocalDate
 
-import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import io.getquill.{ H2JdbcContext, NamingStrategy, SnakeCase }
 import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId, Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.QuillCrudWithContext
 
 import scala.util.{ Success, Try }
 
 object QuillCrudSpec {
-  def youngerThan[Dialect <: SqlIdiom, Naming <: NamingStrategy](
+  def youngerThan[D <: SqlIdiom, N <: NamingStrategy](
     from: LocalDate,
-    ctx: JdbcContext[Dialect, Naming] with QuillCrudWithContext with DateQuotes): Try[Seq[Person]] =
+    ctx: JdbcContextDateQuotes[D, N]): Try[Seq[Person]] =
     Try {
       import ctx._
       ctx.run(query[Person].filter(_.birthDate > lift(from)))
