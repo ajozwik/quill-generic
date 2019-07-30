@@ -24,4 +24,8 @@ trait MyPersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
     run(r.max)
   }
 
+  def youngerThan(date: LocalDate): Try[Seq[Person]] = Try {
+    import context._
+    run(dynamicSchema.filter(p => quote(p.birthDate > lift(date))))
+  }
 }

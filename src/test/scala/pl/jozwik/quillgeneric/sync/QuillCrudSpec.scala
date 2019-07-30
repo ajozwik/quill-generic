@@ -51,6 +51,7 @@ class QuillCrudSpec extends AbstractSpec {
       repository.max shouldBe Success(Option(person.birthDate))
       repository.delete(person.id) shouldBe 'success
       repository.all shouldBe Success(Seq())
+      repository.youngerThan(today) shouldBe 'success
 
     }
 

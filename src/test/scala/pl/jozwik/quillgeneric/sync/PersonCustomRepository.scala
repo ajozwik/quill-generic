@@ -4,14 +4,15 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.{ QuillCrudWithContext, RepositoryWithGeneratedId }
+import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
+import pl.jozwik.quillgeneric.quillmacro.sync.{ JdbcRepositoryWithGeneratedId, QuillCrudWithContext }
 
 import scala.util.Try
 
 final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
-    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext,
+    protected val context: JdbcContext[Dialect, Naming] with QuillCrudWithContext with DateQuotes,
     tableName: String)
-  extends RepositoryWithGeneratedId[PersonId, Person] {
+  extends JdbcRepositoryWithGeneratedId[PersonId, Person, Dialect, Naming] {
 
   private val aliases = {
     import context._
@@ -19,6 +20,9 @@ final class PersonCustomRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy
       alias[Person](_.birthDate, "dob")
     }
   }
+
+  protected def dynamicSchema: context.DynamicEntityQuery[Person] = dSchema
+
   private implicit val dSchema: context.DynamicEntityQuery[Person] = context.dynamicQuerySchema[Person](tableName, aliases: _*)
 
   override def all: Try[Seq[Person]] =
