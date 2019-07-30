@@ -6,7 +6,7 @@ Library of generic CRUD operation for quill library
 
 Example usage in:
 
- - [PersonRepository](/src/test/scala/pl/jozwik/quillgeneric/sync/PersonRepository.scala)
+ - [PersonRepository](/src/test/scala/pl/jozwik/quillgeneric/sync/PersonRepository.scala) and [MyPersonRepository](src/test/scala/pl/jozwik/quillgeneric/sync/MyPersonRepository.scala)
  - [PersonAsyncRepository](/src/test/scala/pl/jozwik/quillgeneric/async/PersonAsyncRepository.scala)
  
  Repositories are generated automatically by [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-crud-generic), see
