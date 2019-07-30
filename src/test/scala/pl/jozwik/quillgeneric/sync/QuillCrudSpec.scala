@@ -80,7 +80,8 @@ class QuillCrudSpec extends AbstractSpec {
       logger.debug("generated id")
       val person = Person(PersonId.empty, "firstName", "lastName", today)
       repository.all shouldBe Try(Seq())
-      val personId = repository.create(person)
+      val personId = repository.createOrUpdate(person)
+      personId shouldBe 'success
       val personIdProvided = personId.success.value
       val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
       repository.update(createdPatron) shouldBe 'success
@@ -96,12 +97,13 @@ class QuillCrudSpec extends AbstractSpec {
       repository.max shouldBe Success(None)
     }
 
-    "Configuration " in {
+    "Handle simple Configuration with custom id" in {
       val repository = new ConfigurationRepository(ctx)
       logger.debug("configuration")
       val entity = Configuration(ConfigurationId("firstName"), "lastName")
       repository.all shouldBe Try(Seq())
-      val entityId = repository.create(entity)
+      val entityId = repository.createOrUpdate(entity)
+      entityId shouldBe 'success
       val entityIdProvided = entityId.success.value
       val createdEntity = repository.read(entityIdProvided).success.value.getOrElse(fail())
       repository.update(createdEntity) shouldBe 'success
@@ -109,6 +111,7 @@ class QuillCrudSpec extends AbstractSpec {
       val newValue = "newValue"
       val modified = createdEntity.copy(value = newValue)
       repository.update(modified) shouldBe 'success
+      repository.createOrUpdate(modified) shouldBe 'success
       repository.read(createdEntity.id).success.value.map(_.value) shouldBe Option(newValue)
       repository.delete(createdEntity.id) shouldBe 'success
       repository.read(createdEntity.id).success.value shouldBe empty
