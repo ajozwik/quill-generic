@@ -29,4 +29,8 @@ trait QuillCrudWithContext {
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Boolean] = macro QuillCrudMacro.delete
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Boolean] = macro QuillCrudMacro.deleteByFilter
+
+  def searchByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Seq[T]] = macro QuillCrudMacro.searchByFilter
+
+  def count[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Long] = macro QuillCrudMacro.count
 }

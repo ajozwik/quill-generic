@@ -49,6 +49,7 @@ class QuillCrudSpec extends AbstractSpec {
       repository.update(person) shouldBe 'success
       repository.all shouldBe Success(Seq(person))
       repository.max shouldBe Success(Option(person.birthDate))
+      repository.count shouldBe Success(1)
       repository.delete(person.id) shouldBe 'success
       repository.all shouldBe Success(Seq())
       repository.youngerThan(today) shouldBe 'success
@@ -124,6 +125,7 @@ class QuillCrudSpec extends AbstractSpec {
       repository.createOrUpdate(entity2) shouldBe 'success
       repository.update(entity2) shouldBe 'success
       repository.all.success.value should contain theSameElementsAs Seq(entity, entity2)
+
     }
   }
 }

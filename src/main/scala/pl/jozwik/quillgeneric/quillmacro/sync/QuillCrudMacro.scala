@@ -112,4 +112,24 @@ class QuillCrudMacro(val c: MacroContext) {
         ) > 0
       }
     """
+
+  def searchByFilter(filter: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+        run(
+           $dSchema.filter($filter)
+        )
+      }
+    """
+
+  def count(filter: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+        run(
+           $dSchema.filter($filter).size
+        )
+      }
+    """
 }
