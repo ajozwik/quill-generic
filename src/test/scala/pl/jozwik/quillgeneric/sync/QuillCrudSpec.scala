@@ -43,7 +43,7 @@ class QuillCrudSpec extends AbstractSpec {
       val notExisting = Person(PersonId(2), "firstName", "lastName", today)
       youngerThan(today, ctx)
       repository.all shouldBe Success(Seq())
-      repository.create(person, false) shouldBe 'success
+      repository.create(person, !generateId) shouldBe 'success
       repository.read(notExisting.id).success.value shouldBe empty
       repository.read(person.id).success.value shouldBe Option(person)
       repository.update(person) shouldBe 'success
@@ -60,7 +60,7 @@ class QuillCrudSpec extends AbstractSpec {
       logger.debug("generated id with custom field")
       val person = Person(PersonId.empty, "firstName", "lastName", today)
       repository.all shouldBe Try(Seq())
-      val personId = repository.create(person, generateId)
+      val personId = repository.create(person)
       val personIdProvided = personId.success.value
       val createdPatron = repository.read(personIdProvided).success.value.getOrElse(fail())
       repository.update(createdPatron) shouldBe 'success
@@ -100,8 +100,9 @@ class QuillCrudSpec extends AbstractSpec {
 
     "Handle simple Configuration with custom id" in {
       val repository = new ConfigurationRepository(ctx)
-      logger.debug("configuration")
+      //      logger.debug("configuration")
       val entity = Configuration(ConfigurationId("firstName"), "lastName")
+      val entity2 = Configuration(ConfigurationId("nextName"), "nextName")
       repository.all shouldBe Try(Seq())
       val entityId = repository.createOrUpdate(entity)
       entityId shouldBe 'success
@@ -117,6 +118,12 @@ class QuillCrudSpec extends AbstractSpec {
       repository.delete(createdEntity.id) shouldBe 'success
       repository.read(createdEntity.id).success.value shouldBe empty
       repository.all shouldBe Try(Seq())
+
+      repository.createOrUpdate(entity) shouldBe 'success
+      repository.createOrUpdate(entity2) shouldBe 'success
+      repository.createOrUpdate(entity2) shouldBe 'success
+      repository.update(entity2) shouldBe 'success
+      repository.all.success.value should contain theSameElementsAs Seq(entity, entity2)
     }
   }
 }

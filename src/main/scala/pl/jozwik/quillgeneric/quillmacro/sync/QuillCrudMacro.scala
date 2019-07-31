@@ -23,12 +23,11 @@ class QuillCrudMacro(val c: MacroContext) {
       util.Try {
        transaction{
           val result = run(
-            $dSchema.filter(_.id == lift(id))
+            $dSchema.filter(_.id == lift(id)).updateValue($entity)
           )
-          if (result.isEmpty) {
+          if (result == 0) {
             run($dSchema.insertValue($entity).returningGenerated(_.id))
           } else {
-            run($dSchema.updateValue($entity))
             $entity.id
           }
         }
@@ -42,12 +41,10 @@ class QuillCrudMacro(val c: MacroContext) {
       util.Try {
        transaction{
          val result = run(
-             $dSchema.filter(_.id == lift(id))
+             $dSchema.filter(_.id == lift(id)).updateValue($entity)
           )
-          if(result.isEmpty){
+          if(result == 0){
             run($dSchema.insertValue($entity))
-          } else {
-            run($dSchema.updateValue($entity))
           }
         }
         $entity.id
@@ -78,9 +75,10 @@ class QuillCrudMacro(val c: MacroContext) {
   def update(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
+      val id = $entity.id
       util.Try {
         run(
-            $dSchema.updateValue($entity)
+            $dSchema.filter(_.id == lift(id)).updateValue($entity)
         )
       }
     """
