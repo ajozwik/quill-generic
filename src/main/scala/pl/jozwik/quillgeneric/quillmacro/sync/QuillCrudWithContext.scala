@@ -30,7 +30,9 @@ trait QuillCrudWithContext {
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Boolean] = macro QuillCrudMacro.deleteByFilter
 
-  def searchByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Seq[T]] = macro QuillCrudMacro.searchByFilter
+  def searchByFilter[T](filter: T => Boolean)(
+    offset: Int,
+    limit: Int)(implicit dSchema: dQuery[T]): Try[Seq[T]] = macro QuillCrudMacro.searchByFilter
 
   def count[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Long] = macro QuillCrudMacro.count
 }

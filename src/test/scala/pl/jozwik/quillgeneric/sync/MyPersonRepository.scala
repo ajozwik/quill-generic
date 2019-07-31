@@ -11,10 +11,10 @@ import scala.util.Try
 
 trait MyPersonRepository[D <: SqlIdiom, N <: NamingStrategy]
   extends JdbcRepositoryWithGeneratedId[PersonId, Person, D, N] {
-
-  def searchByFirstName(name: String): Try[Seq[Person]] = {
+  def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]] = {
     import context._
-    searchByFilter((p: Person) => p.firstName == lift(name) && p.lastName != lift(""))(dynamicSchema)
+    searchByFilter((p: Person) =>
+      p.firstName == lift(name) && p.lastName != lift(""))(lift(offset), lift(limit))(dynamicSchema)
   }
 
   def max: Try[Option[LocalDate]] = Try {
@@ -23,12 +23,13 @@ trait MyPersonRepository[D <: SqlIdiom, N <: NamingStrategy]
     run(r.max)
   }
 
-  def youngerThan(date: LocalDate): Try[Seq[Person]] = {
+  def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]] = {
     import context._
-    searchByFilter((p: Person) => quote(p.birthDate > lift(date)))(dynamicSchema)
+    searchByFilter((p: Person) => quote(p.birthDate > lift(date)))(lift(0), lift(limit))(dynamicSchema)
   }
 
   def count: Try[Long] = {
     context.count((_: Person) => true)(dynamicSchema)
   }
+
 }

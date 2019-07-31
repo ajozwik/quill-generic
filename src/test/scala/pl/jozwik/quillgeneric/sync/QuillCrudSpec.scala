@@ -29,6 +29,8 @@ class QuillCrudSpec extends AbstractSpec {
 
   private lazy val ctx = new H2JdbcContext(SnakeCase, "h2") with QuillCrudWithContext with DateQuotes
 
+  private val (offset, limit) = (0, 100)
+
   private val generateId = true
 
   override def afterAll(): Unit = {
@@ -52,8 +54,7 @@ class QuillCrudSpec extends AbstractSpec {
       repository.count shouldBe Success(1)
       repository.delete(person.id) shouldBe 'success
       repository.all shouldBe Success(Seq())
-      repository.youngerThan(today) shouldBe 'success
-
+      repository.youngerThan(today)(offset, limit) shouldBe 'success
     }
 
     "Call all operations on Person with auto generated id and custom field" in {
@@ -92,7 +93,7 @@ class QuillCrudSpec extends AbstractSpec {
       val modified = createdPatron.copy(birthDate = newBirthDate)
       repository.update(modified) shouldBe 'success
       repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
-      repository.searchByFirstName(person.firstName) shouldBe Success(Seq(modified))
+      repository.searchByFirstName(person.firstName)(offset, limit) shouldBe Success(Seq(modified))
       repository.delete(createdPatron.id) shouldBe 'success
       repository.read(createdPatron.id).success.value shouldBe empty
       repository.all shouldBe Try(Seq())

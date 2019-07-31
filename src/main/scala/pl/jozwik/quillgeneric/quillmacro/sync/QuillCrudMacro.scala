@@ -113,12 +113,12 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
-  def searchByFilter(filter: Tree)(dSchema: Tree): Tree =
+  def searchByFilter(filter: Tree)(offset: Tree, limit: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
         run(
-           $dSchema.filter($filter)
+           $dSchema.filter($filter).drop($offset).take($limit)
         )
       }
     """
