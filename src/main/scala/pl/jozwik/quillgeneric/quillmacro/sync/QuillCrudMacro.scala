@@ -118,7 +118,7 @@ class QuillCrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       util.Try {
         run(
-           $dSchema.filter($filter).drop($offset).take($limit)
+           $dSchema.filter($filter).drop(lift($offset)).take(lift($limit))
         )
       }
     """
