@@ -3,7 +3,7 @@ import scalariform.formatter.preferences._
 
 val `scalaVersion_2.13` = "2.13.0"
 
-val `scalaVersion_2.12` = "2.12.8"
+val `scalaVersion_2.12` = "2.12.9"
 
 ThisBuild / scapegoatVersion := "1.3.9"
 
