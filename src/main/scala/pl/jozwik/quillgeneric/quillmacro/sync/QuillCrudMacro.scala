@@ -10,9 +10,7 @@ class QuillCrudMacro(val c: MacroContext) {
     q"""
       import ${c.prefix}._
       util.Try {
-        run(
-          $dSchema
-        )
+        run($dSchema)
       }
     """
 
@@ -34,6 +32,28 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
+  def createWithGenerateIdOrUpdateAndRead(entity: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      val id = $entity.id
+      util.Try {
+       transaction{
+          val result = run(
+            $dSchema.filter(_.id == lift(id)).updateValue($entity)
+          )
+          val newId =
+            if (result == 0) {
+              run($dSchema.insertValue($entity).returningGenerated(_.id))
+            } else {
+              $entity.id
+            }
+          run($dSchema.filter(_.id == lift(newId)))
+          .headOption
+          .getOrElse(throw new NoSuchElementException(s"$$newId"))
+        }
+      }
+    """
+
   def createOrUpdate(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
@@ -51,6 +71,25 @@ class QuillCrudMacro(val c: MacroContext) {
       }
     """
 
+  def createOrUpdateAndRead(entity: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      val id = $entity.id
+      util.Try {
+       transaction{
+         val result = run(
+             $dSchema.filter(_.id == lift(id)).updateValue($entity)
+          )
+          if(result == 0){
+            run($dSchema.insertValue($entity))
+          }
+        }
+        run($dSchema.filter(_.id == lift(id)))
+          .headOption
+          .getOrElse(throw new NoSuchElementException(s"$$id"))
+      }
+    """
+
   def create(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
@@ -62,13 +101,38 @@ class QuillCrudMacro(val c: MacroContext) {
        }
     """
 
+  def createAndRead(entity: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      val id = $entity.id
+      util.Try {
+        transaction {
+          run($dSchema.insertValue($entity))
+          run($dSchema.filter(_.id == lift(id)))
+          .headOption
+          .getOrElse(throw new NoSuchElementException(s"$$id"))
+        }
+       }
+    """
+
   def createAndGenerateId(entity: Tree)(dSchema: Tree): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-          run(
-           $dSchema.insertValue($entity).returningGenerated(_.id)
-          )
+          run($dSchema.insertValue($entity).returningGenerated(_.id))
+       }
+    """
+
+  def createWithGenerateIdAndRead(entity: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      util.Try {
+       transaction {
+         val id = run($dSchema.insertValue($entity).returningGenerated(_.id))
+         run($dSchema.filter(_.id == lift(id)))
+         .headOption
+         .getOrElse(throw new NoSuchElementException(s"$$id"))
+        }
        }
     """
 
@@ -77,9 +141,21 @@ class QuillCrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
-        run(
-            $dSchema.filter(_.id == lift(id)).updateValue($entity)
-        )
+        run($dSchema.filter(_.id == lift(id)).updateValue($entity))
+      }
+    """
+
+  def updateAndRead(entity: Tree)(dSchema: Tree): Tree =
+    q"""
+      import ${c.prefix}._
+      val id = $entity.id
+      util.Try {
+       transaction {
+        run($dSchema.filter(_.id == lift(id)).updateValue($entity))
+        run($dSchema.filter(_.id == lift(id)))
+         .headOption
+         .getOrElse(throw new NoSuchElementException(s"$$id"))
+       }
       }
     """
 
@@ -87,9 +163,8 @@ class QuillCrudMacro(val c: MacroContext) {
     q"""
       import ${c.prefix}._
       util.Try {
-        run(
-           $dSchema.filter(_.id == lift($id))
-        ).headOption
+        run($dSchema.filter(_.id == lift($id)))
+        .headOption
       }
     """
 

@@ -14,15 +14,28 @@ trait QuillCrudWithContext {
 
   def create[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro QuillCrudMacro.create
 
+  def createAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro QuillCrudMacro.createAndRead
+
   def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro QuillCrudMacro.createAndGenerateId
+
+  def createWithGenerateIdAndRead[K, T <: WithId[K]](
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro QuillCrudMacro.createWithGenerateIdAndRead
 
   def createOrUpdate[K, T <: WithId[K]](
     entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro QuillCrudMacro.createOrUpdate
 
+  def createOrUpdateAndRead[K, T <: WithId[K]](
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro QuillCrudMacro.createOrUpdateAndRead
+
   def createAndGenerateIdOrUpdate[K, T <: WithId[K]](
     entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro QuillCrudMacro.createAndGenerateIdOrUpdate
 
+  def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro QuillCrudMacro.createWithGenerateIdOrUpdateAndRead
+
   def update[T](entity: T)(implicit dSchema: dQuery[T]): Try[Long] = macro QuillCrudMacro.update
+
+  def updateAndRead[T](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro QuillCrudMacro.updateAndRead
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Option[T]] = macro QuillCrudMacro.read
 

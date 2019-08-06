@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.repository
 
 import java.time.LocalDate
 
@@ -11,20 +11,20 @@ import scala.util.Try
 
 trait MyPersonRepository[D <: SqlIdiom, N <: NamingStrategy]
   extends JdbcRepositoryWithGeneratedId[PersonId, Person, D, N] {
+
+  import context._
+
   def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]] = {
-    import context._
     searchByFilter((p: Person) =>
       p.firstName == lift(name) && p.lastName != lift(""))(offset, limit)(dynamicSchema)
   }
 
   def max: Try[Option[LocalDate]] = Try {
-    import context._
     val r = dynamicSchema.map(p => p.birthDate)
     run(r.max)
   }
 
   def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]] = {
-    import context._
     searchByFilter((p: Person) => quote(p.birthDate > lift(date)))(offset, limit)(dynamicSchema)
   }
 

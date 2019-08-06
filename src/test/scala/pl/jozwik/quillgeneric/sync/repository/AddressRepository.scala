@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.repository
 
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
@@ -26,6 +26,13 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
       context.create[AddressId, Address](entity)
     }
 
+  override def createAndRead(entity: Address, generateId: Boolean = true): Try[Address] =
+    if (generateId) {
+      context.createWithGenerateIdAndRead[AddressId, Address](entity)
+    } else {
+      context.createAndRead[AddressId, Address](entity)
+    }
+
   override def read(id: AddressId): Try[Option[Address]] =
     context.read[AddressId, Address](id)
 
@@ -36,8 +43,18 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
       context.createOrUpdate[AddressId, Address](entity)
     }
 
+  override def createOrUpdateAndRead(entity: Address, generateId: Boolean = true): Try[Address] =
+    if (generateId) {
+      context.createWithGenerateIdOrUpdateAndRead[AddressId, Address](entity)
+    } else {
+      context.createOrUpdateAndRead[AddressId, Address](entity)
+    }
+
   override def update(entity: Address): Try[Long] =
     context.update[Address](entity)
+
+  override def updateAndRead(entity: Address): Try[Address] =
+    context.updateAndRead[Address](entity)
 
   override def delete(id: AddressId): Try[Boolean] =
     context.deleteByFilter[Address](_.id == id)
