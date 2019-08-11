@@ -12,7 +12,7 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcCompositeKeyContextDateQuotes[D, N],
     tableName: String
 )
-  extends JdbcRepositoryCompositeKey[ProductId, PersonId, SaleId, Sale, D, N] {
+  extends JdbcRepositoryCompositeKey[SaleId, Sale, D, N] {
 
   private val aliases = {
     import context._
