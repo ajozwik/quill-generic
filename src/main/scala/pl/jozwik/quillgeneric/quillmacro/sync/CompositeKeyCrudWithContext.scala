@@ -12,21 +12,21 @@ trait CompositeKeyCrudWithContext {
 
   def all[T](implicit dSchema: dQuery[T]): Try[Seq[T]] = macro CompositeKeyCrudMacro.all
 
-  def create[K <: CompositeKey[_, _], T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CompositeKeyCrudMacro.create
+  def create[K <: CompositeKey[_, _], T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CompositeKeyCrudMacro.create[T]
 
-  def createAndRead[K <: CompositeKey[_, _], T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CompositeKeyCrudMacro.createAndRead
+  def createAndRead[K <: CompositeKey[_, _], T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CompositeKeyCrudMacro.createAndRead[T]
 
   def createOrUpdate[K <: CompositeKey[_, _], T <: WithId[K]](
     entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CompositeKeyCrudMacro.createOrUpdate[T]
 
   def createOrUpdateAndRead[K <: CompositeKey[_, _], T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CompositeKeyCrudMacro.createOrUpdateAndRead
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CompositeKeyCrudMacro.createOrUpdateAndRead[T]
 
-  def update[T](entity: T)(implicit dSchema: dQuery[T]): Try[Long] = macro CompositeKeyCrudMacro.update
+  def update[T](entity: T)(implicit dSchema: dQuery[T]): Try[Long] = macro CompositeKeyCrudMacro.update[T]
 
-  def updateAndRead[T](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CompositeKeyCrudMacro.updateAndRead
+  def updateAndRead[T](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CompositeKeyCrudMacro.updateAndRead[T]
 
-  def read[K <: CompositeKey[_, _], T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Option[T]] = macro CompositeKeyCrudMacro.read
+  def read[K <: CompositeKey[_, _], T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Option[T]] = macro CompositeKeyCrudMacro.read[K]
 
   def delete[K <: CompositeKey[_, _], T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Boolean] = macro CompositeKeyCrudMacro.delete
 

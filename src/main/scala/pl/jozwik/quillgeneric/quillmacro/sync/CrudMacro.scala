@@ -80,17 +80,17 @@ private class CrudMacro(val c: MacroContext) {
       val id = $entity.id
       util.Try {
        transaction {
-        val q = $dSchema.filter(_.id == lift(id))
+         val q = $dSchema.filter(_.id == lift(id))
          val result = run(
              q.updateValue($entity)
           )
           if(result == 0){
             run($dSchema.insertValue($entity))
           }
-        }
-        run(q)
+          run(q)
           .headOption
           .getOrElse(throw new NoSuchElementException(s"$$id"))
+        }
       }
     """
 
@@ -167,21 +167,21 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def read[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[K])(dSchema: c.Expr[_]): Tree =
+  def read[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        val q = $dSchema.filter(_.id == lift(id))
+        val q = $dSchema.filter(_.id == lift($id))
         run(q)
         .headOption
       }
     """
 
-  def delete[K: c.WeakTypeTag](entity: c.Expr[K])(dSchema: c.Expr[_]): Tree =
+  def delete[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        val q = $dSchema.filter(_.id == lift(id))
+        val q = $dSchema.filter(_.id == lift($id))
         run(
            q.delete
         ) > 0

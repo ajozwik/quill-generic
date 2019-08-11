@@ -106,11 +106,11 @@ private class CompositeKeyCrudMacro(val c: MacroContext) {
       }
     """
 
-  def read[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[K])(dSchema: c.Expr[_]): Tree =
+  def read[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
-        val q = $dSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2))
+        val q = $dSchema.filter(_.id.fk1 == lift($id.fk1)).filter(_.id.fk2 == lift($id.fk2))
         run(q)
         .headOption
       }

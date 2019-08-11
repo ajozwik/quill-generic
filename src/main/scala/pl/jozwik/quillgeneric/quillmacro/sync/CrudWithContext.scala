@@ -12,34 +12,34 @@ trait CrudWithContext {
 
   def all[T](implicit dSchema: dQuery[T]): Try[Seq[T]] = macro CrudMacro.all
 
-  def create[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.create
+  def create[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.create[T]
 
-  def createAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createAndRead
+  def createAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createAndRead[T]
 
-  def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateId
+  def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateId[T]
 
   def createWithGenerateIdAndRead[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdAndRead
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdAndRead[T]
 
   def createOrUpdate[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createOrUpdate
+    entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createOrUpdate[T]
 
   def createOrUpdateAndRead[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createOrUpdateAndRead
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createOrUpdateAndRead[T]
 
   def createAndGenerateIdOrUpdate[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateIdOrUpdate
+    entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateIdOrUpdate[T]
 
   def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdOrUpdateAndRead
+    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdOrUpdateAndRead[T]
 
-  def update[T](entity: T)(implicit dSchema: dQuery[T]): Try[Long] = macro CrudMacro.update
+  def update[T](entity: T)(implicit dSchema: dQuery[T]): Try[Long] = macro CrudMacro.update[T]
 
-  def updateAndRead[T](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.updateAndRead
+  def updateAndRead[T](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.updateAndRead[T]
 
-  def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Option[T]] = macro CrudMacro.read
+  def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Option[T]] = macro CrudMacro.read[K]
 
-  def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Boolean] = macro CrudMacro.delete
+  def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Try[Boolean] = macro CrudMacro.delete[K]
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Boolean] = macro CrudMacro.deleteByFilter
 
