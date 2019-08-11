@@ -129,7 +129,8 @@ private class CrudMacro(val c: MacroContext) {
       util.Try {
        transaction {
          val id = run($dSchema.insertValue($entity).returningGenerated(_.id))
-         run($dSchema.filter(_.id == lift(id)))
+         val q = $dSchema.filter(_.id == lift(id))
+         run(q)
          .headOption
          .getOrElse(throw new NoSuchElementException(s"$$id"))
         }
@@ -141,7 +142,8 @@ private class CrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
-        run($dSchema.filter(_.id == lift(id)).updateValue($entity))
+        val q = $dSchema.filter(_.id == lift(id))
+        run(q.updateValue($entity))
       }
     """
 
@@ -151,8 +153,9 @@ private class CrudMacro(val c: MacroContext) {
       val id = $entity.id
       util.Try {
        transaction {
-        run($dSchema.filter(_.id == lift(id)).updateValue($entity))
-        run($dSchema.filter(_.id == lift(id)))
+        val q = $dSchema.filter(_.id == lift(id))
+        run(q.updateValue($entity))
+        run(q)
          .headOption
          .getOrElse(throw new NoSuchElementException(s"$$id"))
        }
@@ -163,7 +166,8 @@ private class CrudMacro(val c: MacroContext) {
     q"""
       import ${c.prefix}._
       util.Try {
-        run($dSchema.filter(_.id == lift($id)))
+        val q = $dSchema.filter(_.id == lift(id))
+        run(q)
         .headOption
       }
     """
@@ -172,8 +176,9 @@ private class CrudMacro(val c: MacroContext) {
     q"""
       import ${c.prefix}._
       util.Try {
+        val q = $dSchema.filter(_.id == lift(id))
         run(
-           $dSchema.filter(_.id == lift($id)).delete
+           q.delete
         ) > 0
       }
     """

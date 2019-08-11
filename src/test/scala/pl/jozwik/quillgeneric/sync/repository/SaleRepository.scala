@@ -2,7 +2,7 @@ package pl.jozwik.quillgeneric.sync.repository
 
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.model.{ PersonId, ProductId, Sale, SaleId }
+import pl.jozwik.quillgeneric.model.{ Sale, SaleId }
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcCompositeKeyContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryCompositeKey
 
@@ -48,7 +48,7 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     context.update[Sale](entity)
 
   override def updateAndRead(entity: Sale): Try[Sale] =
-    context.updateAndRead[Sale](entity)(dSchema)
+    context.updateAndRead[Sale](entity)
 
   override def delete(id: SaleId): Try[Boolean] =
     context.delete[SaleId, Sale](id)
