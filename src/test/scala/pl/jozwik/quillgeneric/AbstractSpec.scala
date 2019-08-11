@@ -16,7 +16,7 @@ trait Spec extends StrictLogging {
 }
 
 trait AbstractSpec extends WordSpecLike with TimeLimitedTests with Spec with Matchers with BeforeAndAfterAll {
-  protected val today: LocalDate = LocalDate.now
+  protected val today: LocalDate = LocalDate.now()
 }
 
 trait AbstractAsyncSpec extends AsyncWordSpecLike with AsyncTimeLimitedTests with Spec with Matchers

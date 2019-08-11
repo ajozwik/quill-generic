@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
-import pl.jozwik.quillgeneric.quillmacro.WithId
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 import scala.util.Try
 
@@ -13,6 +13,8 @@ trait RepositoryWithGeneratedId[K, T <: WithId[K]] extends BaseRepository[K, T] 
 
   def createOrUpdateAndRead(entity: T, generatedId: Boolean = true): Try[T]
 }
+
+trait RepositoryCompositeKey[K1, K2, K <: CompositeKey[K1, K2], T <: WithId[K]] extends Repository[K, T]
 
 trait Repository[K, T <: WithId[K]] extends BaseRepository[K, T] {
   def create(entity: T): Try[K]
