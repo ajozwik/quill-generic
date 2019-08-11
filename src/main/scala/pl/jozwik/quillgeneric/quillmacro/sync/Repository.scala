@@ -14,7 +14,7 @@ trait RepositoryWithGeneratedId[K, T <: WithId[K]] extends BaseRepository[K, T] 
   def createOrUpdateAndRead(entity: T, generatedId: Boolean = true): Try[T]
 }
 
-trait RepositoryCompositeKey[K1, K2, K <: CompositeKey[K1, K2], T <: WithId[K]] extends Repository[K, T]
+trait RepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K]] extends Repository[K, T]
 
 trait Repository[K, T <: WithId[K]] extends BaseRepository[K, T] {
   def create(entity: T): Try[K]
