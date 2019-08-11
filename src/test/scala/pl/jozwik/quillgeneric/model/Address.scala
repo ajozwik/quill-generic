@@ -1,5 +1,7 @@
 package pl.jozwik.quillgeneric.model
 
+import java.time.LocalDateTime
+
 import pl.jozwik.quillgeneric.quillmacro.WithId
 
 object AddressId {
@@ -14,4 +16,5 @@ final case class Address(
     city: String,
     street: Option[String] = None,
     buildingNumber: Option[String] = None,
+    updated: Option[LocalDateTime] = None,
     localNumber: Option[String] = None) extends WithId[AddressId]
