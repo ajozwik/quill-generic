@@ -6,7 +6,7 @@ private class CrudMacro(val c: MacroContext) {
 
   import c.universe._
 
-  def all(dSchema: Tree): Tree =
+  def all(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -14,7 +14,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def createAndGenerateIdOrUpdate(entity: Tree)(dSchema: Tree): Tree =
+  def createAndGenerateIdOrUpdate[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -32,7 +32,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def createWithGenerateIdOrUpdateAndRead(entity: Tree)(dSchema: Tree): Tree =
+  def createWithGenerateIdOrUpdateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -54,7 +54,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def createOrUpdate(entity: Tree)(dSchema: Tree): Tree =
+  def createOrUpdate[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -71,7 +71,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def createOrUpdateAndRead(entity: Tree)(dSchema: Tree): Tree =
+  def createOrUpdateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -90,7 +90,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def create(entity: Tree)(dSchema: Tree): Tree =
+  def create[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -101,7 +101,7 @@ private class CrudMacro(val c: MacroContext) {
        }
     """
 
-  def createAndRead(entity: Tree)(dSchema: Tree): Tree =
+  def createAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -115,7 +115,7 @@ private class CrudMacro(val c: MacroContext) {
        }
     """
 
-  def createAndGenerateId(entity: Tree)(dSchema: Tree): Tree =
+  def createAndGenerateId[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -123,7 +123,7 @@ private class CrudMacro(val c: MacroContext) {
        }
     """
 
-  def createWithGenerateIdAndRead(entity: Tree)(dSchema: Tree): Tree =
+  def createWithGenerateIdAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -137,7 +137,7 @@ private class CrudMacro(val c: MacroContext) {
        }
     """
 
-  def update(entity: Tree)(dSchema: Tree): Tree =
+  def update[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -147,7 +147,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def updateAndRead(entity: Tree)(dSchema: Tree): Tree =
+  def updateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       val id = $entity.id
@@ -162,7 +162,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def read(id: Tree)(dSchema: Tree): Tree =
+  def read[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[K])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -172,7 +172,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def delete(id: Tree)(dSchema: Tree): Tree =
+  def delete[K: c.WeakTypeTag](entity: c.Expr[K])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -183,7 +183,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def deleteByFilter(filter: Tree)(dSchema: Tree): Tree =
+  def deleteByFilter(filter: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -193,7 +193,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def searchByFilter(filter: Tree)(offset: Tree, limit: Tree)(dSchema: Tree): Tree =
+  def searchByFilter(filter: Tree)(offset: Tree, limit: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -203,7 +203,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def count(filter: Tree)(dSchema: Tree): Tree =
+  def count(filter: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
