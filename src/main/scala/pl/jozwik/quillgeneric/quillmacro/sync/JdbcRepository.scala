@@ -25,8 +25,8 @@ trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] exte
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
-trait JdbcRepositoryCompositeKey[K1, K2, K <: CompositeKey[K1, K2], T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
-  extends RepositoryCompositeKey[K1, K2, K, T] {
+trait JdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
+  extends RepositoryCompositeKey[K, T] {
   protected val context: JdbcCompositeKeyContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
