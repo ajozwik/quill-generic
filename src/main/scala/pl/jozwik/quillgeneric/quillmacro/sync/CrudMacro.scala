@@ -20,8 +20,9 @@ private class CrudMacro(val c: MacroContext) {
       val id = $entity.id
       util.Try {
        transaction{
+          val q = $dSchema.filter(_.id == lift(id))
           val result = run(
-            $dSchema.filter(_.id == lift(id)).updateValue($entity)
+            q.updateValue($entity)
           )
           if (result == 0) {
             run($dSchema.insertValue($entity).returningGenerated(_.id))
@@ -38,8 +39,9 @@ private class CrudMacro(val c: MacroContext) {
       val id = $entity.id
       util.Try {
        transaction{
+          val q = $dSchema.filter(_.id == lift(id))
           val result = run(
-            $dSchema.filter(_.id == lift(id)).updateValue($entity)
+            q.updateValue($entity)
           )
           val newId =
             if (result == 0) {
@@ -59,9 +61,10 @@ private class CrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
-       transaction{
+       transaction {
+         val q = $dSchema.filter(_.id == lift(id))
          val result = run(
-             $dSchema.filter(_.id == lift(id)).updateValue($entity)
+             q.updateValue($entity)
           )
           if(result == 0){
             run($dSchema.insertValue($entity))
@@ -76,15 +79,16 @@ private class CrudMacro(val c: MacroContext) {
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
-       transaction{
+       transaction {
+        val q = $dSchema.filter(_.id == lift(id))
          val result = run(
-             $dSchema.filter(_.id == lift(id)).updateValue($entity)
+             q.updateValue($entity)
           )
           if(result == 0){
             run($dSchema.insertValue($entity))
           }
         }
-        run($dSchema.filter(_.id == lift(id)))
+        run(q)
           .headOption
           .getOrElse(throw new NoSuchElementException(s"$$id"))
       }
@@ -108,7 +112,8 @@ private class CrudMacro(val c: MacroContext) {
       util.Try {
         transaction {
           run($dSchema.insertValue($entity))
-          run($dSchema.filter(_.id == lift(id)))
+          val q = $dSchema.filter(_.id == lift(id))
+          run(q)
           .headOption
           .getOrElse(throw new NoSuchElementException(s"$$id"))
         }
