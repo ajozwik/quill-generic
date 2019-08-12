@@ -24,6 +24,8 @@ trait SaleRepositorySuite extends AbstractQuillSpec {
       val sale = Sale(saleId, now)
       repository.createAndRead(sale) shouldBe 'success
 
+      repository.createOrUpdateAndRead(sale) shouldBe 'success
+
       repository.read(saleId).success.get shouldBe Option(sale)
     }
   }

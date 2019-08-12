@@ -51,10 +51,10 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
     }
 
   override def update(entity: Address): Try[Long] =
-    context.update[Address](entity)
+    context.update[AddressId, Address](entity)
 
   override def updateAndRead(entity: Address): Try[Address] =
-    context.updateAndRead[Address](entity)
+    context.updateAndRead[AddressId, Address](entity)
 
   override def delete(id: AddressId): Try[Boolean] =
     context.deleteByFilter[Address](_.id == id)

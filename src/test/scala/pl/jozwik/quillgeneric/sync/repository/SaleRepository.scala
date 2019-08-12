@@ -45,10 +45,10 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     context.read[SaleId, Sale](id)
 
   override def update(entity: Sale): Try[Long] =
-    context.update[Sale](entity)
+    context.update[SaleId, Sale](entity)
 
   override def updateAndRead(entity: Sale): Try[Sale] =
-    context.updateAndRead[Sale](entity)
+    context.updateAndRead[SaleId, Sale](entity)
 
   override def delete(id: SaleId): Try[Boolean] =
     context.delete[SaleId, Sale](id)

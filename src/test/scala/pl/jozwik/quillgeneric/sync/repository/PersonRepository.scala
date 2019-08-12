@@ -52,10 +52,10 @@ final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](
     context.read[PersonId, Person](id)
 
   override def update(entity: Person): Try[Long] =
-    context.update[Person](entity)
+    context.update[PersonId, Person](entity)
 
   override def updateAndRead(entity: Person): Try[Person] =
-    context.updateAndRead[Person](entity)
+    context.updateAndRead[PersonId, Person](entity)
 
   override def delete(id: PersonId): Try[Boolean] =
     context.delete[PersonId, Person](id)

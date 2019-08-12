@@ -44,10 +44,10 @@ class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
     context.read[ConfigurationId, Configuration](id)
 
   override def update(entity: Configuration): Try[Long] =
-    context.update[Configuration](entity)
+    context.update[ConfigurationId, Configuration](entity)
 
   override def updateAndRead(entity: Configuration): Try[Configuration] =
-    context.updateAndRead[Configuration](entity)(dSchema)
+    context.updateAndRead[ConfigurationId, Configuration](entity)(dSchema)
 
   override def delete(id: ConfigurationId): Try[Boolean] =
     context.delete[ConfigurationId, Configuration](id)

@@ -53,10 +53,10 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](
     context.read[ProductId, Product](id)
 
   override def update(entity: Product): Try[Long] =
-    context.update[Product](entity)
+    context.update[ProductId, Product](entity)
 
   override def updateAndRead(entity: Product): Try[Product] =
-    context.updateAndRead[Product](entity)(dSchema)
+    context.updateAndRead[ProductId, Product](entity)(dSchema)
 
   override def delete(id: ProductId): Try[Boolean] =
     context.delete[ProductId, Product](id)
