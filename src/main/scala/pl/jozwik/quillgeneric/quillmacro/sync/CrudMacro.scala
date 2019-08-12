@@ -21,11 +21,9 @@ private class CrudMacro(val c: MacroContext) {
 
     t.baseClasses.find(c => compositeSet.contains(c.asClass.fullName)) match {
       case None =>
-        c.info(NoPosition, s"${weakTypeOf[K]}  None", true)
         q"$dSchema.filter(_.id == lift($id))"
       case Some(base) =>
         val query = q"$dSchema.filter(_.id.fk1 == lift($id.fk1)).filter(_.id.fk2 == lift($id.fk2))"
-        c.info(NoPosition, s"${weakTypeOf[K]} -> ${base.fullName}", true)
         base.fullName match {
           case `compositeKey4Name` =>
             q"$query.filter(_.id.fk3 == lift($id.fk3)).filter(_.id.fk4 == lift($id.fk4))"
