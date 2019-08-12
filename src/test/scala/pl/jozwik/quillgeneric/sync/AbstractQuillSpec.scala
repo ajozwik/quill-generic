@@ -7,7 +7,7 @@ import org.scalatest.BeforeAndAfterAll
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.model.AddressId
 import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.{ CompositeKeyCrudWithContext, CrudWithContext }
+import pl.jozwik.quillgeneric.quillmacro.sync.CrudWithContext
 import pl.jozwik.quillgeneric.sync.repository.AddressRepository
 
 trait AbstractQuillSpec extends AbstractSpec with BeforeAndAfterAll {
@@ -26,5 +26,4 @@ trait AbstractQuillSpec extends AbstractSpec with BeforeAndAfterAll {
     super.afterAll()
   }
 
-  lazy protected val compositeCtx = new H2JdbcContext(SnakeCase, "h2") with CompositeKeyCrudWithContext with DateQuotes
 }

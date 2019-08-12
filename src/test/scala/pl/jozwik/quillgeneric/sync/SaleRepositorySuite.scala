@@ -8,7 +8,7 @@ import scala.util.Success
 
 trait SaleRepositorySuite extends AbstractQuillSpec {
 
-  private val repository = new SaleRepository(compositeCtx, "Sale")
+  private val repository = new SaleRepository(ctx, "Sale")
   private val personRepository = new PersonRepository(ctx, "Person2")
   private val productRepository = new ProductRepository(ctx, "Product")
   "Sale Repository " should {
