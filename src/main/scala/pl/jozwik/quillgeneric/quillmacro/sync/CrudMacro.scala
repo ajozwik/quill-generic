@@ -6,6 +6,15 @@ private class CrudMacro(val c: MacroContext) {
 
   import c.universe._
 
+  private def callFilterOnId[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]) = {
+    q"$dSchema.filter(_.id == lift($id))"
+  }
+
+  private def callFilter[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]) = {
+    val id = c.Expr[K](q"$entity.id")
+    callFilterOnId(id)(dSchema)
+  }
+
   def all(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
@@ -14,32 +23,35 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def createAndGenerateIdOrUpdate[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def createAndGenerateIdOrUpdate[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter(entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
        transaction{
-          val q = $dSchema.filter(_.id == lift(id))
+          val q = $filter
           val result = run(
             q.updateValue($entity)
           )
           if (result == 0) {
             run($dSchema.insertValue($entity).returningGenerated(_.id))
           } else {
-            $entity.id
+            id
           }
         }
       }
     """
+  }
 
-  def createWithGenerateIdOrUpdateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def createWithGenerateIdOrUpdateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter(entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
        transaction{
-          val q = $dSchema.filter(_.id == lift(id))
+          val q = $filter
           val result = run(
             q.updateValue($entity)
           )
@@ -47,7 +59,7 @@ private class CrudMacro(val c: MacroContext) {
             if (result == 0) {
               run($dSchema.insertValue($entity).returningGenerated(_.id))
             } else {
-              $entity.id
+              id
             }
           run($dSchema.filter(_.id == lift(newId)))
           .headOption
@@ -55,14 +67,31 @@ private class CrudMacro(val c: MacroContext) {
         }
       }
     """
+  }
 
-  def createOrUpdate[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def createWithGenerateIdAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    q"""
+      import ${c.prefix}._
+      util.Try {
+       transaction {
+         val newId = run($dSchema.insertValue($entity).returningGenerated(_.id))
+         val q = $dSchema.filter(_.id == lift(newId))
+         run(q)
+         .headOption
+         .getOrElse(throw new NoSuchElementException(s"$$newId"))
+        }
+       }
+    """
+  }
+
+  def createOrUpdate[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter(entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
        transaction {
-         val q = $dSchema.filter(_.id == lift(id))
+         val q = $filter
          val result = run(
              q.updateValue($entity)
           )
@@ -73,14 +102,16 @@ private class CrudMacro(val c: MacroContext) {
         $entity.id
       }
     """
+  }
 
-  def createOrUpdateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def createOrUpdateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter(entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
        transaction {
-         val q = $dSchema.filter(_.id == lift(id))
+         val q = $filter
          val result = run(
              q.updateValue($entity)
           )
@@ -93,6 +124,7 @@ private class CrudMacro(val c: MacroContext) {
         }
       }
     """
+  }
 
   def create[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
@@ -105,20 +137,22 @@ private class CrudMacro(val c: MacroContext) {
        }
     """
 
-  def createAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter[K, T](entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
         transaction {
           run($dSchema.insertValue($entity))
-          val q = $dSchema.filter(_.id == lift(id))
+          val q = $filter
           run(q)
           .headOption
           .getOrElse(throw new NoSuchElementException(s"$$id"))
         }
        }
     """
+  }
 
   def createAndGenerateId[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
@@ -128,37 +162,26 @@ private class CrudMacro(val c: MacroContext) {
        }
     """
 
-  def createWithGenerateIdAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
-    q"""
-      import ${c.prefix}._
-      util.Try {
-       transaction {
-         val id = run($dSchema.insertValue($entity).returningGenerated(_.id))
-         val q = $dSchema.filter(_.id == lift(id))
-         run(q)
-         .headOption
-         .getOrElse(throw new NoSuchElementException(s"$$id"))
-        }
-       }
-    """
-
-  def update[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def update[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter(entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
-        val q = $dSchema.filter(_.id == lift(id))
+        val q = $filter
         run(q.updateValue($entity))
       }
     """
+  }
 
-  def updateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
+  def updateAndRead[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilter(entity)(dSchema)
     q"""
       import ${c.prefix}._
       val id = $entity.id
       util.Try {
        transaction {
-        val q = $dSchema.filter(_.id == lift(id))
+        val q = $filter
         run(q.updateValue($entity))
         run(q)
          .headOption
@@ -166,27 +189,32 @@ private class CrudMacro(val c: MacroContext) {
        }
       }
     """
+  }
 
-  def read[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree =
+  def read[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilterOnId(id)(dSchema)
     q"""
       import ${c.prefix}._
       util.Try {
-        val q = $dSchema.filter(_.id == lift($id))
+        val q = $filter
         run(q)
         .headOption
       }
     """
+  }
 
-  def delete[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree =
+  def delete[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilterOnId(id)(dSchema)
     q"""
       import ${c.prefix}._
       util.Try {
-        val q = $dSchema.filter(_.id == lift($id))
+        val q = $filter
         run(
            q.delete
         ) > 0
       }
     """
+  }
 
   def deleteByFilter(filter: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
@@ -198,7 +226,7 @@ private class CrudMacro(val c: MacroContext) {
       }
     """
 
-  def searchByFilter(filter: Tree)(offset: Tree, limit: Tree)(dSchema: c.Expr[_]): Tree =
+  def searchByFilter(filter: Tree)(offset: c.Expr[Int], limit: c.Expr[Int])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {

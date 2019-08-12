@@ -15,7 +15,9 @@ trait SaleRepositorySuite extends AbstractQuillSpec {
     "Call all operations on Sale" in {
       repository.all shouldBe Success(Seq())
       val personWithoutId = Person(PersonId.empty, "firstName", "lastName", today)
-      val person = personRepository.createAndRead(personWithoutId).success.get
+      val maybePerson = personRepository.createAndRead(personWithoutId)
+      maybePerson shouldBe 'success
+      val person = maybePerson.success.get
       val productWithoutId = Product(ProductId.empty, "productName")
       val product = productRepository.createAndRead(productWithoutId).success.get
       val saleId = SaleId(product.id, person.id)
