@@ -3,13 +3,13 @@ package pl.jozwik.quillgeneric.sync.repository
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Sale, SaleId }
-import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcCompositeKeyContextDateQuotes
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryCompositeKey
 
 import scala.util.Try
 
 final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
-    protected val context: JdbcCompositeKeyContextDateQuotes[D, N],
+    protected val context: JdbcContextDateQuotes[D, N],
     tableName: String
 )
   extends JdbcRepositoryCompositeKey[SaleId, Sale, D, N] {

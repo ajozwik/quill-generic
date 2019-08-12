@@ -1,13 +1,34 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, CompositeKey3, CompositeKey4 }
+
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
 
 private class CrudMacro(val c: MacroContext) {
 
   import c.universe._
+  private val compositeKeyName = classOf[CompositeKey[_, _]].getName
+  private val compositeKey3Name = classOf[CompositeKey3[_, _, _]].getName
+  private val compositeKey4Name = classOf[CompositeKey4[_, _, _, _]].getName
 
   private def callFilterOnId[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]) = {
-    q"$dSchema.filter(_.id == lift($id))"
+    weakTypeOf[K].baseClasses.find(_.asClass.fullName == compositeKeyName) match {
+      case None =>
+        q"$dSchema.filter(_.id == lift($id))"
+      case Some(base) =>
+        val query = q"$dSchema.filter(_.id.fk1 == lift($id.fk1)).filter(_.id.fk2 == lift($id.fk2))"
+        base.fullName match {
+          case `compositeKey4Name` =>
+            q"$query.filter(_.id.fk3 == lift($id.fk3)).filter(_.id.fk4 == lift($id.fk4))"
+          case `compositeKey3Name` =>
+            q"$query.filter(_.id.fk3 == lift($id.fk3))"
+          case `compositeKeyName` =>
+            query
+          case x =>
+            c.abort(NoPosition, s"$x not supported")
+
+        }
+    }
   }
 
   private def callFilter[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]) = {
