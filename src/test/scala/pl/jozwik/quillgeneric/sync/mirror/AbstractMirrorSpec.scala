@@ -6,4 +6,7 @@ import pl.jozwik.quillgeneric.quillmacro.sync.MirrorContextDateQuotes
 
 trait AbstractMirrorSpec extends AbstractSpec {
   lazy protected val ctx = new MirrorContextDateQuotes(MirrorSqlDialect, strategy)
+
+  protected def logToConsole[A](a: A): Unit =
+    logger.debug(s"$a")
 }

@@ -8,14 +8,13 @@ trait ConfigurationRepositorySuite extends AbstractMirrorSpec {
       "Handle simple Configuration with custom id" in {
         val repository = new ConfigurationRepository(ctx)
         val entity     = Configuration(ConfigurationId("firstName"), "lastName")
-        logger.debug(repository.all.string)
-        repository.createOrUpdate(entity)
-        repository.read(entity.id)
-        repository.update(entity).string
-        repository.updateAndRead(entity).string
-        repository.createOrUpdateAndRead(entity).string
-        repository.delete(entity.id).string
-        repository.createOrUpdate(entity)
+        logToConsole(repository.all.string)
+        logToConsole(repository.createOrUpdate(entity))
+        logToConsole(repository.read(entity.id).string)
+        logToConsole(repository.update(entity).string)
+        logToConsole(repository.updateAndRead(entity).string)
+        logToConsole(repository.createOrUpdateAndRead(entity).string)
+        logToConsole(repository.delete(entity.id).string)
 
       }
     }
