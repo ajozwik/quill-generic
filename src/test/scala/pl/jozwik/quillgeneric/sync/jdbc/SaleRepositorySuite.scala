@@ -5,7 +5,7 @@ import pl.jozwik.quillgeneric.sync.jdbc.repository.{ PersonRepository, ProductRe
 import org.scalatest.TryValues._
 import scala.util.Success
 
-trait SaleRepositorySuite extends AbstractQuillSpec {
+trait SaleRepositorySuite extends AbstractJdbcSpec {
 
   private val repository        = new SaleRepository(ctx, "Sale")
   private val personRepository  = new PersonRepository(ctx, "Person2")

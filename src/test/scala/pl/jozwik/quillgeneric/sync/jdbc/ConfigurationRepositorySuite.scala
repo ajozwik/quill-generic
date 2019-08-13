@@ -6,7 +6,7 @@ import pl.jozwik.quillgeneric.sync.jdbc.repository.ConfigurationRepository
 import scala.util.{ Success, Try }
 import org.scalatest.TryValues._
 
-trait ConfigurationRepositorySuite extends AbstractQuillSpec {
+trait ConfigurationRepositorySuite extends AbstractJdbcSpec {
   "ConfigurationRepository" should {
       "Handle simple Configuration with custom id" in {
         val repository = new ConfigurationRepository(ctx)

@@ -6,7 +6,7 @@ import pl.jozwik.quillgeneric.sync.jdbc.repository.PersonRepository
 import scala.util.{ Success, Try }
 import org.scalatest.TryValues._
 
-trait PersonRepositorySuite extends AbstractQuillSpec {
+trait PersonRepositorySuite extends AbstractJdbcSpec {
   "PersonRepository " should {
       "Call all operations on Person2 with auto generated id" in {
         val repository = new PersonRepository(ctx, "Person2")

@@ -17,25 +17,39 @@ trait RepositoryWithGeneratedId[K, T <: WithId[K]] extends BaseRepository[K, T] 
 trait RepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K]] extends Repository[K, T]
 
 trait Repository[K, T <: WithId[K]] extends BaseRepository[K, T] {
-  def create(entity: T): Try[K]
+  type CreateAndRead
 
-  def createAndRead(entity: T): Try[T]
+  type Create
 
-  def createOrUpdate(entity: T): Try[K]
+  def create(entity: T): Create
 
-  def createOrUpdateAndRead(entity: T): Try[T]
+  def createAndRead(entity: T): CreateAndRead
+
+  def createOrUpdate(entity: T): Create
+
+  def createOrUpdateAndRead(entity: T): CreateAndRead
 }
 
 trait BaseRepository[K, T <: WithId[K]] {
 
-  def all: Try[Seq[T]]
+  type All
 
-  def read(id: K): Try[Option[T]]
+  type Delete
 
-  def update(t: T): Try[Long]
+  type Read
 
-  def updateAndRead(t: T): Try[T]
+  type Update
 
-  def delete(id: K): Try[Long]
+  type UpdateAndRead
+
+  def all: All
+
+  def read(id: K): Read
+
+  def update(t: T): Update
+
+  def updateAndRead(t: T): UpdateAndRead
+
+  def delete(id: K): Delete
 
 }

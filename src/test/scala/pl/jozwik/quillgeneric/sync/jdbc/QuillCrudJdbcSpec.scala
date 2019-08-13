@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.sync.jdbc
 
-class QuillCrudH2Spec
+class QuillCrudJdbcSpec
   extends Cell4dSuite
   with PersonRepositoryNotGeneratedIdSuite
   with PersonCustomRepositorySuite

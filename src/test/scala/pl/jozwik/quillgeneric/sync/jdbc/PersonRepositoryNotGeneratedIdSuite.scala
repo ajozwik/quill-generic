@@ -20,7 +20,7 @@ object PersonRepositoryNotGeneratedIdSuite {
     }
 }
 
-trait PersonRepositoryNotGeneratedIdSuite extends AbstractQuillSpec {
+trait PersonRepositoryNotGeneratedIdSuite extends AbstractJdbcSpec {
 
   import PersonRepositoryNotGeneratedIdSuite._
 
