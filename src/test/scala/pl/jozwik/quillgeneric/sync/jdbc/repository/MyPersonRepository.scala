@@ -13,18 +13,21 @@ trait MyPersonRepository[D <: SqlIdiom, N <: NamingStrategy] extends JdbcReposit
 
   import context._
 
-  def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]] =
+  def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]] = Try {
     searchByFilter((p: Person) => p.firstName == lift(name) && p.lastName != lift(""))(offset, limit)(dynamicSchema)
+  }
 
   def max: Try[Option[LocalDate]] = Try {
     val r = dynamicSchema.map(p => p.birthDate)
     run(r.max)
   }
 
-  def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]] =
+  def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]] = Try {
     searchByFilter((p: Person) => quote(p.birthDate > lift(date)))(offset, limit)(dynamicSchema)
+  }
 
-  def count: Try[Long] =
+  def count: Try[Long] = Try {
     context.count((_: Person) => true)(dynamicSchema)
+  }
 
 }

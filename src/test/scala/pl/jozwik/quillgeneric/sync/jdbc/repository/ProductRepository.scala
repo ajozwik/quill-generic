@@ -16,47 +16,66 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](protected val contex
   private implicit val dSchema: context.DynamicEntityQuery[Product] =
     context.dynamicQuerySchema[Product](tableName)
 
-  override def create(entity: Product, generateId: Boolean = true): Try[ProductId] =
+  override def create(entity: Product, generateId: Boolean = true): Try[ProductId] = Try {
     if (generateId) {
       context.createAndGenerateId[ProductId, Product](entity)
     } else {
       context.create[ProductId, Product](entity)
     }
+  }
 
-  override def createAndRead(entity: Product, generateId: Boolean = true): Try[Product] =
-    if (generateId) {
-      context.createWithGenerateIdAndRead[ProductId, Product](entity)
-    } else {
-      context.createAndRead[ProductId, Product](entity)
+  override def createAndRead(entity: Product, generateId: Boolean = true): Try[Product] = Try {
+    context.transaction {
+      if (generateId) {
+        context.createWithGenerateIdAndRead[ProductId, Product](entity)
+      } else {
+        context.createAndRead[ProductId, Product](entity)
+      }
     }
+  }
 
   override def createOrUpdate(entity: Product, generateId: Boolean = true): Try[ProductId] =
-    if (generateId) {
-      context.createAndGenerateIdOrUpdate[ProductId, Product](entity)
-    } else {
-      context.createOrUpdate[ProductId, Product](entity)
+    Try {
+      context.transaction {
+        if (generateId) {
+          context.createAndGenerateIdOrUpdate[ProductId, Product](entity)
+        } else {
+          context.createOrUpdate[ProductId, Product](entity)
+        }
+      }
     }
 
-  override def createOrUpdateAndRead(entity: Product, generateId: Boolean = true): Try[Product] =
-    if (generateId) {
-      context.createWithGenerateIdOrUpdateAndRead[ProductId, Product](entity)
-    } else {
-      context.createOrUpdateAndRead[ProductId, Product](entity)
+  override def createOrUpdateAndRead(entity: Product, generateId: Boolean = true): Try[Product] = Try {
+    context.transaction {
+      if (generateId) {
+        context.createWithGenerateIdOrUpdateAndRead[ProductId, Product](entity)
+      } else {
+        context.createOrUpdateAndRead[ProductId, Product](entity)
+      }
     }
+  }
 
-  override def all: Try[Seq[Product]] =
+  override def all: Try[Seq[Product]] = Try {
     context.all[Product]
+  }
 
-  override def read(id: ProductId): Try[Option[Product]] =
+  override def read(id: ProductId): Try[Option[Product]] = Try {
     context.read[ProductId, Product](id)
+  }
 
-  override def update(entity: Product): Try[Long] =
+  override def update(entity: Product): Try[Long] = Try {
     context.update[ProductId, Product](entity)
+  }
 
-  override def updateAndRead(entity: Product): Try[Product] =
-    context.updateAndRead[ProductId, Product](entity)(dSchema)
+  override def updateAndRead(entity: Product): Try[Product] = Try {
+    context.transaction {
+      context.updateAndRead[ProductId, Product](entity)(dSchema)
+    }
+  }
 
-  override def delete(id: ProductId): Try[Boolean] =
-    context.delete[ProductId, Product](id)
+  override def delete(id: ProductId): Try[Long] =
+    Try {
+      context.delete[ProductId, Product](id)
+    }
 
 }

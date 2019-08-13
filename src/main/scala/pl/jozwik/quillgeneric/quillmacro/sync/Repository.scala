@@ -36,6 +36,6 @@ trait BaseRepository[K, T <: WithId[K]] {
 
   def updateAndRead(t: T): Try[T]
 
-  def delete(id: K): Try[Boolean]
+  def delete(id: K): Try[Long]
 
 }

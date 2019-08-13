@@ -26,29 +26,53 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
   protected def dynamicSchema: context.DynamicEntityQuery[Sale] = dSchema
 
   override def create(entity: Sale): Try[SaleId] =
-    context.create[SaleId, Sale](entity)
+    Try {
+      context.create[SaleId, Sale](entity)
+    }
 
   override def createAndRead(entity: Sale): Try[Sale] =
-    context.createAndRead[SaleId, Sale](entity)
+    Try {
+      context.transaction {
+        context.createAndRead[SaleId, Sale](entity)
+      }
+    }
 
   override def createOrUpdate(entity: Sale): Try[SaleId] =
-    context.createOrUpdate[SaleId, Sale](entity)
+    Try {
+      context.transaction {
+        context.createOrUpdate[SaleId, Sale](entity)
+      }
+    }
 
   override def createOrUpdateAndRead(entity: Sale): Try[Sale] =
-    context.createOrUpdateAndRead[SaleId, Sale](entity)
+    Try {
+      context.transaction {
+        context.createOrUpdateAndRead[SaleId, Sale](entity)
+      }
+    }
 
   override def all: Try[Seq[Sale]] =
-    context.all[Sale]
+    Try {
+      context.all[Sale]
+    }
 
   override def read(id: SaleId): Try[Option[Sale]] =
-    context.read[SaleId, Sale](id)
+    Try {
+      context.read[SaleId, Sale](id)
+    }
 
-  override def update(entity: Sale): Try[Long] =
+  override def update(entity: Sale): Try[Long] = Try {
     context.update[SaleId, Sale](entity)
+  }
 
-  override def updateAndRead(entity: Sale): Try[Sale] =
-    context.updateAndRead[SaleId, Sale](entity)
+  override def updateAndRead(entity: Sale): Try[Sale] = Try {
+    context.transaction {
+      context.updateAndRead[SaleId, Sale](entity)
+    }
+  }
 
-  override def delete(id: SaleId): Try[Boolean] =
-    context.delete[SaleId, Sale](id)
+  override def delete(id: SaleId): Try[Long] =
+    Try {
+      context.delete[SaleId, Sale](id)
+    }
 }

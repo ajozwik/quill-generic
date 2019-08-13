@@ -16,46 +16,70 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
   private implicit val dSchema: context.DynamicEntityQuery[Address] = context.dynamicQuerySchema[Address](tableName)
 
   override def all: Try[Seq[Address]] =
-    context.all[Address]
+    Try {
+      context.all[Address]
+    }
 
   override def create(entity: Address, generateId: Boolean = true): Try[AddressId] =
-    if (generateId) {
-      context.createAndGenerateId[AddressId, Address](entity)
-    } else {
-      context.create[AddressId, Address](entity)
+    Try {
+      if (generateId) {
+        context.createAndGenerateId[AddressId, Address](entity)
+      } else {
+        context.create[AddressId, Address](entity)
+      }
     }
 
   override def createAndRead(entity: Address, generateId: Boolean = true): Try[Address] =
-    if (generateId) {
-      context.createWithGenerateIdAndRead[AddressId, Address](entity)
-    } else {
-      context.createAndRead[AddressId, Address](entity)
+    Try {
+      context.transaction {
+        if (generateId) {
+          context.createWithGenerateIdAndRead[AddressId, Address](entity)
+        } else {
+          context.createAndRead[AddressId, Address](entity)
+        }
+      }
     }
 
   override def read(id: AddressId): Try[Option[Address]] =
-    context.read[AddressId, Address](id)
+    Try {
+      context.read[AddressId, Address](id)
+    }
 
   override def createOrUpdate(entity: Address, generateId: Boolean = true): Try[AddressId] =
-    if (generateId) {
-      context.createAndGenerateIdOrUpdate[AddressId, Address](entity)
-    } else {
-      context.createOrUpdate[AddressId, Address](entity)
+    Try {
+      context.transaction {
+        if (generateId) {
+          context.createAndGenerateIdOrUpdate[AddressId, Address](entity)
+        } else {
+          context.createOrUpdate[AddressId, Address](entity)
+        }
+      }
     }
 
   override def createOrUpdateAndRead(entity: Address, generateId: Boolean = true): Try[Address] =
-    if (generateId) {
-      context.createWithGenerateIdOrUpdateAndRead[AddressId, Address](entity)
-    } else {
-      context.createOrUpdateAndRead[AddressId, Address](entity)
+    Try {
+      context.transaction {
+        if (generateId) {
+          context.createWithGenerateIdOrUpdateAndRead[AddressId, Address](entity)
+        } else {
+          context.createOrUpdateAndRead[AddressId, Address](entity)
+        }
+      }
     }
 
-  override def update(entity: Address): Try[Long] =
+  override def update(entity: Address): Try[Long] = Try {
     context.update[AddressId, Address](entity)
+  }
 
-  override def updateAndRead(entity: Address): Try[Address] =
-    context.updateAndRead[AddressId, Address](entity)
+  override def updateAndRead(entity: Address): Try[Address] = Try {
+    context.transaction {
+      context.updateAndRead[AddressId, Address](entity)
+    }
+  }
 
-  override def delete(id: AddressId): Try[Boolean] =
-    context.deleteByFilter[Address](_.id == id)
+  override def delete(id: AddressId): Try[Long] =
+    Try {
+      context.deleteByFilter[Address](_.id == id)
+    }
 
 }

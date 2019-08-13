@@ -4,16 +4,16 @@ import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey2, CompositeKey3, Composi
 
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
 
-object CrudMacro {
-  private val compositeKey2Name = classOf[CompositeKey2[_, _]].getName
-  private val compositeKey3Name = classOf[CompositeKey3[_, _, _]].getName
-  private val compositeKey4Name = classOf[CompositeKey4[_, _, _, _]].getName
-  private val compositeSet      = Set(compositeKey2Name, compositeKey3Name, compositeKey4Name)
+object Keys {
+  private[sync] val compositeKey2Name = classOf[CompositeKey2[_, _]].getName
+  private[sync] val compositeKey3Name = classOf[CompositeKey3[_, _, _]].getName
+  private[sync] val compositeKey4Name = classOf[CompositeKey4[_, _, _, _]].getName
+  private[sync] val compositeSet      = Set(compositeKey2Name, compositeKey3Name, compositeKey4Name)
 }
 
-private class CrudMacro(val c: MacroContext) {
+private[sync] class CrudMacro(val c: MacroContext) {
 
-  import CrudMacro._
+  import Keys._
   import c.universe._
 
   private def callFilterOnId[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]) = {
@@ -43,233 +43,186 @@ private class CrudMacro(val c: MacroContext) {
     callFilterOnId(id)(dSchema)
   }
 
-  def all(dSchema: c.Expr[_]): Tree =
-    q"""
+  def all[T: c.WeakTypeTag](dSchema: c.Expr[_]): c.Expr[Seq[T]] =
+    c.Expr[Seq[T]] { q"""
       import ${c.prefix}._
-      util.Try {
         run($dSchema)
-      }
-    """
+    """ }
 
-  def createAndGenerateIdOrUpdate[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+  def createAndGenerateIdOrUpdate[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[K] = {
     val filter = callFilter[K, T](entity)(dSchema)
-    q"""
+    c.Expr[K] { q"""
       import ${c.prefix}._
       val id = $entity.id
-      util.Try {
-       transaction{
-          val q = $filter
-          val result = run(
-            q.updateValue($entity)
-          )
-          if (result == 0) {
-            run($dSchema.insertValue($entity).returningGenerated(_.id))
-          } else {
-            id
-          }
-        }
+      val q = $filter
+      val result = run(
+        q.updateValue($entity)
+      )
+      if (result == 0) {
+        run($dSchema.insertValue($entity).returningGenerated(_.id))
+      } else {
+        id
       }
-    """
+    """ }
   }
 
-  def createWithGenerateIdOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+  def createWithGenerateIdOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[T] = {
     val filter = callFilter[K, T](entity)(dSchema)
-    q"""
+    c.Expr[T] { q"""
       import ${c.prefix}._
       val id = $entity.id
-      util.Try {
-       transaction{
-          val q = $filter
-          val result = run(
-            q.updateValue($entity)
-          )
-          val newId =
-            if (result == 0) {
-              run($dSchema.insertValue($entity).returningGenerated(_.id))
-            } else {
-              id
-            }
-          run($dSchema.filter(_.id == lift(newId)))
-          .headOption
-          .getOrElse(throw new NoSuchElementException(s"$$newId"))
-        }
-      }
-    """
-  }
-
-  def createWithGenerateIdAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
-    q"""
-      import ${c.prefix}._
-      util.Try {
-       transaction {
-         val newId = run($dSchema.insertValue($entity).returningGenerated(_.id))
-         val q = $dSchema.filter(_.id == lift(newId))
-         run(q)
-         .headOption
-         .getOrElse(throw new NoSuchElementException(s"$$newId"))
-        }
-       }
-    """
-
-  def createOrUpdate[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      util.Try {
-       transaction {
-         val q = $filter
-         val result = run(
-             q.updateValue($entity)
-          )
-          if(result == 0){
-            run($dSchema.insertValue($entity))
-          }
-        }
-        $entity.id
-      }
-    """
-  }
-
-  def createOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      util.Try {
-       transaction {
-         val q = $filter
-         val result = run(
-             q.updateValue($entity)
-          )
-          if(result == 0){
-            run($dSchema.insertValue($entity))
-          }
-          run(q)
-          .headOption
-          .getOrElse(throw new NoSuchElementException(s"$$id"))
-        }
-      }
-    """
-  }
-
-  def create[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
-    q"""
-      import ${c.prefix}._
-      util.Try {
-          run(
-            $dSchema.insertValue($entity)
-          )
-          $entity.id
-       }
-    """
-
-  def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      util.Try {
-        transaction {
-          run($dSchema.insertValue($entity))
-          val q = $filter
-          run(q)
-          .headOption
-          .getOrElse(throw new NoSuchElementException(s"$$id"))
-        }
-       }
-    """
-  }
-
-  def createAndGenerateId[T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
-    q"""
-      import ${c.prefix}._
-      util.Try {
+      val q = $filter
+      val result = run(
+        q.updateValue($entity)
+      )
+      val newId =
+        if (result == 0) {
           run($dSchema.insertValue($entity).returningGenerated(_.id))
-       }
-    """
+        } else {
+          id
+        }
+      run($dSchema.filter(_.id == lift(newId)))
+      .headOption
+      .getOrElse(throw new NoSuchElementException(s"$$newId"))
+    """ }
+  }
 
-  def update[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+  def createWithGenerateIdAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[T] =
+    c.Expr[T] { q"""
+      import ${c.prefix}._
+      val newId = run($dSchema.insertValue($entity).returningGenerated(_.id))
+      val q = $dSchema.filter(_.id == lift(newId))
+      run(q)
+      .headOption
+      .getOrElse(throw new NoSuchElementException(s"$$newId"))
+    """ }
+
+  def createOrUpdate[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[K] = {
     val filter = callFilter[K, T](entity)(dSchema)
-    q"""
+    c.Expr[K] { q"""
       import ${c.prefix}._
       val id = $entity.id
-      util.Try {
-        val q = $filter
-        run(q.updateValue($entity))
-      }
-    """
+      val q = $filter
+      val result = run(q.updateValue($entity))
+      if(result == 0){
+          run($dSchema.insertValue($entity))
+      } 
+      id
+    """ }
   }
 
-  def updateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+  def createOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[T] = {
     val filter = callFilter[K, T](entity)(dSchema)
-    q"""
+    c.Expr[T] { q"""
       import ${c.prefix}._
       val id = $entity.id
-      util.Try {
-       transaction {
-        val q = $filter
-        run(q.updateValue($entity))
-        run(q)
-         .headOption
-         .getOrElse(throw new NoSuchElementException(s"$$id"))
+      val q = $filter
+      val result = run(
+          q.updateValue($entity)
+       )
+       if(result == 0){
+         run($dSchema.insertValue($entity))
        }
-      }
-    """
+       run(q)
+       .headOption
+       .getOrElse(throw new NoSuchElementException(s"$$id"))
+    """ }
   }
 
-  def read[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
+  def create[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[K] =
+    c.Expr[K] { q"""
+      import ${c.prefix}._
+      run(
+        $dSchema.insertValue($entity)
+      )
+      $entity.id
+    """ }
+
+  def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[T] = {
+    val filter = callFilter[K, T](entity)(dSchema)
+    c.Expr[T] { q"""
+      import ${c.prefix}._
+      val id = $entity.id
+      run($dSchema.insertValue($entity))
+      val q = $filter
+      run(q)
+      .headOption
+      .getOrElse(throw new NoSuchElementException(s"$$id"))
+    """ }
+  }
+
+  def createAndGenerateId[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[K] =
+    c.Expr[K] { q"""
+      import ${c.prefix}._
+      run($dSchema.insertValue($entity).returningGenerated(_.id))
+    """ }
+
+  def update[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[Long] = {
+    val filter = callFilter[K, T](entity)(dSchema)
+    c.Expr[Long] { q"""
+      import ${c.prefix}._
+      val q = $filter
+      run(q.updateValue($entity))
+    """ }
+  }
+
+  def updateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): c.Expr[T] = {
+    val filter = callFilter[K, T](entity)(dSchema)
+    c.Expr[T] { q"""
+      import ${c.prefix}._
+      val q = $filter
+      run(q.updateValue($entity))
+      run(q)
+      .headOption
+      .getOrElse{
+        val id = $entity.id
+        throw new NoSuchElementException(s"$$id")
+       }
+    """ }
+  }
+
+  def read[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): c.Expr[Option[T]] = {
     val filter = callFilterOnId(id)(dSchema)
-    q"""
+    c.Expr[Option[T]] { q"""
       import ${c.prefix}._
-      util.Try {
-        val q = $filter
-        run(q)
-        .headOption
-      }
-    """
+      val q = $filter
+      run(q)
+      .headOption
+    """ }
   }
 
-  def delete[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
+  def delete[K: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): c.Expr[Long] = {
     val filter = callFilterOnId(id)(dSchema)
-    q"""
+    c.Expr[Long] { q"""
       import ${c.prefix}._
-      util.Try {
-        val q = $filter
-        run(
-           q.delete
-        ) > 0
-      }
-    """
+      val q = $filter
+      run(
+         q.delete
+      )
+    """ }
   }
 
-  def deleteByFilter(filter: Tree)(dSchema: c.Expr[_]): Tree =
-    q"""
+  def deleteByFilter(filter: Tree)(dSchema: c.Expr[_]): c.Expr[Long] =
+    c.Expr[Long] { q"""
       import ${c.prefix}._
-      util.Try {
-        run(
-           $dSchema.filter($filter).delete
-        ) > 0
-      }
-    """
+      run(
+         $dSchema.filter($filter).delete
+      )
+    """ }
 
-  def searchByFilter(filter: Tree)(offset: c.Expr[Int], limit: c.Expr[Int])(dSchema: c.Expr[_]): Tree =
-    q"""
+  def searchByFilter[T: c.WeakTypeTag](filter: Tree)(offset: c.Expr[Int], limit: c.Expr[Int])(dSchema: c.Expr[_]): c.Expr[Seq[T]] =
+    c.Expr[Seq[T]] { q"""
       import ${c.prefix}._
-      util.Try {
-        run(
-           $dSchema.filter($filter).drop(lift($offset)).take(lift($limit))
-        )
-      }
-    """
+      run(
+        $dSchema.filter($filter).drop(lift($offset)).take(lift($limit))
+      )
+    """ }
 
-  def count(filter: Tree)(dSchema: c.Expr[_]): Tree =
-    q"""
+  def count(filter: Tree)(dSchema: c.Expr[_]): c.Expr[Long] =
+    c.Expr[Long] { q"""
       import ${c.prefix}._
-      util.Try {
-        run(
-           $dSchema.filter($filter).size
-        )
-      }
-    """
+      run(
+         $dSchema.filter($filter).size
+      )
+    """ }
 }
