@@ -1,11 +1,10 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.jdbc
 
-import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.sync.repository.ConfigurationRepository
+import pl.jozwik.quillgeneric.sync.jdbc.repository.ConfigurationRepository
 
 import scala.util.{ Success, Try }
-
+import org.scalatest.TryValues._
 trait ConfigurationRepositorySuite extends AbstractQuillSpec {
   "ConfigurationRepository" should {
     "Handle simple Configuration with custom id" in {

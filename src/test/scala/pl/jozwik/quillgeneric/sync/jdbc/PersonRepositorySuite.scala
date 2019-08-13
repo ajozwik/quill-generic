@@ -1,11 +1,10 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.jdbc
 
-import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.sync.repository.PersonRepository
+import pl.jozwik.quillgeneric.sync.jdbc.repository.PersonRepository
 
 import scala.util.{ Success, Try }
-
+import org.scalatest.TryValues._
 trait PersonRepositorySuite extends AbstractQuillSpec {
   "PersonRepository " should {
     "Call all operations on Person2 with auto generated id" in {

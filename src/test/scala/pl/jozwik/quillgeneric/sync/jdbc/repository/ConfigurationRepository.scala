@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.sync.repository
+package pl.jozwik.quillgeneric.sync.jdbc.repository
 
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom

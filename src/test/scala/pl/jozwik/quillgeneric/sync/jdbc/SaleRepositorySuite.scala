@@ -1,9 +1,8 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.jdbc
 
-import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.model._
-import pl.jozwik.quillgeneric.sync.repository.{ PersonRepository, ProductRepository, SaleRepository }
-
+import pl.jozwik.quillgeneric.sync.jdbc.repository.{ PersonRepository, ProductRepository, SaleRepository }
+import org.scalatest.TryValues._
 import scala.util.Success
 
 trait SaleRepositorySuite extends AbstractQuillSpec {

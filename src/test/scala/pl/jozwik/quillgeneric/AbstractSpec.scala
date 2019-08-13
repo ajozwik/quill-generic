@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric
 
-import java.time.LocalDate
+import java.time.{ LocalDate, LocalDateTime }
 
 import com.typesafe.scalalogging.StrictLogging
 import org.scalatest.concurrent.{ AsyncTimeLimitedTests, TimeLimitedTests }
@@ -16,7 +16,8 @@ trait Spec extends StrictLogging {
 }
 
 trait AbstractSpec extends WordSpecLike with TimeLimitedTests with Spec with Matchers with BeforeAndAfterAll {
-  protected val today: LocalDate = LocalDate.now()
+  protected val now: LocalDateTime = LocalDateTime.now()
+  protected val today: LocalDate = now.toLocalDate
 }
 
 trait AbstractAsyncSpec extends AsyncWordSpecLike with AsyncTimeLimitedTests with Spec with Matchers

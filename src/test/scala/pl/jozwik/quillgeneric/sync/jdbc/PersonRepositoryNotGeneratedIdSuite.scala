@@ -1,13 +1,13 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.jdbc
 
 import java.time.LocalDate
 
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.sync.repository.PersonRepository
 import org.scalatest.TryValues._
+import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
+import pl.jozwik.quillgeneric.sync.jdbc.repository.PersonRepository
 
 import scala.util.{ Success, Try }
 

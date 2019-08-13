@@ -1,7 +1,7 @@
-package pl.jozwik.quillgeneric.sync
+package pl.jozwik.quillgeneric.sync.jdbc
 
 import pl.jozwik.quillgeneric.model.{ Cell4d, Cell4dId }
-import pl.jozwik.quillgeneric.sync.repository.Cell4dRepository
+import pl.jozwik.quillgeneric.sync.jdbc.repository.Cell4dRepository
 
 trait Cell4dSuite extends AbstractQuillSpec {
   private val repository = new Cell4dRepository(ctx)
