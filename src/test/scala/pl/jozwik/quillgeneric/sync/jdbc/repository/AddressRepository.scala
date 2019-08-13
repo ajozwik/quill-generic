@@ -4,14 +4,15 @@ import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Address, AddressId }
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.RepositoryWithGeneratedId
+import pl.jozwik.quillgeneric.quillmacro.sync.{ RepositoryWithGeneratedId, SqlRepository }
 
 import scala.util.Try
 
 final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[D, N],
     tableName: String
-) extends RepositoryWithGeneratedId[AddressId, Address] {
+) extends RepositoryWithGeneratedId[AddressId, Address]
+  with SqlRepository[AddressId, Address] {
 
   private implicit val dSchema: context.DynamicEntityQuery[Address] = context.dynamicQuerySchema[Address](tableName)
 
