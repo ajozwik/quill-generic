@@ -11,8 +11,7 @@ import scala.util.Try
 final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[D, N],
     tableName: String
-)
-  extends RepositoryWithGeneratedId[AddressId, Address] {
+) extends RepositoryWithGeneratedId[AddressId, Address] {
 
   private implicit val dSchema: context.DynamicEntityQuery[Address] = context.dynamicQuerySchema[Address](tableName)
 

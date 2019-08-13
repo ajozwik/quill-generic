@@ -11,8 +11,7 @@ import scala.util.Try
 final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[D, N],
     tableName: String
-)
-  extends JdbcRepositoryCompositeKey[SaleId, Sale, D, N] {
+) extends JdbcRepositoryCompositeKey[SaleId, Sale, D, N] {
 
   private val aliases = {
     import context._

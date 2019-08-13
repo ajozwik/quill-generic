@@ -12,12 +12,12 @@ trait AbstractSpecScalaCheck extends AbstractSpec with Checkers
 
 trait Spec extends StrictLogging {
   val TIMEOUT_SECONDS = 600
-  val timeLimit = Span(TIMEOUT_SECONDS, Seconds)
+  val timeLimit       = Span(TIMEOUT_SECONDS, Seconds)
 }
 
 trait AbstractSpec extends WordSpecLike with TimeLimitedTests with Spec with Matchers with BeforeAndAfterAll {
   protected val now: LocalDateTime = LocalDateTime.now()
-  protected val today: LocalDate = now.toLocalDate
+  protected val today: LocalDate   = now.toLocalDate
 }
 
 trait AbstractAsyncSpec extends AsyncWordSpecLike with AsyncTimeLimitedTests with Spec with Matchers

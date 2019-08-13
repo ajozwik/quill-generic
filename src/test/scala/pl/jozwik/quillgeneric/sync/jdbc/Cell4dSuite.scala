@@ -7,10 +7,10 @@ trait Cell4dSuite extends AbstractQuillSpec {
   private val repository = new Cell4dRepository(ctx)
 
   "Cell4dSuite " should {
-    "Call crud operations " in {
-      val entity = Cell4d(Cell4dId(0, 1, 0, 1), false)
-      repository.createOrUpdateAndRead(entity) shouldBe 'success
+      "Call crud operations " in {
+        val entity = Cell4d(Cell4dId(0, 1, 0, 1), false)
+        repository.createOrUpdateAndRead(entity) shouldBe 'success
 
+      }
     }
-  }
 }

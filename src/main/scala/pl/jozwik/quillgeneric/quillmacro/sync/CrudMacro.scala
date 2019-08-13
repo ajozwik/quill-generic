@@ -8,7 +8,7 @@ object CrudMacro {
   private val compositeKey2Name = classOf[CompositeKey2[_, _]].getName
   private val compositeKey3Name = classOf[CompositeKey3[_, _, _]].getName
   private val compositeKey4Name = classOf[CompositeKey4[_, _, _, _]].getName
-  private val compositeSet = Set(compositeKey2Name, compositeKey3Name, compositeKey4Name)
+  private val compositeSet      = Set(compositeKey2Name, compositeKey3Name, compositeKey4Name)
 }
 
 private class CrudMacro(val c: MacroContext) {
@@ -97,7 +97,7 @@ private class CrudMacro(val c: MacroContext) {
     """
   }
 
-  def createWithGenerateIdAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
+  def createWithGenerateIdAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
       util.Try {
@@ -110,7 +110,6 @@ private class CrudMacro(val c: MacroContext) {
         }
        }
     """
-  }
 
   def createOrUpdate[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: c.Expr[T])(dSchema: c.Expr[_]): Tree = {
     val filter = callFilter[K, T](entity)(dSchema)

@@ -7,9 +7,7 @@ import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuot
 
 import scala.util.Try
 
-final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](
-    protected val context: JdbcContextDateQuotes[D, N],
-    protected val tableName: String)
+final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](protected val context: JdbcContextDateQuotes[D, N], protected val tableName: String)
   extends MyPersonRepository[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Person] = dSchema

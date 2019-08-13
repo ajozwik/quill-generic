@@ -17,4 +17,5 @@ final case class Address(
     street: Option[String] = None,
     buildingNumber: Option[String] = None,
     updated: Option[LocalDateTime] = None,
-    localNumber: Option[String] = None) extends WithId[AddressId]
+    localNumber: Option[String] = None
+) extends WithId[AddressId]

@@ -1,5 +1,4 @@
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
-import scalariform.formatter.preferences._
 
 val `scalaVersion_2.13` = "2.13.0"
 
@@ -73,11 +72,7 @@ def projectWithName(name: String, file: File): Project = Project(name, file).set
   ),
   licenseReportTitle := "Copyright (c) 2019 Andrzej Jozwik",
   licenseSelection := Seq(LicenseCategory.MIT),
-  sources in(Compile, doc) := Seq.empty,
-  scalariformPreferences := scalariformPreferences.value
-    .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(DoubleIndentConstructorArguments, true)
-    .setPreference(DanglingCloseParenthesis, Preserve)
+  sources in(Compile, doc) := Seq.empty
 )
 
 

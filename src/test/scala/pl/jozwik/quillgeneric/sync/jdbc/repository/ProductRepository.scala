@@ -8,9 +8,7 @@ import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
 import scala.util.Try
 
-class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](
-    protected val context: JdbcContextDateQuotes[D, N],
-    protected val tableName: String = "Product")
+class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](protected val context: JdbcContextDateQuotes[D, N], protected val tableName: String = "Product")
   extends JdbcRepositoryWithGeneratedId[ProductId, Product, D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Product] = dSchema

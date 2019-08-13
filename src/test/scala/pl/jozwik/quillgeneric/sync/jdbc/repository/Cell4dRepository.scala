@@ -11,8 +11,7 @@ import scala.util.Try
 final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[Dialect, Naming],
     protected val tableName: String = "Cell4d"
-)
-  extends RepositoryCompositeKey[Cell4dId, Cell4d] {
+) extends RepositoryCompositeKey[Cell4dId, Cell4d] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Cell4d] = dSchema
 

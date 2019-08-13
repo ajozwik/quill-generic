@@ -7,8 +7,8 @@ import scala.concurrent.Future
 class QueriesAsyncSpec extends AbstractAsyncSpec {
 
   "QueriesAsync " should {
-    "Call all operations " in {
-      Future.successful(succeed)
+      "Call all operations " in {
+        Future.successful(succeed)
+      }
     }
-  }
 }

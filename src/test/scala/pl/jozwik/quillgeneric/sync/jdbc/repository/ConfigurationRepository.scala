@@ -10,8 +10,8 @@ import scala.util.Try
 
 class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[D, N],
-    protected val tableName: String = "Configuration")
-  extends JdbcRepository[ConfigurationId, Configuration, D, N] {
+    protected val tableName: String = "Configuration"
+) extends JdbcRepository[ConfigurationId, Configuration, D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Configuration] = dSchema
 

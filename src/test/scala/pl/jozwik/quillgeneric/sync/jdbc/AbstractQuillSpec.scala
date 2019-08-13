@@ -13,8 +13,8 @@ trait AbstractQuillSpec extends AbstractSpec with BeforeAndAfterAll {
   private val strategy = NamingStrategy(SnakeCase, UpperCase)
 
   protected val (offset, limit) = (0, 100)
-  protected val generateId = true
-  protected val addressId = AddressId(1)
+  protected val generateId      = true
+  protected val addressId       = AddressId(1)
 
   lazy protected val ctx = new H2JdbcContext(strategy, "h2") with CrudWithContext with DateQuotes
 

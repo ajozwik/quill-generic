@@ -8,9 +8,7 @@ import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
 import scala.util.Try
 
-final class PersonCustomRepository[D <: SqlIdiom, N <: NamingStrategy](
-    protected val context: JdbcContextDateQuotes[D, N],
-    tableName: String)
+final class PersonCustomRepository[D <: SqlIdiom, N <: NamingStrategy](protected val context: JdbcContextDateQuotes[D, N], tableName: String)
   extends JdbcRepositoryWithGeneratedId[PersonId, Person, D, N] {
 
   private val aliases = {

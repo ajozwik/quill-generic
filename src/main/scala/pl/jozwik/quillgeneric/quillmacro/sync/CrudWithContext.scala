@@ -18,20 +18,16 @@ trait CrudWithContext {
 
   def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateId[T]
 
-  def createWithGenerateIdAndRead[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdAndRead[K, T]
+  def createWithGenerateIdAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdAndRead[K, T]
 
-  def createOrUpdate[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createOrUpdate[K, T]
+  def createOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createOrUpdate[K, T]
 
-  def createOrUpdateAndRead[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createOrUpdateAndRead[K, T]
+  def createOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createOrUpdateAndRead[K, T]
 
-  def createAndGenerateIdOrUpdate[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateIdOrUpdate[K, T]
+  def createAndGenerateIdOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[K] = macro CrudMacro.createAndGenerateIdOrUpdate[K, T]
 
-  def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](
-    entity: T)(implicit dSchema: dQuery[T]): Try[T] = macro CrudMacro.createWithGenerateIdOrUpdateAndRead[K, T]
+  def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[T] =
+    macro CrudMacro.createWithGenerateIdOrUpdateAndRead[K, T]
 
   def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Try[Long] = macro CrudMacro.update[K, T]
 
@@ -43,9 +39,7 @@ trait CrudWithContext {
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Boolean] = macro CrudMacro.deleteByFilter
 
-  def searchByFilter[T](filter: T => Boolean)(
-    offset: Int,
-    limit: Int)(implicit dSchema: dQuery[T]): Try[Seq[T]] = macro CrudMacro.searchByFilter
+  def searchByFilter[T](filter: T => Boolean)(offset: Int, limit: Int)(implicit dSchema: dQuery[T]): Try[Seq[T]] = macro CrudMacro.searchByFilter
 
   def count[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Try[Long] = macro CrudMacro.count
 }
