@@ -11,13 +11,13 @@ object JdbcRepository {
   type JdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = JdbcContext[D, N] with ContextDateQuotes[D, N]
 }
 
-trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends RepositoryWithGeneratedId[K, T] with SqlRepository[K, T] {
+trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends RepositoryWithGeneratedId[K, T] {
   protected val context: JdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
-trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends Repository[K, T] with SqlRepository[K, T] {
+trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends Repository[K, T] {
   protected val context: JdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
