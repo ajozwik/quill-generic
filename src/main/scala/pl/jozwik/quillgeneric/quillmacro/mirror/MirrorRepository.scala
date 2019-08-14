@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.quillmacro.sync
+package pl.jozwik.quillgeneric.quillmacro.mirror
 
 import io.getquill.NamingStrategy
 import io.getquill.idiom.Idiom

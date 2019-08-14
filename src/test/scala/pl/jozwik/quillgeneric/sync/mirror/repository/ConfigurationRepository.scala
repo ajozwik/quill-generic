@@ -3,8 +3,7 @@ package pl.jozwik.quillgeneric.sync.mirror.repository
 import io.getquill.NamingStrategy
 import io.getquill.idiom.Idiom
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.quillmacro.sync.MirrorRepository
-import pl.jozwik.quillgeneric.quillmacro.sync.MirrorContextDateQuotes
+import pl.jozwik.quillgeneric.quillmacro.mirror.{ MirrorContextDateQuotes, MirrorRepository }
 
 class ConfigurationRepository[D <: Idiom, N <: NamingStrategy](
     protected val context: MirrorContextDateQuotes[D, N],

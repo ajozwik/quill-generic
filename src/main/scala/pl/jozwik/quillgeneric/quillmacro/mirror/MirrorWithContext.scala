@@ -1,9 +1,10 @@
-package pl.jozwik.quillgeneric.quillmacro.sync
+package pl.jozwik.quillgeneric.quillmacro.mirror
 
 import io.getquill.idiom.Idiom
 import io.getquill.{ MirrorContext, NamingStrategy }
 import pl.jozwik.quillgeneric.quillmacro.WithId
 import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
+import pl.jozwik.quillgeneric.quillmacro.sync.CrudMacro
 
 import scala.language.experimental.macros
 
@@ -26,16 +27,9 @@ trait MirrorWithContext {
 
   def createOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): K = macro CrudMacro.createOrUpdate[K, T]
 
-  def createOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T = macro CrudMacro.createOrUpdateAndRead[K, T]
-
   def createAndGenerateIdOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): K = macro CrudMacro.createAndGenerateIdOrUpdate[K, T]
 
-  def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T =
-    macro CrudMacro.createWithGenerateIdOrUpdateAndRead[K, T]
-
   def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): ActionMirror = macro CrudMacro.update[K, T]
-
-  def updateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T = macro CrudMacro.updateAndRead[K, T]
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): QueryMirror[T] = macro CrudMacro.callFilterOnIdTree[K]
 

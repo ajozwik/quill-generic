@@ -1,10 +1,10 @@
-package pl.jozwik.quillgeneric.quillmacro.sync
+package pl.jozwik.quillgeneric.quillmacro.monix
 
 import pl.jozwik.quillgeneric.quillmacro.AbstractCrudMacro
 
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
 
-class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
+class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
 
   import c.universe._
 
@@ -14,14 +14,12 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
       import ${c.prefix}._
       val id = $entity.id
       val q = $filter
-      val result = run(
-        q.updateValue($entity)
-      )
-      if (result == 0) {
-        run($dSchema.insertValue($entity).returningGenerated(_.id))
-      } else {
-        id
-      }
+      for {
+        result <- run(q.updateValue($entity))
+        t <- if(result == 0){ run($dSchema.insertValue($entity).returningGenerated(_.id)) } else { monix.eval.Task.now(id)}
+       } yield {
+        t
+       }    
     """
   }
 
@@ -31,29 +29,25 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
       import ${c.prefix}._
       val id = $entity.id
       val q = $filter
-      val result = run(
-        q.updateValue($entity)
-      )
-      val newId =
-        if (result == 0) {
-          run($dSchema.insertValue($entity).returningGenerated(_.id))
-        } else {
-          id
-        }
-      run($dSchema.filter(_.id == lift(newId)))
-      .headOption
-      .getOrElse(throw new NoSuchElementException(s"$$newId"))
+      for {
+        result <- run(q.updateValue($entity))
+        newId <- if(result == 0){ run($dSchema.insertValue($entity).returningGenerated(_.id)) } else { monix.eval.Task.now(id)}
+        r <- run($dSchema.filter(_.id == lift(newId)))
+       } yield {
+        r.headOption.getOrElse(throw new NoSuchElementException(s"$$newId"))
+       }    
     """
   }
 
   def createWithGenerateIdAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
-      val newId = run($dSchema.insertValue($entity).returningGenerated(_.id))
-      val q = $dSchema.filter(_.id == lift(newId))
-      run(q)
-      .headOption
-      .getOrElse(throw new NoSuchElementException(s"$$newId"))
+      for {
+         newId <- run($dSchema.insertValue($entity).returningGenerated(_.id))
+         r <- run($dSchema.filter(_.id == lift(newId)))
+       } yield {
+         r.headOption.getOrElse(throw new NoSuchElementException(s"$$newId"))
+      }
     """
 
   def createOrUpdate[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
@@ -62,11 +56,12 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
       import ${c.prefix}._
       val id = $entity.id
       val q = $filter
-      val result = run(q.updateValue($entity))
-      if(result == 0){
-          run($dSchema.insertValue($entity))
-      } 
-      id
+      for {
+        result <- run(q.updateValue($entity))
+        t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { monix.eval.Task.now(id) }
+       } yield {
+        id
+       }    
     """
   }
 
@@ -76,25 +71,24 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
       import ${c.prefix}._
       val id = $entity.id
       val q = $filter
-      val result = run(
-          q.updateValue($entity)
-       )
-       if(result == 0){
-         run($dSchema.insertValue($entity))
-       }
-       run(q)
-       .headOption
-       .getOrElse(throw new NoSuchElementException(s"$$id"))
+      for {
+        result <- run(q.updateValue($entity))
+        t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { monix.eval.Task.now(())}
+        r <- run(q)
+       } yield {
+         r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
+       }     
     """
   }
 
   def create[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
-      run(
-        $dSchema.insertValue($entity)
-      )
-      $entity.id
+      for{
+        _ <- run($dSchema.insertValue($entity))
+      } yield {
+        $entity.id
+      }
     """
 
   def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
@@ -102,11 +96,14 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
     q"""
       import ${c.prefix}._
       val id = $entity.id
-      run($dSchema.insertValue($entity))
       val q = $filter
-      run(q)
-      .headOption
-      .getOrElse(throw new NoSuchElementException(s"$$id"))
+      for{
+        _ <- run($dSchema.insertValue($entity))
+        r <- run(q) 
+      } yield {
+        r.headOption
+        .getOrElse(throw new NoSuchElementException(s"$$id"))
+      }
     """
   }
 
@@ -115,12 +112,15 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
     q"""
       import ${c.prefix}._
       val q = $filter
-      run(q.updateValue($entity))
-      run(q)
-      .headOption
-      .getOrElse{
-        val id = $entity.id
-        throw new NoSuchElementException(s"$$id")
+      for{
+         _ <-  run(q.updateValue($entity))
+         seq <- run(q)
+       } yield {
+        seq.headOption
+        .getOrElse{
+          val id = $entity.id
+          throw new NoSuchElementException(s"$$id")
+         }
        }
     """
   }
@@ -130,8 +130,11 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
     q"""
       import ${c.prefix}._
       val q = $filter
-      run(q)
-      .headOption
+      for {
+        r <- run(q)
+      } yield {
+        r.headOption
+      }
     """
   }
 

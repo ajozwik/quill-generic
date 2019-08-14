@@ -18,11 +18,12 @@ ThisBuild / organization := "com.github.ajozwik"
 
 ThisBuild / scalacOptions ++= Seq(
   "-target:jvm-1.8",
-  "-encoding", "UTF-8",
+  "-encoding",
+  "UTF-8",
   "-deprecation", // warning and location for usages of deprecated APIs
-  "-feature", // warning and location for usages of features that should be imported explicitly
-  "-unchecked", // additional warnings where generated code depends on assumptions
-  "-Xlint", // recommended additional warnings
+  "-feature",     // warning and location for usages of features that should be imported explicitly
+  "-unchecked",   // additional warnings where generated code depends on assumptions
+  "-Xlint",       // recommended additional warnings
   //  "-Ywarn-adapted-args", // Warn if an argument list is modified to match the receiver
   "-Ywarn-value-discard", // Warn when non-Unit expression results are unused
   //  "-Ywarn-inaccessible",
@@ -43,36 +44,30 @@ val `io.getquill_quill-async` = "io.getquill" %% "quill-async" % quillVersion
 
 val `io.getquill_quill-async-mysql` = "io.getquill" %% "quill-async-mysql" % quillVersion
 
-val `io.getquill_quill-jdbc` = "io.getquill" %% "quill-jdbc" % quillVersion
+val `io.getquill_quill-jdbc` = "io.getquill" %% "quill-jdbc-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
 
-
 lazy val `macro-quill` = projectWithName("macro-quill", file(".")).settings(
   libraryDependencies ++= Seq(
-    `io.getquill_quill-async`,
-    `ch.qos.logback_logback-classic` % Test,
-    `com.typesafe.scala-logging_scala-logging` % Test,
-    `io.getquill_quill-async-mysql` % Test,
-    `io.getquill_quill-jdbc`,
-    `com.h2database_h2` % Test
-  ),
-  scapegoatIgnoredFiles := Seq(".*/*Macro.*.scala",".*/.*Queries.*.scala")
+        `io.getquill_quill-async`,
+        `ch.qos.logback_logback-classic`           % Test,
+        `com.typesafe.scala-logging_scala-logging` % Test,
+        `io.getquill_quill-async-mysql`            % Test,
+        `io.getquill_quill-jdbc`,
+        `com.h2database_h2` % Test
+      ),
+  scapegoatIgnoredFiles := Seq(".*/*Macro.*.scala", ".*/.*Queries.*.scala")
 )
-
-
-
 
 def projectWithName(name: String, file: File): Project = Project(name, file).settings(
   libraryDependencies ++= Seq(
-    `org.scalatest_scalatest`,
-    `org.scalacheck_scalacheck`
-  ),
+        `org.scalatest_scalatest`,
+        `org.scalacheck_scalacheck`
+      ),
   licenseReportTitle := "Copyright (c) 2019 Andrzej Jozwik",
   licenseSelection := Seq(LicenseCategory.MIT),
-  sources in(Compile, doc) := Seq.empty
+  sources in (Compile, doc) := Seq.empty
 )
-
-
