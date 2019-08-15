@@ -66,5 +66,5 @@ And monix Task:
  
  - [PersonCustomRepositoryJdbc](/src/test/scala/pl/jozwik/quillgeneric/monix/repository/PersonCustomRepositoryJdbc.scala)
  
-Synchronized and monix repositories are generated automatically by [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-crud-generic), see
+Synchronized and monix repositories are generated automatically by [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-crud-generic), see build.sbt in
 [quill-macro-example](https://github.com/ajozwik/quill-macro-example)
