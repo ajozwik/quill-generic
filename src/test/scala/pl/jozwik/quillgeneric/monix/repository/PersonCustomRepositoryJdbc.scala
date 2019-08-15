@@ -4,13 +4,13 @@ import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import monix.eval.Task
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.monix.MonixRepository.MonixJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.monix.MonixRepositoryWithGeneratedId
+import pl.jozwik.quillgeneric.quillmacro.monix.JdbcMonixRepository.MonixJdbcContextDateQuotes
+import pl.jozwik.quillgeneric.quillmacro.monix.JdbcMonixRepositoryWithGeneratedId
 
-final class PersonCustomRepository[D <: SqlIdiom, N <: NamingStrategy](
+final class PersonCustomRepositoryJdbc[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: MonixJdbcContextDateQuotes[D, N],
     tableName: String
-) extends MonixRepositoryWithGeneratedId[PersonId, Person, D, N] {
+) extends JdbcMonixRepositoryWithGeneratedId[PersonId, Person, D, N] {
 
   private val aliases = {
     import context._

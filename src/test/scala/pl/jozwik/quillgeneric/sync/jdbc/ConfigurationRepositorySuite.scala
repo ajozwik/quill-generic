@@ -5,11 +5,12 @@ import pl.jozwik.quillgeneric.sync.jdbc.repository.ConfigurationRepository
 
 import scala.util.{ Success, Try }
 import org.scalatest.TryValues._
+import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
 
 trait ConfigurationRepositorySuite extends AbstractJdbcSpec {
   "ConfigurationRepository" should {
       "Handle simple Configuration with custom id" in {
-        val repository = new ConfigurationRepository(ctx)
+        val repository: SyncRepository[ConfigurationId, Configuration] = new ConfigurationRepository(ctx)
         //      logger.debug("configuration")
         val entity  = Configuration(ConfigurationId("firstName"), "lastName")
         val entity2 = Configuration(ConfigurationId("nextName"), "nextName")

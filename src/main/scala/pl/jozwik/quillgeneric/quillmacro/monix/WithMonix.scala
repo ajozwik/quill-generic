@@ -4,5 +4,5 @@ import monix.eval.Task
 import pl.jozwik.quillgeneric.quillmacro.WithMonad
 
 trait WithMonix extends WithMonad {
-  override type F[_] = Task[_]
+  override type F[A] = Task[A]
 }
