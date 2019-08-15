@@ -64,7 +64,7 @@ Current we support Try:
  
 And monix Task:
  
- - [PersonCustomRepositoryJdbc](/src/test/scala/pl/jozwik/quillgeneric/monix/repository/PersonAsyncRepository.scala)
+ - [PersonCustomRepositoryJdbc](/src/test/scala/pl/jozwik/quillgeneric/monix/repository/PersonCustomRepositoryJdbc.scala)
  
 Synchronized and monix repositories are generated automatically by [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-crud-generic), see
 [quill-macro-example](https://github.com/ajozwik/quill-macro-example)
