@@ -8,7 +8,8 @@ import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 object JdbcMonixRepository {
-  type MonixJdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = MonixJdbcContext[D, N] with MonixWithContext with DateQuotes
+  type MonixWithContextDateQuotes                                     = MonixWithContext with DateQuotes
+  type MonixJdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = MonixJdbcContext[D, N] with MonixWithContextDateQuotes
 }
 
 trait JdbcMonixRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends MonixRepositoryWithGeneratedId[K, T] {
