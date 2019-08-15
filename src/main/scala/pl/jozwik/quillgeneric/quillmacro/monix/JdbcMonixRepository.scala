@@ -5,7 +5,7 @@ import io.getquill.context.monix.MonixJdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.quillmacro.monix.JdbcMonixRepository.MonixJdbcContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.quotes.DateQuotes
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, Repository, RepositoryWithGeneratedId, WithId }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 object JdbcMonixRepository {
   type MonixJdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = MonixJdbcContext[D, N] with MonixWithContext with DateQuotes
