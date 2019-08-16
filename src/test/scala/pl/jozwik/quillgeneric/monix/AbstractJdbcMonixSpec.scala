@@ -11,7 +11,7 @@ trait AbstractJdbcMonixSpec extends AbstractSpec with BeforeAndAfterAll {
 
   protected implicit val scheduler: Scheduler = monix.execution.Scheduler.Implicits.global
 
-  lazy protected val ctx = new H2MonixJdbcContext(strategy, "h2") with MonixWithContext with DateQuotes
+  lazy protected val ctx = new H2MonixJdbcContext(strategy, "h2Monix") with MonixWithContext with DateQuotes
 
   override def afterAll(): Unit = {
     ctx.close()
