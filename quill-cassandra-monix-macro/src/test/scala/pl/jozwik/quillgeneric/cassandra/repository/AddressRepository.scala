@@ -31,10 +31,10 @@ final class AddressRepository[Naming <: NamingStrategy](
     context.read[AddressId, Address](id)
 
   override def createOrUpdate(entity: Address): Task[AddressId] =
-    context.createOrUpdate[AddressId, Address](entity)
+    context.create[AddressId, Address](entity)
 
   override def createOrUpdateAndRead(entity: Address): Task[Address] =
-    context.createOrUpdateAndRead[AddressId, Address](entity)
+    context.createAndRead[AddressId, Address](entity)
 
   override def update(entity: Address): Task[Unit] =
     context.update[AddressId, Address](entity)
