@@ -26,15 +26,17 @@ trait Repository[K, T <: WithId[K]] extends BaseRepository[K, T] {
 
 trait BaseRepository[K, T <: WithId[K]] extends WithMonad {
 
+  type U
+
   def all: F[Seq[T]]
 
   def read(id: K): F[Option[T]]
 
-  def update(t: T): F[Long]
+  def update(t: T): F[U]
 
   def updateAndRead(t: T): F[T]
 
-  def delete(id: K): F[Long]
+  def delete(id: K): F[U]
 
 }
 

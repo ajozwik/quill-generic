@@ -4,18 +4,18 @@ import java.util.{ Date, UUID }
 
 import pl.jozwik.quillgeneric.quillmacro.WithId
 
-object SimpleAddressId {
-  val random: SimpleAddressId = SimpleAddressId(UUID.randomUUID())
+object AddressId {
+  val random: AddressId = AddressId(UUID.randomUUID())
 }
 
-final case class SimpleAddressId(value: UUID) extends AnyVal
+final case class AddressId(value: UUID) extends AnyVal
 
-final case class SimpleAddress(
-    id: SimpleAddressId,
+final case class Address(
+    id: AddressId,
     country: String,
     city: String,
     street: Option[String] = None,
     buildingNumber: Option[String] = None,
     updated: Option[Date] = None,
     localNumber: Option[String] = None
-) extends WithId[SimpleAddressId]
+) extends WithId[AddressId]

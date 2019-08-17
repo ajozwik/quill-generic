@@ -1,16 +1,17 @@
 package pl.jozwik.quillgeneric.cassandra
 
 import com.datastax.driver.core.{ Cluster, Session }
-import io.getquill.{ CassandraMonixContext, SnakeCase }
+import com.datastax.driver.extras.codecs.jdk8.LocalDateTimeCodec
+import io.getquill.{ CassandraMonixContext, CassandraSyncContext, SnakeCase }
 import monix.execution.Scheduler
 import org.cassandraunit.CQLDataLoader
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper
 import org.scalatest.BeforeAndAfterAll
 import pl.jozwik.quillgeneric.AbstractSpec
-import pl.jozwik.quillgeneric.cassandra.model.{ SimpleAddress, SimpleAddressId }
-import com.datastax.driver.extras.codecs.jdk8.LocalDateTimeCodec
+import pl.jozwik.quillgeneric.cassandra.model.{ Address, AddressId }
 import pl.jozwik.quillgeneric.quillmacro.DateQuotes
+import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContext
 
 class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
   protected implicit val scheduler: Scheduler = Scheduler.Implicits.global
@@ -24,7 +25,9 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
 
   protected val keySpace = "demo"
 
-  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix") with DateQuotes
+  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix") with MonixWithContext[Unit] with DateQuotes
+
+  lazy val syncCtx = new CassandraSyncContext(SnakeCase, "cassandraMonix") with DateQuotes
 
   override def beforeAll(): Unit = {
     cluster.getConfiguration.getCodecRegistry.register(LocalDateTimeCodec.instance)
@@ -41,11 +44,11 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
   }
 
   "really simple transformation" should {
-      "run " in {
-        val id      = SimpleAddressId.random
-        val address = SimpleAddress(id, "country", "city")
+      "run monix" in {
+        val id      = AddressId.random
+        val address = Address(id, "country", "city")
         import ctx._
-        val schema = ctx.dynamicQuerySchema[SimpleAddress]("Address")
+        val schema = ctx.dynamicQuerySchema[Address]("Address")
         ctx
           .run {
             schema.insertValue(address)
@@ -57,8 +60,36 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
           )
           .runSyncUnsafe()
         logger.debug(s"$v")
+        ctx
+          .run(
+            schema.filter(_.id == lift(id)).delete
+          )
+          .runSyncUnsafe()
       }
 
+      "run sync" in {
+        val id      = AddressId.random
+        val address = Address(id, "country", "city")
+        import syncCtx._
+        val schema = syncCtx.dynamicQuerySchema[Address]("Address")
+        syncCtx
+          .run {
+            schema.insertValue(address)
+          }
+        syncCtx
+          .run {
+            schema.insertValue(address)
+          }
+        val v = syncCtx
+          .run(
+            schema.filter(_.id == lift(id))
+          )
+        logger.debug(s"$v")
+        syncCtx
+          .run(
+            schema.filter(_.id == lift(id)).delete
+          )
+      }
     }
 
 }

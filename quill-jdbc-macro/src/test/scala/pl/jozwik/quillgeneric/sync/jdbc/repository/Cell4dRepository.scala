@@ -3,7 +3,7 @@ package pl.jozwik.quillgeneric.sync.jdbc.repository
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Cell4d, Cell4dId }
-import pl.jozwik.quillgeneric.quillmacro.RepositoryCompositeKey
+import pl.jozwik.quillgeneric.quillmacro.{ RepositoryCompositeKey, WithUpdate }
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.WithSync
 
@@ -13,7 +13,8 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[Dialect, Naming],
     protected val tableName: String = "Cell4d"
 ) extends RepositoryCompositeKey[Cell4dId, Cell4d]
-  with WithSync {
+  with WithSync
+  with WithUpdate[Long] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Cell4d] = dSchema
 

@@ -5,19 +5,19 @@ import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.quillmacro.sync.CrudWithContext.ContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
 object JdbcRepository {
   type JdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = JdbcContext[D, N] with ContextDateQuotes[D, N]
 }
 
-trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepositoryWithGeneratedId[K, T] {
+trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepositoryWithGeneratedId[K, T] with WithUpdate[Long] {
   protected val context: JdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
-trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepository[K, T] {
+trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepository[K, T] with WithUpdate[Long] {
   protected val context: JdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]

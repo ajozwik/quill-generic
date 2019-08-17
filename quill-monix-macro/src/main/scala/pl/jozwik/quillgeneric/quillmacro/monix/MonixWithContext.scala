@@ -6,7 +6,7 @@ import pl.jozwik.quillgeneric.quillmacro.WithId
 
 import scala.language.experimental.macros
 
-trait MonixWithContext {
+trait MonixWithContext[U] {
   this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 
@@ -29,13 +29,13 @@ trait MonixWithContext {
   def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Task[T] =
     macro MonixMacro.createWithGenerateIdOrUpdateAndRead[K, T]
 
-  def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Task[Long] = macro MonixMacro.update[K, T]
+  def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Task[U] = macro MonixMacro.update[K, T]
 
   def updateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Task[T] = macro MonixMacro.updateAndRead[K, T]
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[Option[T]] = macro MonixMacro.read[K, T]
 
-  def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[Long] = macro MonixMacro.delete[K]
+  def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[U] = macro MonixMacro.delete[K]
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Task[Long] = macro MonixMacro.deleteByFilter
 
