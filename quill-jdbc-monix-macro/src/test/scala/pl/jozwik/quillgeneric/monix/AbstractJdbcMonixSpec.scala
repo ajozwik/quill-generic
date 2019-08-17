@@ -7,7 +7,7 @@ import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.quillmacro.DateQuotes
 import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContext
 
-trait AbstractJdbcMonixSpec extends AbstractSpec with BeforeAndAfterAll {
+trait AbstractMonixJdbcSpec extends AbstractSpec with BeforeAndAfterAll {
   protected implicit val scheduler: Scheduler = Scheduler.Implicits.global
   lazy protected val ctx                      = new H2MonixJdbcContext(strategy, "h2Monix") with MonixWithContext with DateQuotes
 

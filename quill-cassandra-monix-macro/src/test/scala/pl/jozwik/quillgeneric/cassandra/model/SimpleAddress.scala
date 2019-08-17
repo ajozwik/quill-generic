@@ -1,7 +1,6 @@
 package pl.jozwik.quillgeneric.cassandra.model
 
-import java.time.LocalDateTime
-import java.util.UUID
+import java.util.{ Date, UUID }
 
 import pl.jozwik.quillgeneric.quillmacro.WithId
 
@@ -17,6 +16,6 @@ final case class SimpleAddress(
     city: String,
     street: Option[String] = None,
     buildingNumber: Option[String] = None,
-    //updated: Option[LocalDateTime] = None,
+    updated: Option[Date] = None,
     localNumber: Option[String] = None
 ) extends WithId[SimpleAddressId]

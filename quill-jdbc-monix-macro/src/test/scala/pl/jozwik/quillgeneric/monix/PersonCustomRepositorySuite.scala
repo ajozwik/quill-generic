@@ -3,7 +3,7 @@ package pl.jozwik.quillgeneric.monix
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
 import pl.jozwik.quillgeneric.monix.repository.PersonCustomRepositoryJdbc
 
-trait PersonCustomRepositorySuite extends AbstractJdbcMonixSpec {
+trait PersonCustomRepositorySuite extends AbstractMonixJdbcSpec {
   "PersonCustomRepository " should {
       "Call all operations on Person with auto generated id and custom field" in {
         val repository = new PersonCustomRepositoryJdbc(ctx, "Person3")

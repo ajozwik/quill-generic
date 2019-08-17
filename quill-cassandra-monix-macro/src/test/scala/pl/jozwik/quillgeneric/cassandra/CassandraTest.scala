@@ -9,6 +9,8 @@ import org.cassandraunit.utils.EmbeddedCassandraServerHelper
 import org.scalatest.BeforeAndAfterAll
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.cassandra.model.{ SimpleAddress, SimpleAddressId }
+import com.datastax.driver.extras.codecs.jdk8.LocalDateTimeCodec
+import pl.jozwik.quillgeneric.quillmacro.DateQuotes
 
 class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
   protected implicit val scheduler: Scheduler = Scheduler.Implicits.global
@@ -22,9 +24,10 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
 
   protected val keySpace = "demo"
 
-  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix")
+  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix") with DateQuotes
 
   override def beforeAll(): Unit = {
+    cluster.getConfiguration.getCodecRegistry.register(LocalDateTimeCodec.instance)
     EmbeddedCassandraServerHelper.cleanEmbeddedCassandra()
     val dataLoader = new CQLDataLoader(session)
     dataLoader.load(new ClassPathCQLDataSet("scripts/create.cql", keySpace))

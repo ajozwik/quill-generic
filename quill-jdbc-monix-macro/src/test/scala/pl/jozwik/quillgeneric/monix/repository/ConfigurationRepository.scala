@@ -4,13 +4,13 @@ import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import monix.eval.Task
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.quillmacro.monix.JdbcMonixRepository
-import pl.jozwik.quillgeneric.quillmacro.monix.JdbcMonixRepository.MonixJdbcContextDateQuotes
+import pl.jozwik.quillgeneric.quillmacro.monix.jdbc.MonixJdbcRepository
+import pl.jozwik.quillgeneric.quillmacro.monix.jdbc.MonixJdbcRepository.MonixJdbcContextDateQuotes
 
 class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: MonixJdbcContextDateQuotes[D, N],
     protected val tableName: String = "Configuration"
-) extends JdbcMonixRepository[ConfigurationId, Configuration, D, N] {
+) extends MonixJdbcRepository[ConfigurationId, Configuration, D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Configuration] = dSchema
 
