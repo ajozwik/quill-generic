@@ -1,9 +1,9 @@
-package pl.jozwik.quillgeneric.quillmacro.monix.cassandra
+package pl.jozwik.quillgeneric.quillmacro.cassandra.monix
 
 import io.getquill.{ CassandraMonixContext, NamingStrategy }
-import pl.jozwik.quillgeneric.quillmacro.monix.cassandra.CassandraMonixRepository.CassandraMonixContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.monix.{ MonixRepository, MonixWithContext }
+import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository.CassandraMonixContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, DateQuotes, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.monix.{ MonixRepository, MonixWithContext }
 
 object CassandraMonixRepository {
   type CassandraMonixContextDateQuotes[N <: NamingStrategy] = CassandraMonixContext[N] with MonixWithContext[Unit] with DateQuotes

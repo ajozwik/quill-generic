@@ -2,7 +2,7 @@ package pl.jozwik.quillgeneric.cassandra
 
 import com.datastax.driver.core.{ Cluster, Session }
 import com.datastax.driver.extras.codecs.jdk8.LocalDateTimeCodec
-import io.getquill.{ CassandraMonixContext, SnakeCase }
+import io.getquill.{ CassandraSyncContext, SnakeCase }
 import monix.execution.Scheduler
 import org.cassandraunit.CQLDataLoader
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet
@@ -11,7 +11,6 @@ import org.scalatest.BeforeAndAfterAll
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.cassandra.model.{ Address, AddressId }
 import pl.jozwik.quillgeneric.quillmacro.DateQuotes
-import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContext
 
 class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
   protected implicit val scheduler: Scheduler = Scheduler.Implicits.global
@@ -25,7 +24,7 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
 
   protected val keySpace = "demo"
 
-  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix") with MonixWithContext[Unit] with DateQuotes
+  lazy val syncCtx = new CassandraSyncContext(SnakeCase, "cassandra") with DateQuotes
 
   override def beforeAll(): Unit = {
     cluster.getConfiguration.getCodecRegistry.register(LocalDateTimeCodec.instance)
@@ -42,29 +41,30 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
   }
 
   "really simple transformation" should {
-      "run monix" in {
+
+      "run sync" in {
         val id      = AddressId.random
         val address = Address(id, "country", "city")
-        import ctx._
-        val schema = ctx.dynamicQuerySchema[Address]("Address")
-        ctx
+        import syncCtx._
+        val schema = syncCtx.dynamicQuerySchema[Address]("Address")
+        syncCtx
           .run {
             schema.insertValue(address)
           }
-          .runSyncUnsafe()
-        val v = ctx
+        syncCtx
+          .run {
+            schema.insertValue(address)
+          }
+        val v = syncCtx
           .run(
             schema.filter(_.id == lift(id))
           )
-          .runSyncUnsafe()
         logger.debug(s"$v")
-        ctx
+        syncCtx
           .run(
             schema.filter(_.id == lift(id)).delete
           )
-          .runSyncUnsafe()
       }
-
     }
 
 }

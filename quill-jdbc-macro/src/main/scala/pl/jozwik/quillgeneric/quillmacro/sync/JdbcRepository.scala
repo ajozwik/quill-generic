@@ -1,13 +1,15 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
 import io.getquill.NamingStrategy
+import io.getquill.context.Context
 import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.quillmacro.sync.CrudWithContext.ContextDateQuotes
+import io.getquill.idiom.Idiom
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, DateQuotes, WithId, WithUpdate }
 
 object JdbcRepository {
+  type ContextDateQuotes[D <: Idiom, N <: NamingStrategy]        = Context[D, N] with CrudWithContext[Long] with DateQuotes
   type JdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = JdbcContext[D, N] with ContextDateQuotes[D, N]
 }
 

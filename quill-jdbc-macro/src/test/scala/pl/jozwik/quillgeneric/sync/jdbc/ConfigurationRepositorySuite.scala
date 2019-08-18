@@ -1,11 +1,11 @@
 package pl.jozwik.quillgeneric.sync.jdbc
 
+import org.scalatest.TryValues._
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
+import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
 import pl.jozwik.quillgeneric.sync.jdbc.repository.ConfigurationRepository
 
 import scala.util.{ Success, Try }
-import org.scalatest.TryValues._
-import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
 
 trait ConfigurationRepositorySuite extends AbstractJdbcSpec {
   "ConfigurationRepository" should {

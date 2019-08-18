@@ -46,6 +46,8 @@ val `io.getquill_quill-async-mysql` = "io.getquill" %% "quill-async-mysql" % qui
 
 val `io.getquill_quill-cassandra-monix` = "io.getquill" %% "quill-cassandra-monix" % quillVersion
 
+val `io.getquill_quill-cassandra` = "io.getquill" %% "quill-cassandra" % quillVersion
+
 val `io.getquill_quill-jdbc` = "io.getquill" %% "quill-jdbc" % quillVersion
 
 val `io.getquill_quill-jdbc-monix` = "io.getquill" %% "quill-jdbc-monix" % quillVersion
@@ -89,6 +91,18 @@ lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-
     Test / fork := true
   )
   .dependsOn(`quill-monix-macro`)
+  .dependsOn(Seq(`macro-quill`, `quill-monix-macro`).map(_ % "test->test"): _*)
+
+lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file("quill-cassandra-macro"))
+  .settings(
+    libraryDependencies ++= Seq(
+          `io.getquill_quill-cassandra`,
+          `org.cassandraunit_cassandra-unit`               % Test,
+          `com.datastax.cassandra_cassandra-driver-extras` % Test
+        ),
+    Test / fork := true
+  )
+  .dependsOn(`macro-quill`)
   .dependsOn(Seq(`macro-quill`, `quill-monix-macro`).map(_ % "test->test"): _*)
 
 lazy val `quill-jdbc-macro` = projectWithName("quill-jdbc-macro", file("quill-jdbc-macro"))

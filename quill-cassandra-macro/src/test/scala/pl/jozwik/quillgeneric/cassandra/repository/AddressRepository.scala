@@ -1,15 +1,16 @@
 package pl.jozwik.quillgeneric.cassandra.repository
 
 import io.getquill.NamingStrategy
-import monix.eval.Task
 import pl.jozwik.quillgeneric.cassandra.model.{ Address, AddressId }
-import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository
-import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository.CassandraMonixContextDateQuotes
+import pl.jozwik.quillgeneric.quillmacro.cassandra.sync.CassandraRepository
+import pl.jozwik.quillgeneric.quillmacro.cassandra.sync.CassandraRepository.CassandraContextDateQuotes
+
+import scala.util.Try
 
 final class AddressRepository[Naming <: NamingStrategy](
-    protected val context: CassandraMonixContextDateQuotes[Naming],
+    protected val context: CassandraContextDateQuotes[Naming],
     protected val tableName: String = "Address"
-) extends CassandraMonixRepository[AddressId, Address, Naming] {
+) extends CassandraRepository[AddressId, Address, Naming] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Address] = dSchema
 
@@ -18,31 +19,40 @@ final class AddressRepository[Naming <: NamingStrategy](
     context.dynamicQuerySchema[Address](tableName, alias(_.city, "city"))
   }
 
-  override def all: Task[Seq[Address]] =
+  override def all: Try[Seq[Address]] = Try {
     context.all[Address]
+  }
 
-  override def create(entity: Address): Task[AddressId] =
+  override def create(entity: Address): Try[AddressId] = Try {
     context.create[AddressId, Address](entity)
+  }
 
-  override def createAndRead(entity: Address): Task[Address] =
+  override def createAndRead(entity: Address): Try[Address] = Try {
     context.createAndRead[AddressId, Address](entity)
+  }
 
-  override def read(id: AddressId): Task[Option[Address]] =
+  override def read(id: AddressId): Try[Option[Address]] = Try {
     context.read[AddressId, Address](id)
+  }
 
-  override def createOrUpdate(entity: Address): Task[AddressId] =
+  override def createOrUpdate(entity: Address): Try[AddressId] = Try {
     context.create[AddressId, Address](entity)
+  }
 
-  override def createOrUpdateAndRead(entity: Address): Task[Address] =
+  override def createOrUpdateAndRead(entity: Address): Try[Address] = Try {
     context.createAndRead[AddressId, Address](entity)
+  }
 
-  override def update(entity: Address): Task[Unit] =
+  override def update(entity: Address): Try[Unit] = Try {
     context.update[AddressId, Address](entity)
+  }
 
-  override def updateAndRead(entity: Address): Task[Address] =
+  override def updateAndRead(entity: Address): Try[Address] = Try {
     context.updateAndRead[AddressId, Address](entity)
+  }
 
-  override def delete(id: AddressId): Task[Unit] =
+  override def delete(id: AddressId): Try[Unit] = Try {
     context.delete[AddressId, Address](id)
+  }
 
 }

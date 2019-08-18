@@ -7,11 +7,7 @@ import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, DateQuotes, WithId }
 
 import scala.language.experimental.macros
 
-object CrudWithContext {
-  type ContextDateQuotes[D <: Idiom, N <: NamingStrategy] = Context[D, N] with CrudWithContext with DateQuotes
-}
-
-trait CrudWithContext {
+trait CrudWithContext[U] {
   this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 
@@ -34,13 +30,13 @@ trait CrudWithContext {
   def createWithGenerateIdOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T =
     macro CrudMacro.createWithGenerateIdOrUpdateAndRead[K, T]
 
-  def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): Long = macro CrudMacro.update[K, T]
+  def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): U = macro CrudMacro.update[K, T]
 
   def updateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T = macro CrudMacro.updateAndRead[K, T]
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Option[T] = macro CrudMacro.read[K, T]
 
-  def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Long = macro CrudMacro.delete[K]
+  def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): U = macro CrudMacro.delete[K]
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Long = macro CrudMacro.deleteByFilter
 

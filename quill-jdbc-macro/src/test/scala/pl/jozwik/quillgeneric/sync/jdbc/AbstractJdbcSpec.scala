@@ -9,7 +9,7 @@ import pl.jozwik.quillgeneric.sync.jdbc.repository.AddressRepository
 
 trait AbstractJdbcSpec extends AbstractSpec with BeforeAndAfterAll {
 
-  lazy protected val ctx = new H2JdbcContext(strategy, "h2") with CrudWithContext with DateQuotes
+  lazy protected val ctx = new H2JdbcContext(strategy, "h2") with CrudWithContext[Long] with DateQuotes
 
   protected lazy val addressRepository = new AddressRepository(ctx, "Address")
 
