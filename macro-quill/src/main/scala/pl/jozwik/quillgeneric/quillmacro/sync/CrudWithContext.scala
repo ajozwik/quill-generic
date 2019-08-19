@@ -1,20 +1,9 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
 import io.getquill.context.Context
-import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, WithId }
 
 import scala.language.experimental.macros
-
-object CrudWithContext {
-
-  type CrudWithContextDateQuotesUnit = CrudWithContextDateQuotes[Unit]
-  type CrudWithContextDateQuotesLong = CrudWithContextDateQuotes[Long]
-
-}
-
-trait CrudWithContextDateQuotes[U] extends CrudWithContext[U] with DateQuotes {
-  this: Context[_, _] =>
-}
 
 trait CrudWithContext[U] {
   this: Context[_, _] =>

@@ -37,6 +37,8 @@ trait MonixWithContext[U] {
 
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[U] = macro MonixMacro.delete[K]
 
+  def deleteAll[T](implicit dSchema: dQuery[T]): Task[U] = macro MonixMacro.deleteAll[T]
+
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Task[Long] = macro MonixMacro.deleteByFilter
 
   def searchByFilter[T](filter: T => Boolean)(offset: Int, limit: Int)(implicit dSchema: dQuery[T]): Task[Seq[T]] = macro MonixMacro.searchByFilter[T]

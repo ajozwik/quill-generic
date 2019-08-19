@@ -81,4 +81,9 @@ final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](protected val c
       context.delete[PersonId, Person](id)
     }
 
+  override def deleteAll: Try[Long] =
+    Try {
+      context.deleteAll
+    }
+
 }

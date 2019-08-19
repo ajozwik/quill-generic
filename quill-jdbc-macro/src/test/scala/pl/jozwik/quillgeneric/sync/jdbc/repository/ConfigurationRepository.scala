@@ -71,4 +71,9 @@ class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
       context.delete[ConfigurationId, Configuration](id)
     }
 
+  override def deleteAll: Try[Long] =
+    Try {
+      context.deleteAll
+    }
+
 }

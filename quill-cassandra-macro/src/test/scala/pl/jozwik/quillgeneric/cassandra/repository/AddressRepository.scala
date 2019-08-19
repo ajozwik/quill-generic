@@ -55,4 +55,8 @@ final class AddressRepository[Naming <: NamingStrategy](
     context.delete[AddressId, Address](id)
   }
 
+  override def deleteAll: Try[Unit] = Try {
+    context.deleteAll
+  }
+
 }

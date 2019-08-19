@@ -74,4 +74,7 @@ final class PersonCustomRepositoryJdbc[D <: SqlIdiom, N <: NamingStrategy](
   override def delete(id: PersonId): Task[Long] =
     context.delete[PersonId, Person](id)
 
+  override def deleteAll: Task[Long] =
+    context.deleteAll
+
 }

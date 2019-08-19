@@ -57,4 +57,7 @@ class ConfigurationRepository[D <: Idiom, N <: NamingStrategy](
   override def delete(id: ConfigurationId): context.ActionMirror =
     context.delete[ConfigurationId, Configuration](id)
 
+  override def deleteAll: context.ActionMirror =
+    context.deleteAll
+
 }

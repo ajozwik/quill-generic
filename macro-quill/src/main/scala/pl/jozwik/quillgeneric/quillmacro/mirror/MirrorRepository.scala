@@ -55,4 +55,6 @@ trait BaseMirrorRepository[K, T <: WithId[K]] {
 
   def delete(id: K): ActionMirror
 
+  def deleteAll: ActionMirror
+
 }

@@ -59,4 +59,7 @@ class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
   override def delete(id: ConfigurationId): Task[Long] =
     context.delete[ConfigurationId, Configuration](id)
 
+  override def deleteAll: Task[Long] =
+    context.deleteAll
+
 }

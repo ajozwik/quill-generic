@@ -6,7 +6,7 @@ Library of generic CRUD operation for quill library. Only dynamic queries are su
 
 Always when you start new project you must to write a lot of boilerplate code for handling simple CRUD operations. Purpose of this library is to support creating CRUD repository with [Quill](https://github.com/getquill/quill) library.
 
-Purpose of CRUD operations - [Repository](/src/main/scala/pl/jozwik/quillgeneric/Repository.scala) - where F is monad like scala.util.Try/monix.eval.Task/scala.concurrent.Future :
+Purpose of CRUD operations - [Repository](/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala) - where F is monad like scala.util.Try/monix.eval.Task/scala.concurrent.Future :
 ```scala
 package pl.jozwik.quillgeneric.quillmacro
 

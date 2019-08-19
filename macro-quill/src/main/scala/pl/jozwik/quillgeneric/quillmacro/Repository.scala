@@ -38,6 +38,8 @@ trait BaseRepository[K, T <: WithId[K]] extends WithMonad {
 
   def delete(id: K): F[U]
 
+  def deleteAll: F[U]
+
 }
 
 trait WithMonad {
