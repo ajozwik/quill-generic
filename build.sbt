@@ -6,6 +6,8 @@ val `scalaVersion_2.12` = "2.12.9"
 
 name := "quill-macro-parent"
 
+ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
+
 ThisBuild / scapegoatVersion := "1.3.9"
 
 resolvers += Resolver.sonatypeRepo("releases")

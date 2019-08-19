@@ -10,8 +10,7 @@ import org.cassandraunit.utils.EmbeddedCassandraServerHelper
 import org.scalatest.BeforeAndAfterAll
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.cassandra.model.{ Address, AddressId }
-import pl.jozwik.quillgeneric.quillmacro.DateQuotes
-import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContext
+import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContextDateQuotes.MonixWithContextDateQuotesUnit
 
 class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
   protected implicit val scheduler: Scheduler = Scheduler.Implicits.global
@@ -25,7 +24,7 @@ class CassandraTest extends AbstractSpec with BeforeAndAfterAll {
 
   protected val keySpace = "demo"
 
-  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix") with MonixWithContext[Unit] with DateQuotes
+  lazy val ctx = new CassandraMonixContext(SnakeCase, "cassandraMonix") with MonixWithContextDateQuotesUnit
 
   override def beforeAll(): Unit = {
     cluster.getConfiguration.getCodecRegistry.register(LocalDateTimeCodec.instance)
