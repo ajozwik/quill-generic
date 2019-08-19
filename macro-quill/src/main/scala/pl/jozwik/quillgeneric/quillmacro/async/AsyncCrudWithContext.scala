@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.quillmacro.async
 
-import io.getquill.context.async.AsyncContext
+import io.getquill.context.Context
 import pl.jozwik.quillgeneric.quillmacro.{ DateQuotes, WithId }
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -14,11 +14,11 @@ object AsyncCrudWithContext {
 }
 
 trait AsyncCrudWithContextDateQuotes[U] extends AsyncCrudWithContext[U] with DateQuotes {
-  this: AsyncContext[_, _, _] =>
+  this: Context[_, _] =>
 }
 
 trait AsyncCrudWithContext[U] {
-  this: AsyncContext[_, _, _] =>
+  this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 
   def all[T](implicit dSchema: dQuery[T], ex: ExecutionContext): Future[Seq[T]] = macro AsyncCrudMacro.all[T]

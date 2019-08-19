@@ -7,7 +7,6 @@ import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
 object CassandraRepository {
-
   type CassandraContextDateQuotes[N <: NamingStrategy] = CassandraSyncContext[N] with CrudWithContextDateQuotesUnit
 }
 

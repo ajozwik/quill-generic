@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.cassandra.repository
+package pl.jozwik.quillgeneric.cassandra.sync.repository
 
 import io.getquill.NamingStrategy
 import pl.jozwik.quillgeneric.cassandra.model.{ Address, AddressId }
