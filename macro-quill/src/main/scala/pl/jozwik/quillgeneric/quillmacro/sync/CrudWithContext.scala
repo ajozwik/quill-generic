@@ -1,9 +1,7 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
-import io.getquill.NamingStrategy
 import io.getquill.context.Context
-import io.getquill.idiom.Idiom
-import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, WithId }
 
 import scala.language.experimental.macros
 
