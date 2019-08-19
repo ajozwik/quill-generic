@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PATH=$HOME/bin:$PATH sbt clean test publishSigned sonatypeRelease
+PATH=$HOME/bin:$PATH sbt clean test publishLocal publishSigned sonatypeRelease
