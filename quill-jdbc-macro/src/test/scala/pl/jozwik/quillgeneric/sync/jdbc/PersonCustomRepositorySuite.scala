@@ -25,6 +25,7 @@ trait PersonCustomRepositorySuite extends AbstractJdbcSpec {
         repository.delete(createdPatron.id) shouldBe 'success
         repository.read(createdPatron.id).success.value shouldBe empty
         repository.all shouldBe Try(Seq())
+        repository.deleteAll shouldBe 'success
 
       }
     }

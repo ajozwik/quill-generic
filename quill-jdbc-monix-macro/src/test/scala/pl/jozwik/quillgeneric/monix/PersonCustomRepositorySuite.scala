@@ -24,6 +24,8 @@ trait PersonCustomRepositorySuite extends AbstractMonixJdbcSpec {
         repository.read(createdPatron.id).runSyncUnsafe() shouldBe empty
         repository.all.runSyncUnsafe() shouldBe Seq()
 
+        repository.deleteAll.runSyncUnsafe() shouldBe 0
+
       }
     }
 }

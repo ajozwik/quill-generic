@@ -39,7 +39,7 @@ abstract class AbstractCrudMacro {
   def all[T: c.WeakTypeTag](dSchema: c.Expr[_]): Tree =
     q"""
       import ${c.prefix}._
-        run($dSchema)
+      run($dSchema)
     """
 
   def createAndGenerateId[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree =
@@ -74,6 +74,12 @@ abstract class AbstractCrudMacro {
       run(
          $dSchema.filter($filter).delete
       )
+    """
+
+  def deleteAll[T: c.WeakTypeTag](dSchema: c.Expr[_]): Tree =
+    q"""
+      import ${c.prefix}._
+      run($dSchema.delete)
     """
 
   def searchByFilter[T: c.WeakTypeTag](filter: Tree)(offset: c.Expr[Int], limit: c.Expr[Int])(dSchema: c.Expr[_]): Tree =

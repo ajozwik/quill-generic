@@ -45,4 +45,7 @@ final class AddressRepository[Naming <: NamingStrategy](
   override def delete(id: AddressId): Task[Unit] =
     context.delete[AddressId, Address](id)
 
+  override def deleteAll: Task[Unit] =
+    context.deleteAll
+
 }

@@ -78,4 +78,9 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](protected val contex
       context.delete[ProductId, Product](id)
     }
 
+  override def deleteAll: Try[Long] =
+    Try {
+      context.deleteAll
+    }
+
 }

@@ -66,4 +66,8 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     context.delete[Cell4dId, Cell4d](id)
   }
 
+  override def deleteAll: Try[Long] = Try {
+    context.deleteAll
+  }
+
 }

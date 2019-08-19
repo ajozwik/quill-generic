@@ -75,4 +75,9 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     Try {
       context.delete[SaleId, Sale](id)
     }
+
+  override def deleteAll: Try[Long] =
+    Try {
+      context.deleteAll
+    }
 }

@@ -79,7 +79,12 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
 
   override def delete(id: AddressId): Try[Long] =
     Try {
-      context.deleteByFilter[Address](_.id == id)
+      context.delete[AddressId, Address](id)
+    }
+
+  override def deleteAll: Try[Long] =
+    Try {
+      context.deleteAll
     }
 
 }

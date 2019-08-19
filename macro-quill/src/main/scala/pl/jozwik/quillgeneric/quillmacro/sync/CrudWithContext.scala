@@ -36,6 +36,8 @@ trait CrudWithContext[U] {
 
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): U = macro CrudMacro.delete[K]
 
+  def deleteAll[T](implicit dSchema: dQuery[T]): U = macro CrudMacro.deleteAll[T]
+
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Long = macro CrudMacro.deleteByFilter
 
   def searchByFilter[T](filter: T => Boolean)(offset: Int, limit: Int)(implicit dSchema: dQuery[T]): Seq[T] = macro CrudMacro.searchByFilter[T]

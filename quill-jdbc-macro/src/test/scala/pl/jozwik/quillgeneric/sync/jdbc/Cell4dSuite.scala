@@ -10,7 +10,7 @@ trait Cell4dSuite extends AbstractJdbcSpec {
       "Call crud operations " in {
         val entity = Cell4d(Cell4dId(0, 1, 0, 1), false)
         repository.createOrUpdateAndRead(entity) shouldBe 'success
-
+        repository.deleteAll shouldBe 'success
       }
     }
 }

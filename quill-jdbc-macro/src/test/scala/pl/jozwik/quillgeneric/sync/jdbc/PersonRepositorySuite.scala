@@ -28,6 +28,7 @@ trait PersonRepositorySuite extends AbstractJdbcSpec {
         repository.read(createdPatron.id).success.value shouldBe empty
         repository.all shouldBe Try(Seq())
         repository.max shouldBe Success(None)
+        repository.deleteAll shouldBe 'success
       }
     }
 }
