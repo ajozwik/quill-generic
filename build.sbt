@@ -4,6 +4,8 @@ val `scalaVersion_2.13` = "2.13.0"
 
 val `scalaVersion_2.12` = "2.12.9"
 
+name := "quill-macro-parent"
+
 ThisBuild / scapegoatVersion := "1.3.9"
 
 resolvers += Resolver.sonatypeRepo("releases")
