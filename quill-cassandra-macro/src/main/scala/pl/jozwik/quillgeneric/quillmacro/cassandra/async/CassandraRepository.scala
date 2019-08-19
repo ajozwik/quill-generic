@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.quillmacro.cassandra.sync
+package pl.jozwik.quillgeneric.quillmacro.cassandra.async
 
 import io.getquill.{ CassandraSyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.quillmacro.cassandra.sync.CassandraRepository.CassandraContextDateQuotes

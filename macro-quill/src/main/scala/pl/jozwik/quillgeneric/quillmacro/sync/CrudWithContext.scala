@@ -1,11 +1,20 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
-import io.getquill.NamingStrategy
 import io.getquill.context.Context
-import io.getquill.idiom.Idiom
 import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, DateQuotes, WithId }
 
 import scala.language.experimental.macros
+
+object CrudWithContext {
+
+  type CrudWithContextDateQuotesUnit = CrudWithContextDateQuotes[Unit]
+  type CrudWithContextDateQuotesLong = CrudWithContextDateQuotes[Long]
+
+}
+
+trait CrudWithContextDateQuotes[U] extends CrudWithContext[U] with DateQuotes {
+  this: Context[_, _] =>
+}
 
 trait CrudWithContext[U] {
   this: Context[_, _] =>
@@ -37,6 +46,8 @@ trait CrudWithContext[U] {
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Option[T] = macro CrudMacro.read[K, T]
 
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): U = macro CrudMacro.delete[K]
+
+  def deleteAll[T](implicit dSchema: dQuery[T]): U = macro CrudMacro.deleteAll[T]
 
   def deleteByFilter[T](filter: T => Boolean)(implicit dSchema: dQuery[T]): Long = macro CrudMacro.deleteByFilter
 

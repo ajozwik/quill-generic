@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.sync.mirror.repository
+package pl.jozwik.quillgeneric.mirror.repository
 
 import io.getquill.NamingStrategy
 import io.getquill.idiom.Idiom

@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.sync.mirror
+package pl.jozwik.quillgeneric.mirror
 
 import io.getquill.MirrorSqlDialect
 import pl.jozwik.quillgeneric.AbstractSpec
