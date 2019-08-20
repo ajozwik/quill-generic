@@ -1,7 +1,7 @@
 package pl.jozwik.quillgeneric.quillmacro
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
 
-abstract class AbstractCrudMacro {
+trait FilterCrudMacro {
   val c: MacroContext
   import c.universe._
   import pl.jozwik.quillgeneric.quillmacro.Keys._
@@ -35,6 +35,11 @@ abstract class AbstractCrudMacro {
     val id = c.Expr[K](q"$entity.id")
     callFilterOnId[K](id)(dSchema)
   }
+}
+
+trait AbstractCrudMacro extends FilterCrudMacro {
+  val c: MacroContext
+  import c.universe._
 
   def all[T: c.WeakTypeTag](dSchema: c.Expr[_]): Tree =
     q"""

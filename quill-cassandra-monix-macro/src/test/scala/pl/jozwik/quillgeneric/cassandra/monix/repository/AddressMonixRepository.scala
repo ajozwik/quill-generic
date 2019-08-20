@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.cassandra.repository
+package pl.jozwik.quillgeneric.cassandra.monix.repository
 
 import io.getquill.NamingStrategy
 import monix.eval.Task
@@ -6,7 +6,7 @@ import pl.jozwik.quillgeneric.cassandra.model.{ Address, AddressId }
 import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository
 import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository.CassandraMonixContextDateQuotes
 
-final class AddressRepository[Naming <: NamingStrategy](
+final class AddressMonixRepository[Naming <: NamingStrategy](
     protected val context: CassandraMonixContextDateQuotes[Naming],
     protected val tableName: String = "Address"
 ) extends CassandraMonixRepository[AddressId, Address, Naming] {

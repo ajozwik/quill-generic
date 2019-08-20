@@ -1,7 +1,7 @@
-package pl.jozwik.quillgeneric.sync.mirror
+package pl.jozwik.quillgeneric.mirror
 
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.sync.mirror.repository.ConfigurationRepository
+import pl.jozwik.quillgeneric.mirror.repository.ConfigurationRepository
 
 trait ConfigurationRepositorySuite extends AbstractMirrorSpec {
   "ConfigurationRepository" should {

@@ -2,11 +2,12 @@ package pl.jozwik.quillgeneric.quillmacro.cassandra.sync
 
 import io.getquill.{ CassandraSyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.quillmacro.cassandra.sync.CassandraRepository.CassandraContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.{ CrudWithContext, SyncRepository }
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, DateQuotes, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.sync.CrudWithContext.CrudWithContextDateQuotesUnit
+import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
 object CassandraRepository {
-  type CassandraContextDateQuotes[N <: NamingStrategy] = CassandraSyncContext[N] with CrudWithContext[Unit] with DateQuotes
+  type CassandraContextDateQuotes[N <: NamingStrategy] = CassandraSyncContext[N] with CrudWithContextDateQuotesUnit
 }
 
 trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy] extends SyncRepository[K, T] with WithUpdate[Unit] {
@@ -16,4 +17,4 @@ trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy] extends SyncRe
 
 }
 
-trait CassandraMonixRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], N <: NamingStrategy] extends CassandraRepository[K, T, N]
+trait CassandraRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], N <: NamingStrategy] extends CassandraRepository[K, T, N]
