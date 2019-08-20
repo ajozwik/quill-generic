@@ -1,4 +1,4 @@
-package pl.jozwik.quillgeneric.cassandra.repository
+package pl.jozwik.quillgeneric.cassandra.monix.repository
 
 import io.getquill.NamingStrategy
 import monix.eval.Task
