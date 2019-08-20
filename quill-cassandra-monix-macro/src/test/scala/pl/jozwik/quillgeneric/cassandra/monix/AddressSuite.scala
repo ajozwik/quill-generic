@@ -1,10 +1,9 @@
 package pl.jozwik.quillgeneric.cassandra.monix
 
-import org.scalatest.concurrent.ScalaFutures
 import pl.jozwik.quillgeneric.cassandra.model.AddressId
 import pl.jozwik.quillgeneric.cassandra.monix.repository.AddressMonixRepository
 
-trait AddressSuite extends AbstractMonixMonixSpec with ScalaFutures {
+trait AddressSuite extends AbstractMonixMonixSpec {
 
   private lazy val repository = new AddressMonixRepository(ctx)
 

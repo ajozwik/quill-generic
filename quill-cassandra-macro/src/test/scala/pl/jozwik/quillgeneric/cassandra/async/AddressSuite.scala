@@ -1,10 +1,9 @@
 package pl.jozwik.quillgeneric.cassandra.async
 
-import org.scalatest.concurrent.ScalaFutures
 import pl.jozwik.quillgeneric.cassandra.async.repository.AddressAsyncRepository
 import pl.jozwik.quillgeneric.cassandra.model.AddressId
 
-trait AddressSuite extends AbstractAsyncSpec with ScalaFutures {
+trait AddressSuite extends AbstractAsyncSpec {
 
   private lazy val repository = new AddressAsyncRepository(ctx)
 
