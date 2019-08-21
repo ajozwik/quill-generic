@@ -35,6 +35,10 @@ final class AddressRepository[Naming <: NamingStrategy](
     context.read[AddressId, Address](id)
   }
 
+  override def readUnsafe(id: AddressId): Try[Address] = Try {
+    context.readUnsafe[AddressId, Address](id)
+  }
+
   override def createOrUpdate(entity: Address): Try[AddressId] = Try {
     context.create[AddressId, Address](entity)
   }

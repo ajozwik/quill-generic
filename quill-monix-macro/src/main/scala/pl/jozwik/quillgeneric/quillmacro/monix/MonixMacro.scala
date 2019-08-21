@@ -138,4 +138,17 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
     """
   }
 
+  def readUnsafe[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
+    val filter = callFilterOnId[K](id)(dSchema)
+    q"""
+      import ${c.prefix}._
+      val q = $filter
+      for {
+        r <- run(q)
+      } yield {
+        r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
+      }
+    """
+  }
+
 }

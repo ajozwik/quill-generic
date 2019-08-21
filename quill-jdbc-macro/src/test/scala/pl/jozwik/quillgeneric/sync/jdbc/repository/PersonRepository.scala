@@ -66,6 +66,10 @@ final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](protected val c
     context.read[PersonId, Person](id)
   }
 
+  override def readUnsafe(id: PersonId): Try[Person] = Try {
+    context.readUnsafe[PersonId, Person](id)
+  }
+
   override def update(entity: Person): Try[Long] = Try {
     context.update[PersonId, Person](entity)
   }

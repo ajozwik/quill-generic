@@ -32,6 +32,8 @@ trait BaseRepository[K, T <: WithId[K]] extends WithMonad {
 
   def read(id: K): F[Option[T]]
 
+  def readUnsafe(id: K): F[T]
+
   def update(t: T): F[U]
 
   def updateAndRead(t: T): F[T]

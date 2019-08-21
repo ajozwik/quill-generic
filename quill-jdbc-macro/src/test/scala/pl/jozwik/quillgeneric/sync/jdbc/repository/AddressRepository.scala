@@ -45,6 +45,11 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
       context.read[AddressId, Address](id)
     }
 
+  override def readUnsafe(id: AddressId): Try[Address] =
+    Try {
+      context.readUnsafe[AddressId, Address](id)
+    }
+
   override def createOrUpdate(entity: Address, generateId: Boolean = true): Try[AddressId] =
     Try {
       context.transaction {

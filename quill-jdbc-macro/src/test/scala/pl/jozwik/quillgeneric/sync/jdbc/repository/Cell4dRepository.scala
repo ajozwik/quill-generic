@@ -41,6 +41,10 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     context.read[Cell4dId, Cell4d](id)
   }
 
+  override def readUnsafe(id: Cell4dId): Try[Cell4d] = Try {
+    context.readUnsafe[Cell4dId, Cell4d](id)
+  }
+
   override def createOrUpdate(entity: Cell4d): Try[Cell4dId] = Try {
     context.transaction {
       context.createOrUpdate[Cell4dId, Cell4d](entity)

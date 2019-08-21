@@ -57,6 +57,11 @@ class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
       context.read[ConfigurationId, Configuration](id)
     }
 
+  override def readUnsafe(id: ConfigurationId): Try[Configuration] =
+    Try {
+      context.readUnsafe[ConfigurationId, Configuration](id)
+    }
+
   override def update(entity: Configuration): Try[Long] = Try {
     context.update[ConfigurationId, Configuration](entity)
   }

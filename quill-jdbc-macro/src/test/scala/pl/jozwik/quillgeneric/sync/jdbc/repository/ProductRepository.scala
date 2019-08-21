@@ -63,6 +63,10 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](protected val contex
     context.read[ProductId, Product](id)
   }
 
+  override def readUnsafe(id: ProductId): Try[Product] = Try {
+    context.readUnsafe[ProductId, Product](id)
+  }
+
   override def update(entity: Product): Try[Long] = Try {
     context.update[ProductId, Product](entity)
   }

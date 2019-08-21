@@ -61,6 +61,11 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
       context.read[SaleId, Sale](id)
     }
 
+  override def readUnsafe(id: SaleId): Try[Sale] =
+    Try {
+      context.readUnsafe[SaleId, Sale](id)
+    }
+
   override def update(entity: Sale): Try[Long] = Try {
     context.update[SaleId, Sale](entity)
   }

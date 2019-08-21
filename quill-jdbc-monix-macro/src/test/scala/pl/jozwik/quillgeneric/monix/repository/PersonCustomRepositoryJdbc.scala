@@ -45,6 +45,9 @@ final class PersonCustomRepositoryJdbc[D <: SqlIdiom, N <: NamingStrategy](
   override def read(id: PersonId): Task[Option[Person]] =
     context.read[PersonId, Person](id)
 
+  override def readUnsafe(id: PersonId): Task[Person] =
+    context.readUnsafe[PersonId, Person](id)
+
   override def createOrUpdate(entity: Person, generateId: Boolean = true): Task[PersonId] =
     context.transaction {
       if (generateId) {

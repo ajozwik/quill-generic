@@ -48,6 +48,10 @@ final class PersonCustomRepository[D <: SqlIdiom, N <: NamingStrategy](protected
     context.read[PersonId, Person](id)
   }
 
+  override def readUnsafe(id: PersonId): Try[Person] = Try {
+    context.readUnsafe[PersonId, Person](id)
+  }
+
   override def createOrUpdate(entity: Person, generateId: Boolean = true): Try[PersonId] = Try {
     context.transaction {
       if (generateId) {

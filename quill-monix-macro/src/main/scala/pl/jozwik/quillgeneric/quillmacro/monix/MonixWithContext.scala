@@ -35,6 +35,8 @@ trait MonixWithContext[U] {
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[Option[T]] = macro MonixMacro.read[K, T]
 
+  def readUnsafe[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[T] = macro MonixMacro.readUnsafe[K, T]
+
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Task[U] = macro MonixMacro.delete[K]
 
   def deleteAll[T](implicit dSchema: dQuery[T]): Task[U] = macro MonixMacro.deleteAll[T]

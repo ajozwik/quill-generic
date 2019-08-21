@@ -30,6 +30,9 @@ final class AddressMonixRepository[Naming <: NamingStrategy](
   override def read(id: AddressId): Task[Option[Address]] =
     context.read[AddressId, Address](id)
 
+  override def readUnsafe(id: AddressId): Task[Address] =
+    context.readUnsafe[AddressId, Address](id)
+
   override def createOrUpdate(entity: Address): Task[AddressId] =
     context.create[AddressId, Address](entity)
 

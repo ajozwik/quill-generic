@@ -43,6 +43,8 @@ trait CrudWithContext[U] {
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Option[T] = macro CrudMacro.read[K, T]
 
+  def readUnsafe[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): T = macro CrudMacro.readUnsafe[K, T]
+
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): U = macro CrudMacro.delete[K]
 
   def deleteAll[T](implicit dSchema: dQuery[T]): U = macro CrudMacro.deleteAll[T]
