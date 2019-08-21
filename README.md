@@ -55,14 +55,14 @@ trait WithMonad {
 }
 ```
 
-Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](/macro-quillgeneric/src/main/scala/pl/jozwik/quillgeneric/quillmacro/WithId.scala)
+Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/WithId.scala)
 If you have composite key - it has to extends io.getquill.Embedded and one of traits [CompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/CompositeKey.scala)
 
 General [Repository and RepositoryCompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala)
 
 Current we support Try:
 
- - [PersonRepository](/quill-jdbc-macro/src/test/scala/pl/jozwik/quillgeneric/sync/jdbc/repository/PersonRepository.scala) and [MyPersonRepository](/macro-quill/src/test/scala/pl/jozwik/quillgeneric/sync/jdbc/repository/MyPersonRepository.scala) (example of usage macro method like searchByFilter, count)
+ - [PersonRepository](/quill-jdbc-macro/src/test/scala/pl/jozwik/quillgeneric/sync/jdbc/repository/PersonRepository.scala) and [MyPersonRepository](/quill-jdbc-macro/src/test/scala/pl/jozwik/quillgeneric/sync/jdbc/repository/MyPersonRepository.scala) (example of usage macro method like searchByFilter, count)
  
 And monix Task:
  
