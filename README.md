@@ -55,10 +55,10 @@ trait WithMonad {
 }
 ```
 
-Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](quill-generic/src/main/scala/pl/jozwik/quillgeneric/quillmacro/WithId.scala)
+Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](/macro-quillgeneric/src/main/scala/pl/jozwik/quillgeneric/quillmacro/WithId.scala)
 If you have composite key - it has to extends io.getquill.Embedded and one of traits [CompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/CompositeKey.scala)
 
-General [Repository and RepositoryCompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/macro-quillsrc/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala)
+General [Repository and RepositoryCompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala)
 
 Current we support Try:
 
@@ -66,7 +66,7 @@ Current we support Try:
  
 And monix Task:
  
- - [PersonCustomRepositoryJdbc](/quill-monix-macro/src/test/scala/pl/jozwik/quillgeneric/monix/repository/PersonCustomRepositoryJdbc.scala)
+ - [PersonCustomRepositoryJdbc](/quill-jdbc-monix-macro/src/test/scala/pl/jozwik/quillgeneric/monix/repository/PersonCustomRepositoryJdbc.scala)
  
 Synchronized and monix repositories are generated automatically by [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-crud-generic), see build.sbt in
 [quill-macro-example](https://github.com/ajozwik/quill-macro-example)
