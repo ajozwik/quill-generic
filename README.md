@@ -55,10 +55,10 @@ trait WithMonad {
 }
 ```
 
-Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](src/main/scala/pl/jozwik/quillgeneric/quillmacro/WithId.scala)
+Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](quill-generic/src/main/scala/pl/jozwik/quillgeneric/quillmacro/WithId.scala)
 If you have composite key - it has to extends io.getquill.Embedded and one of traits [CompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/CompositeKey.scala)
 
-General [Repository and RepositoryCompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala)
+General [Repository and RepositoryCompositeKey](/macro-quill/src/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/macro-quillsrc/main/scala/pl/jozwik/quillgeneric/quillmacro/Repository.scala)
 
 Current we support Try:
 
