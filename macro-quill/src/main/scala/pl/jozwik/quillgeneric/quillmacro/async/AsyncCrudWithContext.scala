@@ -50,6 +50,8 @@ trait AsyncCrudWithContext[U] {
 
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[Option[T]] = macro AsyncCrudMacro.read[K, T]
 
+  def readUnsafe[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[T] = macro AsyncCrudMacro.readUnsafe[K, T]
+
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[U] = macro AsyncCrudMacro.delete[K]
 
   def deleteAll[T](implicit dSchema: dQuery[T], ex: ExecutionContext): Future[U] = macro AsyncCrudMacro.deleteAll[T]

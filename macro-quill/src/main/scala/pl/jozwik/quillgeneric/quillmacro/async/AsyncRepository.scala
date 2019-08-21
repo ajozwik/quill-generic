@@ -34,6 +34,8 @@ trait AsyncBaseRepository[K, T <: WithId[K]] {
 
   def read(id: K)(implicit ex: ExecutionContext): Future[Option[T]]
 
+  def readUnsafe(id: K)(implicit ex: ExecutionContext): Future[T]
+
   def update(t: T)(implicit ex: ExecutionContext): Future[U]
 
   def updateAndRead(t: T)(implicit ex: ExecutionContext): Future[T]

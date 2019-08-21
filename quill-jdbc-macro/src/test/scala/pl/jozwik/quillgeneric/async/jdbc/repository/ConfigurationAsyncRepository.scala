@@ -43,6 +43,9 @@ class ConfigurationAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Conn
   override def read(id: ConfigurationId)(implicit ex: ExecutionContext): Future[Option[Configuration]] =
     context.read[ConfigurationId, Configuration](id)
 
+  override def readUnsafe(id: ConfigurationId)(implicit ex: ExecutionContext): Future[Configuration] =
+    context.readUnsafe[ConfigurationId, Configuration](id)
+
   override def update(t: Configuration)(implicit ex: ExecutionContext): Future[U] =
     context.update[ConfigurationId, Configuration](t)
 

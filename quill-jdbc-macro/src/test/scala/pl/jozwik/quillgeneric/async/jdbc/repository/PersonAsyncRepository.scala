@@ -61,6 +61,9 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
   override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Option[Person]] =
     context.read[PersonId, Person](id)
 
+  override def readUnsafe(id: PersonId)(implicit ex: ExecutionContext): Future[Person] =
+    context.readUnsafe[PersonId, Person](id)
+
   override def update(t: Person)(implicit ex: ExecutionContext): Future[U] =
     context.update[PersonId, Person](t)
 

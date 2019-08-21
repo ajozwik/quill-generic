@@ -137,4 +137,18 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
     """
   }
 
+  def readUnsafe[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree = {
+    val filter = callFilterOnId[K](id)(dSchema)
+    q"""
+      import ${c.prefix}._
+      val q = $filter
+      for {
+        r <- run(q)
+      } yield {
+        r.headOption
+        .getOrElse(throw new NoSuchElementException(s"$$id"))
+      }
+    """
+  }
+
 }
