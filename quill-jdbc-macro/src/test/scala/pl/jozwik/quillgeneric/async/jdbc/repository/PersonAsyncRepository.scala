@@ -23,7 +23,7 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
     context.all[Person]
 
   override def create(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
-    context.transaction { f =>
+    context.transaction { implicit f =>
       if (generatedId) {
         context.createAndGenerateId[PersonId, Person](entity)(dSchema, f)
       } else {
@@ -32,7 +32,7 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
     }
 
   override def createAndRead(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[Person] =
-    context.transaction { f =>
+    context.transaction { implicit f =>
       if (generatedId) {
         context.createWithGenerateIdAndRead[PersonId, Person](entity)(dSchema, f)
       } else {
@@ -41,7 +41,7 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
     }
 
   override def createOrUpdate(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
-    context.transaction { f =>
+    context.transaction { implicit f =>
       if (generatedId) {
         context.createAndGenerateIdOrUpdate[PersonId, Person](entity)(dSchema, f)
       } else {
@@ -50,7 +50,7 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
     }
 
   override def createOrUpdateAndRead(entity: Person, generatedId: Boolean = true)(implicit ex: ExecutionContext): Future[Person] =
-    context.transaction { f =>
+    context.transaction { implicit f =>
       if (generatedId) {
         context.createWithGenerateIdOrUpdateAndRead[PersonId, Person](entity)(dSchema, f)
       } else {

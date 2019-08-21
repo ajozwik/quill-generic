@@ -26,13 +26,19 @@ class ConfigurationAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Conn
     context.create[ConfigurationId, Configuration](entity)
 
   override def createAndRead(entity: Configuration)(implicit ex: ExecutionContext): Future[Configuration] =
-    context.createAndRead[ConfigurationId, Configuration](entity)
+    context.transaction { f =>
+      context.createAndRead[ConfigurationId, Configuration](entity)(dSchema, f)
+    }
 
   override def createOrUpdate(entity: Configuration)(implicit ex: ExecutionContext): Future[ConfigurationId] =
-    context.createOrUpdate[ConfigurationId, Configuration](entity)
+    context.transaction { f =>
+      context.createOrUpdate[ConfigurationId, Configuration](entity)(dSchema, f)
+    }
 
   override def createOrUpdateAndRead(entity: Configuration)(implicit ex: ExecutionContext): Future[Configuration] =
-    context.createOrUpdateAndRead[ConfigurationId, Configuration](entity)
+    context.transaction { f =>
+      context.createOrUpdateAndRead[ConfigurationId, Configuration](entity)(dSchema, f)
+    }
 
   override def read(id: ConfigurationId)(implicit ex: ExecutionContext): Future[Option[Configuration]] =
     context.read[ConfigurationId, Configuration](id)

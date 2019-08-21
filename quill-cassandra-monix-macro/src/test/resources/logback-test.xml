@@ -1,0 +1,21 @@
+<!DOCTYPE configuration>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{yy-MM-dd HH:mm:ss.SSS} [%.-1level] [%class:%line] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.zaxxer" level="INFO" />
+	<logger name="org.apache.cassandra" level="INFO" />
+	<logger name="io.netty" level="INFO" />
+	<logger name="com.datastax" level="WARN" />
+
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+
+</configuration>
