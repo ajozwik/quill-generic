@@ -44,6 +44,8 @@ val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %%
 
 val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
 
+val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
+
 val `io.getquill_quill-async` = "io.getquill" %% "quill-async" % quillVersion
 
 val `io.getquill_quill-async-mysql` = "io.getquill" %% "quill-async-mysql" % quillVersion
@@ -68,7 +70,7 @@ val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" 
 
 lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).settings(
   libraryDependencies ++= Seq(
-        `io.getquill_quill-async`,
+        `io.getquill_quill-core`,
         `ch.qos.logback_logback-classic`           % Test,
         `com.typesafe.scala-logging_scala-logging` % Test,
         `com.h2database_h2`                        % Test
@@ -111,6 +113,10 @@ lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file
 
 lazy val `quill-jdbc-macro` = projectWithName("quill-jdbc-macro", file("quill-jdbc-macro"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc`, `io.getquill_quill-async-mysql` % Test))
+  .dependsOn(`macro-quill`, `macro-quill` % "test->test")
+
+lazy val `quill-async-jdbc-macro` = projectWithName("quill-async-jdbc-macro", file("quill-async-jdbc-macro"))
+  .settings(libraryDependencies ++= Seq(`io.getquill_quill-async`, `io.getquill_quill-async-mysql` % Test))
   .dependsOn(`macro-quill`, `macro-quill` % "test->test")
 
 def projectWithName(name: String, file: File): Project = Project(name, file).settings(

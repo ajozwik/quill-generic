@@ -1,3 +1,0 @@
-package pl.jozwik.quillgeneric.mirror
-
-class MirrorSpec extends PersonRepositorySuite with ConfigurationRepositorySuite
