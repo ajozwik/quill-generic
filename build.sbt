@@ -36,7 +36,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ydelambdafy:method"
 )
 
-val quillVersion = "3.4.1"
+val quillVersion = "3.4.3"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 

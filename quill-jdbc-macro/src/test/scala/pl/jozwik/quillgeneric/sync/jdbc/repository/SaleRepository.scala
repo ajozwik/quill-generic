@@ -16,8 +16,8 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
   private val aliases = {
     import context._
     Seq(
-      alias[Sale](_.id.fk1, "productId"),
-      alias[Sale](_.id.fk2, "personId")
+      alias[Sale](_.id.fk1, "PRODUCT_ID"),
+      alias[Sale](_.id.fk2, "PERSON_ID")
     )
   }
 
