@@ -8,7 +8,7 @@ name := "quill-macro-parent"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
-ThisBuild / scapegoatVersion := "1.3.9"
+ThisBuild / scapegoatVersion := "1.3.10"
 
 resolvers += Resolver.sonatypeRepo("releases")
 

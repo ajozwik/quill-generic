@@ -17,12 +17,18 @@ trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: Namin
   protected val context: JdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
+
+  def inTransaction[A](task: A): A =
+    context.transaction(task)
 }
 
 trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepository[K, T] with WithUpdate[Long] {
   protected val context: JdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
+
+  def inTransaction[A](task: A): A =
+    context.transaction(task)
 
 }
 

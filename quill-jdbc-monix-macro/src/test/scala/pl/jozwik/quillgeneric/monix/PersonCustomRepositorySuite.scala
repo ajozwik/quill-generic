@@ -13,8 +13,15 @@ trait PersonCustomRepositorySuite extends AbstractMonixJdbcSpec {
         val personId         = repository.create(person)
         val personIdProvided = personId.runSyncUnsafe()
         val createdPatron    = repository.read(personIdProvided).runSyncUnsafe().getOrElse(fail())
-        repository.update(createdPatron).runSyncUnsafe() shouldBe 1
-        repository.all.runSyncUnsafe() shouldBe Seq(createdPatron)
+        val task = repository.inTransaction {
+          for {
+            u   <- repository.update(createdPatron)
+            all <- repository.all
+          } yield {
+            (u, all)
+          }
+        }
+        task.runSyncUnsafe() shouldBe ((1, Seq(createdPatron)))
         val newBirthDate = createdPatron.birthDate.minusYears(1)
         val modified     = createdPatron.copy(birthDate = newBirthDate)
         repository.update(modified).runSyncUnsafe() shouldBe 1
