@@ -16,14 +16,16 @@ object AsyncJdbcRepository {
 
 trait AsyncJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
   extends AsyncRepositoryWithGeneratedId[K, T]
-  with WithUpdate[Long] {
-  protected val context: AsyncJdbcContextDateQuotes[D, N, C]
+  with WithUpdate[Long]
+  with WithAsyncJdbcContext[D, N, C] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
-trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: Connection] extends AsyncRepository[K, T] with WithUpdate[Long] {
-  protected val context: AsyncJdbcContextDateQuotes[D, N, C]
+trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
+  extends AsyncRepository[K, T]
+  with WithUpdate[Long]
+  with WithAsyncJdbcContext[D, N, C] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
@@ -31,3 +33,7 @@ trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy,
 
 trait AsyncJdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
   extends AsyncJdbcRepository[K, T, D, N, C]
+
+trait WithAsyncJdbcContext[D <: SqlIdiom, N <: NamingStrategy, C <: Connection] {
+  protected val context: AsyncJdbcContextDateQuotes[D, N, C]
+}

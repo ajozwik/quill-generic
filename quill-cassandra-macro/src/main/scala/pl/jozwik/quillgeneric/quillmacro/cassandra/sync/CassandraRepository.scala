@@ -10,11 +10,12 @@ object CassandraRepository {
   type CassandraContextDateQuotes[N <: NamingStrategy] = CassandraSyncContext[N] with CrudWithContextDateQuotesUnit
 }
 
-trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy] extends SyncRepository[K, T] with WithUpdate[Unit] {
-  protected val context: CassandraContextDateQuotes[N]
+trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy] extends SyncRepository[K, T] with WithUpdate[Unit] with WithCassandraContext[N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
 }
 
 trait CassandraRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], N <: NamingStrategy] extends CassandraRepository[K, T, N]
+
+trait WithCassandraContext[N <: NamingStrategy] { protected val context: CassandraContextDateQuotes[N] }
