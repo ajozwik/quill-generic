@@ -4,14 +4,13 @@ import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Sale, SaleId }
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryCompositeKey
 
 import scala.util.Try
 
 final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[D, N],
     tableName: String
-) extends JdbcRepositoryCompositeKey[SaleId, Sale, D, N] {
+) extends AbstractSaleRepository[D, N] {
 
   private val aliases = {
     import context._

@@ -26,6 +26,7 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
         repository.createOrUpdateAndRead(sale) shouldBe 'success
 
         repository.read(saleId).success.get shouldBe Option(sale)
+        repository.searchFrom(now).success.get shouldBe Seq(sale)
       }
     }
 
