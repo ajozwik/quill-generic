@@ -28,7 +28,7 @@ trait AsyncRepository[K, T <: WithId[K]] extends AsyncBaseRepository[K, T] {
 
 trait AsyncBaseRepository[K, T <: WithId[K]] {
 
-  type U
+  type UP
 
   def all(implicit ex: ExecutionContext): Future[Seq[T]]
 
@@ -36,12 +36,12 @@ trait AsyncBaseRepository[K, T <: WithId[K]] {
 
   def readUnsafe(id: K)(implicit ex: ExecutionContext): Future[T]
 
-  def update(t: T)(implicit ex: ExecutionContext): Future[U]
+  def update(t: T)(implicit ex: ExecutionContext): Future[UP]
 
   def updateAndRead(t: T)(implicit ex: ExecutionContext): Future[T]
 
-  def delete(id: K)(implicit ex: ExecutionContext): Future[U]
+  def delete(id: K)(implicit ex: ExecutionContext): Future[UP]
 
-  def deleteAll(implicit ex: ExecutionContext): Future[U]
+  def deleteAll(implicit ex: ExecutionContext): Future[UP]
 
 }

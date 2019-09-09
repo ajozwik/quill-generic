@@ -64,7 +64,7 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
   override def readUnsafe(id: PersonId)(implicit ex: ExecutionContext): Future[Person] =
     context.readUnsafe[PersonId, Person](id)
 
-  override def update(t: Person)(implicit ex: ExecutionContext): Future[U] =
+  override def update(t: Person)(implicit ex: ExecutionContext): Future[UP] =
     context.update[PersonId, Person](t)
 
   override def updateAndRead(entity: Person)(implicit ex: ExecutionContext): Future[Person] =
@@ -72,10 +72,10 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Connection]
       context.updateAndRead[PersonId, Person](entity)(dSchema, f)
     }
 
-  override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[U] =
+  override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[UP] =
     context.delete(id)
 
-  override def deleteAll(implicit ex: ExecutionContext): Future[U] =
+  override def deleteAll(implicit ex: ExecutionContext): Future[UP] =
     context.deleteAll
 
 }
