@@ -10,6 +10,8 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scapegoatVersion := "1.3.10"
 
+ThisBuild / turbo := true
+
 resolvers += Resolver.sonatypeRepo("releases")
 
 val supportedScalaVersions = Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
