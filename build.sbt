@@ -10,7 +10,7 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scapegoatVersion := "1.3.10"
 
-ThisBuild / turbo := true
+//ThisBuild / turbo := true
 
 resolvers += Resolver.sonatypeRepo("releases")
 
