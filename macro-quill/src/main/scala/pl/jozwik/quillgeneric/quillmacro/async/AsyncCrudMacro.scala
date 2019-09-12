@@ -18,7 +18,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
         t <- if(result == 0){ run($dSchema.insertValue($entity).returningGenerated(_.id)) } else { concurrent.Future.successful(id)}
        } yield {
         t
-       }    
+       }   
     """
   }
 
@@ -34,7 +34,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
         r <- run($dSchema.filter(_.id == lift(newId)))
        } yield {
         r.headOption.getOrElse(throw new NoSuchElementException(s"$$newId"))
-       }    
+       }
     """
   }
 
@@ -60,7 +60,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
         t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { concurrent.Future.successful(id) }
        } yield {
         id
-       }    
+       }
     """
   }
 
@@ -76,7 +76,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
         r <- run(q)
        } yield {
          r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
-       }     
+       }
     """
   }
 
@@ -98,7 +98,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
       val q = $filter
       for{
         _ <- run($dSchema.insertValue($entity))
-        r <- run(q) 
+        r <- run(q)
       } yield {
         r.headOption
         .getOrElse(throw new NoSuchElementException(s"$$id"))

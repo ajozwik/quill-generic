@@ -19,7 +19,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
         t <- if(result == 0){ run($dSchema.insertValue($entity).returningGenerated(_.id)) } else { monix.eval.Task.now(id)}
        } yield {
         t
-       }    
+       } 
     """
   }
 
@@ -35,7 +35,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
         r <- run($dSchema.filter(_.id == lift(newId)))
        } yield {
         r.headOption.getOrElse(throw new NoSuchElementException(s"$$newId"))
-       }    
+       }
     """
   }
 
@@ -61,7 +61,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
         t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { monix.eval.Task.now(id) }
        } yield {
         id
-       }    
+       }
     """
   }
 
@@ -77,7 +77,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
         r <- run(q)
        } yield {
          r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
-       }     
+       }
     """
   }
 
@@ -99,7 +99,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
       val q = $filter
       for{
         _ <- run($dSchema.insertValue($entity))
-        r <- run(q) 
+        r <- run(q)
       } yield {
         r.headOption
         .getOrElse(throw new NoSuchElementException(s"$$id"))

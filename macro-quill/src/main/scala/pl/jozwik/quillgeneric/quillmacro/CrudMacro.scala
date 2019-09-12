@@ -63,7 +63,7 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
       val result = run(q.updateValue($entity))
       if(result == 0){
           run($dSchema.insertValue($entity))
-      } 
+      }
       id
     """
   }

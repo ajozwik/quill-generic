@@ -10,7 +10,7 @@ trait DateQuotes {
 
   implicit val instantEncoder: MappedEncoding[Date, Instant] = MappedEncoding[Date, Instant](_.toInstant)
   implicit val instantDecoder: MappedEncoding[Instant, Date] = MappedEncoding[Instant, Date](Date.from)
-
+  //scalastyle:off
   implicit class LocalDateTimeQuotes(left: LocalDateTime) {
     def >(right: LocalDateTime) = quote(infix"$left > $right".as[Boolean])
 
@@ -40,5 +40,5 @@ trait DateQuotes {
 
     def <=(right: Instant) = quote(infix"$left <= $right".as[Boolean])
   }
-
+  //scalastyle:on
 }
