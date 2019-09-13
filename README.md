@@ -3,6 +3,7 @@ Library of generic CRUD operation for quill library. Only dynamic queries are su
 
 [![Build Status](https://travis-ci.org/ajozwik/quill-generic.svg?branch=master)](https://travis-ci.org/ajozwik/quill-generic)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ajozwik/macro-quill_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ajozwik/macro-quill_2.12)
+[![Coverage Status](https://coveralls.io/repos/github/ajozwik/quill-generic/badge.svg?branch=master)](https://coveralls.io/github/ajozwik/quill-generic?branch=master)
 
 Always when you start new project you must to write a lot of boilerplate code for handling simple CRUD operations. Purpose of this library is to support creating CRUD repository with [Quill](https://github.com/getquill/quill) library.
 
