@@ -34,8 +34,10 @@ trait ConfigurationRepositorySuite extends AbstractJdbcSpec {
         repository.createOrUpdate(entity2) shouldBe 'success
         repository.createOrUpdateAndRead(entity2) shouldBe Success(entity2)
         repository.update(entity2) shouldBe 'success
-        repository.all.success.value should contain theSameElementsAs Seq(entity, entity2)
-        repository.deleteAll shouldBe 'success
+        repository.inTransaction {
+          repository.all.success.value should contain theSameElementsAs Seq(entity, entity2)
+          repository.deleteAll shouldBe 'success
+        }
       }
     }
 }
