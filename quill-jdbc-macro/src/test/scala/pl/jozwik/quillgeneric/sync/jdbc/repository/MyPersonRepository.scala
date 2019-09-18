@@ -30,4 +30,13 @@ trait MyPersonRepository[D <: SqlIdiom, N <: NamingStrategy] extends JdbcReposit
     context.count((_: Person) => true)(dynamicSchema)
   }
 
+  def batchUpdate(persons: Seq[Person]): Try[Unit] = Try {
+    import context._
+    context.transaction {
+      persons.foreach { p =>
+        context.run(dynamicSchema.insertValue(p))
+      }
+    }
+  }
+
 }

@@ -21,9 +21,10 @@ trait PersonCustomRepositorySuite extends AbstractJdbcSpec {
         val modified     = createdPatron.copy(birthDate = newBirthDate)
         repository.update(modified) shouldBe 'success
         repository.read(createdPatron.id).success.value.map(_.birthDate) shouldBe Option(newBirthDate)
-
-        repository.delete(createdPatron.id) shouldBe 'success
-        repository.read(createdPatron.id).success.value shouldBe empty
+        repository.inTransaction {
+          repository.delete(createdPatron.id) shouldBe 'success
+          repository.read(createdPatron.id).success.value shouldBe empty
+        }
         repository.all shouldBe Try(Seq())
         repository.deleteAll shouldBe 'success
 
