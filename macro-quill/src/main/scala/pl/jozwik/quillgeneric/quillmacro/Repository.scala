@@ -2,6 +2,10 @@ package pl.jozwik.quillgeneric.quillmacro
 
 import scala.language.higherKinds
 
+trait WithTransaction extends WithMonad {
+  def inTransaction[A](task: F[A]): F[A]
+}
+
 trait RepositoryWithGeneratedId[K, T <: WithId[K]] extends BaseRepository[K, T] {
   def create(entity: T, generatedId: Boolean = true): F[K]
 

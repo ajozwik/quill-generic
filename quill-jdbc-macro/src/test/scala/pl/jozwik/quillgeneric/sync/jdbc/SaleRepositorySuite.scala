@@ -24,10 +24,18 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
         repository.createAndRead(sale) shouldBe 'success
 
         repository.createOrUpdateAndRead(sale) shouldBe 'success
-        repository.inTransaction {
-          repository.read(saleId).success.get shouldBe Option(sale)
-          repository.searchFrom(now).success.get shouldBe Seq(sale)
-        }
+        repository
+          .inTransaction {
+            for {
+              actualRead <- repository.read(saleId)
+              actualSeq  <- repository.searchFrom(now)
+            } yield {
+              actualRead shouldBe Option(sale)
+              actualSeq shouldBe Seq(sale)
+            }
+          }
+          .success
+          .get
       }
     }
 

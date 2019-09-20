@@ -8,6 +8,8 @@ import io.getquill.idiom.Idiom
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
+import scala.util.Try
+
 object JdbcRepository {
   type ContextDateQuotes[D <: Idiom, N <: NamingStrategy]        = Context[D, N] with CrudWithContextDateQuotes[Long]
   type JdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = JdbcContext[D, N] with ContextDateQuotes[D, N]
@@ -24,11 +26,14 @@ trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: Namin
     context.transaction(task)
 }
 
-trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepository[K, T] with WithUpdate[Long] with WithJdbcContext[D, N] {
+trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
+  extends SyncRepositoryWithTransaction[K, T]
+  with WithUpdate[Long]
+  with WithJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
-  def inTransaction[A](task: A): A =
+  def inTransaction[A](task: Try[A]): Try[A] =
     context.transaction(task)
 
 }
