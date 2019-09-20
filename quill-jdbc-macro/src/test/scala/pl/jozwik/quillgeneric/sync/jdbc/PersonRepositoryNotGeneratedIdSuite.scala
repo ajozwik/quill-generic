@@ -41,10 +41,15 @@ trait PersonRepositoryNotGeneratedIdSuite extends AbstractJdbcSpec {
         repository.count shouldBe Success(1)
         repository.delete(personToUpdate.id) shouldBe 'success
         repository.all shouldBe Success(Seq())
-        repository.inTransaction {
-          repository.youngerThan(today)(offset, limit) shouldBe 'success
-          repository.batchUpdate(Seq(person, notExisting))
-        }
+        repository
+          .inTransaction {
+            for {
+              _ <- repository.youngerThan(today)(offset, limit)
+              _ <- repository.batchUpdate(Seq(person, notExisting))
+            } yield { () }
+          }
+          .success
+          .get
         repository.deleteAll shouldBe 'success
       }
     }

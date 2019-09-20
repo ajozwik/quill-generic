@@ -16,13 +16,13 @@ object JdbcRepository {
 }
 
 trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
-  extends SyncRepositoryWithGeneratedId[K, T]
+  extends SyncRepositoryWithGeneratedIdWithTransaction[K, T]
   with WithUpdate[Long]
   with WithJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
-  def inTransaction[A](task: A): A =
+  def inTransaction[A](task: Try[A]): Try[A] =
     context.transaction(task)
 }
 

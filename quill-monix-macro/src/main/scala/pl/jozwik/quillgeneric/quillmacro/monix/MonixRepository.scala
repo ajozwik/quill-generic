@@ -6,13 +6,13 @@ trait MonixRepository[K, T <: WithId[K]] extends Repository[K, T] with WithMonix
 
 trait MonixRepositoryWithGeneratedId[K, T <: WithId[K]] extends RepositoryWithGeneratedId[K, T] with WithMonix
 
-trait MonixRepositoryLong[K, T <: WithId[K]] extends Repository[K, T] with WithMonix with WithUpdate[Long]
+trait MonixRepositoryLong[K, T <: WithId[K]] extends MonixRepository[K, T] with WithUpdate[Long]
 
-trait MonixRepositoryWithGeneratedIdLong[K, T <: WithId[K]] extends RepositoryWithGeneratedId[K, T] with WithMonix with WithUpdate[Long]
+trait MonixRepositoryWithGeneratedIdLong[K, T <: WithId[K]] extends MonixRepositoryWithGeneratedId[K, T] with WithUpdate[Long]
 
-trait MonixRepositoryUnit[K, T <: WithId[K]] extends Repository[K, T] with WithMonix with WithUpdate[Unit]
+trait MonixRepositoryUnit[K, T <: WithId[K]] extends MonixRepository[K, T] with WithUpdate[Unit]
 
-trait MonixRepositoryWithGeneratedIdUnit[K, T <: WithId[K]] extends RepositoryWithGeneratedId[K, T] with WithMonix with WithUpdate[Unit]
+trait MonixRepositoryWithGeneratedIdUnit[K, T <: WithId[K]] extends MonixRepositoryWithGeneratedId[K, T] with WithUpdate[Unit]
 
 trait MonixRepositoryWithTransaction[K, T <: WithId[K]] extends MonixRepository[K, T] with WithTransaction
 
