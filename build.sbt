@@ -1,6 +1,6 @@
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 
-val `scalaVersion_2.13` = "2.13.0"
+val `scalaVersion_2.13` = "2.13.1"
 
 val `scalaVersion_2.12` = "2.12.10"
 
@@ -38,7 +38,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ydelambdafy:method"
 )
 
-val quillVersion = "3.4.8"
+val quillVersion = "3.4.10"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
@@ -64,7 +64,7 @@ val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.1" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.2" % Test
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
