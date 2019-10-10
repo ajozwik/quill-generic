@@ -126,7 +126,7 @@ def projectWithName(name: String, file: File): Project = Project(name, file).set
         `org.scalatest_scalatest`,
         `org.scalacheck_scalacheck`
       ),
-  licenseReportTitle := "Copyright (c) 2019 Andrzej Jozwik",
+  licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
   licenseSelection := Seq(LicenseCategory.MIT),
   sources in (Compile, doc) := Seq.empty
 )
