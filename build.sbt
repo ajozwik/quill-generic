@@ -4,6 +4,8 @@ val `scalaVersion_2.13` = "2.13.1"
 
 val `scalaVersion_2.12` = "2.12.10"
 
+val `only2_12` = Seq(`scalaVersion_2.12`)
+
 name := "quill-macro-parent"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
@@ -89,7 +91,7 @@ lazy val `quill-monix-macro` = projectWithName("quill-monix-macro", file("quill-
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-monix`))
   .dependsOn(`macro-quill`, `macro-quill` % "test->test")
 
-lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-macro", file("quill-cassandra-monix-macro"))
+lazy val `quill-cassandra-monix-macro` = projectWithNameOnly12("quill-cassandra-monix-macro", file("quill-cassandra-monix-macro"))
   .settings(
     libraryDependencies ++= Seq(
           `io.getquill_quill-cassandra-monix`,
@@ -101,7 +103,7 @@ lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-
   .dependsOn(`quill-monix-macro`)
   .dependsOn(Seq(`macro-quill`, `quill-monix-macro`, `quill-cassandra-macro`).map(_ % "test->test"): _*)
 
-lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file("quill-cassandra-macro"))
+lazy val `quill-cassandra-macro` = projectWithNameOnly12("quill-cassandra-macro", file("quill-cassandra-macro"))
   .settings(
     libraryDependencies ++= Seq(
           `io.getquill_quill-cassandra`,
@@ -114,12 +116,15 @@ lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file
   .dependsOn(Seq(`macro-quill`).map(_ % "test->test"): _*)
 
 lazy val `quill-jdbc-macro` = projectWithName("quill-jdbc-macro", file("quill-jdbc-macro"))
-  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc`, `io.getquill_quill-async-mysql` % Test))
+  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc`))
   .dependsOn(`macro-quill`, `macro-quill` % "test->test")
 
-lazy val `quill-async-jdbc-macro` = projectWithName("quill-async-jdbc-macro", file("quill-async-jdbc-macro"))
+lazy val `quill-async-jdbc-macro` = projectWithNameOnly12("quill-async-jdbc-macro", file("quill-async-jdbc-macro"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-async`, `io.getquill_quill-async-mysql` % Test))
   .dependsOn(`macro-quill`, `macro-quill` % "test->test")
+
+def projectWithNameOnly12(name: String, file: File): Project =
+  projectWithName(name, file).settings(crossScalaVersions := `only2_12`)
 
 def projectWithName(name: String, file: File): Project = Project(name, file).settings(
   libraryDependencies ++= Seq(

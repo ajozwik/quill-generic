@@ -11,32 +11,32 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
   private val personRepository  = new PersonRepository(ctx, "Person2")
   private val productRepository = new ProductRepository(ctx, "Product")
   "Sale Repository " should {
-      "Call all operations on Sale" in {
-        repository.all shouldBe Success(Seq())
-        val personWithoutId = Person(PersonId.empty, "firstName", "lastName", today)
-        val maybePerson     = personRepository.createAndRead(personWithoutId)
-        maybePerson shouldBe 'success
-        val person           = maybePerson.success.get
-        val productWithoutId = Product(ProductId.empty, "productName")
-        val product          = productRepository.createAndRead(productWithoutId).success.get
-        val saleId           = SaleId(product.id, person.id)
-        val sale             = Sale(saleId, now)
-        repository.createAndRead(sale) shouldBe 'success
+    "Call all operations on Sale" in {
+      repository.all shouldBe Success(Seq())
+      val personWithoutId = Person(PersonId.empty, "firstName", "lastName", today)
+      val maybePerson     = personRepository.createAndRead(personWithoutId)
+      maybePerson shouldBe Symbol("success")
+      val person           = maybePerson.success.get
+      val productWithoutId = Product(ProductId.empty, "productName")
+      val product          = productRepository.createAndRead(productWithoutId).success.get
+      val saleId           = SaleId(product.id, person.id)
+      val sale             = Sale(saleId, now)
+      repository.createAndRead(sale) shouldBe Symbol("success")
 
-        repository.createOrUpdateAndRead(sale) shouldBe 'success
-        repository
-          .inTransaction {
-            for {
-              actualRead <- repository.read(saleId)
-              actualSeq  <- repository.searchFrom(now)
-            } yield {
-              actualRead shouldBe Option(sale)
-              actualSeq shouldBe Seq(sale)
-            }
+      repository.createOrUpdateAndRead(sale) shouldBe Symbol("success")
+      repository
+        .inTransaction {
+          for {
+            actualRead <- repository.read(saleId)
+            actualSeq  <- repository.searchFrom(now)
+          } yield {
+            actualRead shouldBe Option(sale)
+            actualSeq shouldBe Seq(sale)
           }
-          .success
-          .get
-      }
+        }
+        .success
+        .get
     }
+  }
 
 }
