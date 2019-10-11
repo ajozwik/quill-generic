@@ -6,7 +6,7 @@ val `scalaVersion_2.12` = "2.12.10"
 
 val `only2_12` = Seq(`scalaVersion_2.12`)
 
-name := "quill-macro-parent"
+val targetJdk = "1.8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
@@ -16,11 +16,9 @@ ThisBuild / scapegoatVersion := "1.3.10"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-val supportedScalaVersions = Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
+ThisBuild / scalaVersion := `scalaVersion_2.13`
 
-ThisBuild / crossScalaVersions := supportedScalaVersions
-
-ThisBuild / scalaVersion := `scalaVersion_2.12`
+ThisBuild / crossScalaVersions := Set(scalaVersion.value, `scalaVersion_2.12`).toSeq
 
 ThisBuild / organization := "com.github.ajozwik"
 
@@ -37,8 +35,11 @@ ThisBuild / scalacOptions ++= Seq(
   //  "-Ywarn-inaccessible",
   "-Ywarn-dead-code",
   "-language:reflectiveCalls",
-  "-Ydelambdafy:method"
+  "-Ydelambdafy:method",
+  s"-target:jvm-${targetJdk}"
 )
+
+ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
 val quillVersion = "3.4.10"
 
@@ -71,6 +72,29 @@ val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.2" % 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
 val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.7.2"
+
+def is213Version(version: String) = CrossVersion.partialVersion(version) match {
+  case Some((2, 13)) =>
+    true
+  case _ =>
+    false
+}
+
+def modulesFromProps: Seq[ClasspathDep[ProjectReference]] = {
+  val scalaVersion = sys.props.getOrElse("scala.version", `scalaVersion_2.12`)
+  is213Version(scalaVersion) match {
+    case true =>
+      scala213Modules
+    case _ =>
+      allModules
+  }
+}
+
+lazy val `quill-macro-parent` =
+  (project in file("."))
+    .settings(skip in publish := true)
+    .aggregate(modulesFromProps.map(_.project): _*)
+    .dependsOn(modulesFromProps: _*)
 
 lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).settings(
   libraryDependencies ++= Seq(
@@ -123,8 +147,29 @@ lazy val `quill-async-jdbc-macro` = projectWithNameOnly12("quill-async-jdbc-macr
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-async`, `io.getquill_quill-async-mysql` % Test))
   .dependsOn(`macro-quill`, `macro-quill` % "test->test")
 
+lazy val baseModules =
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`macro-quill`)
+
+lazy val dbModules =
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-jdbc-macro`, `quill-jdbc-monix-macro`, `quill-monix-macro`)
+
+lazy val asyncDbModules =
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-async-jdbc-macro`)
+
+lazy val cassandraModules =
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-cassandra-macro`, `quill-cassandra-monix-macro`)
+
+lazy val scala213Modules =
+  baseModules ++ dbModules
+
+lazy val allModules =
+  scala213Modules ++ asyncDbModules ++ cassandraModules
+
 def projectWithNameOnly12(name: String, file: File): Project =
-  projectWithName(name, file).settings(crossScalaVersions := `only2_12`)
+  projectWithName(name, file).settings(
+    crossScalaVersions := `only2_12`,
+    skip in publish := is213Version(scalaVersion.value)
+  )
 
 def projectWithName(name: String, file: File): Project = Project(name, file).settings(
   libraryDependencies ++= Seq(
