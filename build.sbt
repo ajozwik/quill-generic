@@ -23,7 +23,6 @@ ThisBuild / crossScalaVersions := Set(scalaVersion.value, `scalaVersion_2.12`).t
 ThisBuild / organization := "com.github.ajozwik"
 
 ThisBuild / scalacOptions ++= Seq(
-  "-target:jvm-1.8",
   "-encoding",
   "UTF-8",
   "-deprecation", // warning and location for usages of deprecated APIs
@@ -36,7 +35,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ywarn-dead-code",
   "-language:reflectiveCalls",
   "-Ydelambdafy:method",
-  s"-target:jvm-${targetJdk}"
+  s"-target:jvm-$targetJdk"
 )
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
