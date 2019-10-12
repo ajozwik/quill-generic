@@ -16,7 +16,7 @@ ThisBuild / scapegoatVersion := "1.3.10"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-ThisBuild / scalaVersion := `scalaVersion_2.13`
+ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 ThisBuild / crossScalaVersions := Set(scalaVersion.value, `scalaVersion_2.12`).toSeq
 
