@@ -16,7 +16,15 @@ ThisBuild / scapegoatVersion := "1.3.10"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-ThisBuild / scalaVersion := `scalaVersion_2.12`
+lazy val scalaVersionFromProps = sys.props.getOrElse("macro.scala.version", `scalaVersion_2.12`)
+
+ThisBuild / scalaVersion := {
+  if (is213Version(scalaVersionFromProps)) {
+    `scalaVersion_2.13`
+  } else {
+    `scalaVersion_2.12`
+  }
+}
 
 ThisBuild / crossScalaVersions := Set(scalaVersion.value, `scalaVersion_2.12`).toSeq
 
@@ -72,22 +80,14 @@ val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" 
 
 val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.7.2"
 
-def is213Version(version: String) = CrossVersion.partialVersion(version) match {
-  case Some((2, 13)) =>
-    true
-  case _ =>
-    false
-}
+def is213Version(version: String): Boolean = version.startsWith("2.13")
 
-def modulesFromProps: Seq[ClasspathDep[ProjectReference]] = {
-  val scalaVersion = sys.props.getOrElse("scala.version", `scalaVersion_2.12`)
-  is213Version(scalaVersion) match {
-    case true =>
-      scala213Modules
-    case _ =>
-      allModules
+def modulesFromProps: Seq[ClasspathDep[ProjectReference]] =
+  if (is213Version(scalaVersionFromProps)) {
+    scala213Modules
+  } else {
+    allModules
   }
-}
 
 lazy val `quill-macro-parent` =
   (project in file("."))

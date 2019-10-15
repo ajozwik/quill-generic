@@ -1,5 +1,6 @@
 package pl.jozwik.quillgeneric
 
+import java.time.temporal.ChronoUnit
 import java.time.{ Instant, LocalDate }
 
 import com.typesafe.scalalogging.StrictLogging
@@ -19,7 +20,7 @@ trait Spec extends StrictLogging {
 
 trait AbstractSpec extends WordSpecLike with TimeLimitedTests with Spec with Matchers with BeforeAndAfterAll {
 
-  protected val now: Instant             = Instant.now()
+  protected val now: Instant             = Instant.now().truncatedTo(ChronoUnit.SECONDS)
   protected val today: LocalDate         = LocalDate.now
   protected val strategy: NamingStrategy = Strategy.namingStrategy
 

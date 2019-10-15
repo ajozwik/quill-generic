@@ -3,7 +3,8 @@ package pl.jozwik.quillgeneric.sync.jdbc
 import pl.jozwik.quillgeneric.model._
 import pl.jozwik.quillgeneric.sync.jdbc.repository.{ PersonRepository, ProductRepository, SaleRepository }
 import org.scalatest.TryValues._
-import scala.util.Success
+
+import scala.util.{ Failure, Success }
 
 trait SaleRepositorySuite extends AbstractJdbcSpec {
 
@@ -33,6 +34,11 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
             actualRead shouldBe Option(sale)
             actualSeq shouldBe Seq(sale)
           }
+        }
+        .recoverWith {
+          case th =>
+            logger.error("", th)
+            Failure(th)
         }
         .success
         .get
