@@ -8,17 +8,17 @@ cache:
 language: scala
 scala:
   - 2.12.10
-#  - 2.13.1
+  - 2.13.1
 
 jdk:
   - openjdk8
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION  -Dfile.encoding=UTF8 -Dquill.macro.log=false -Dquill.binds.log=true clean coverage test coverageReport scalastyle
-  - sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
+  - sbt -Dscala.version=$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -Dquill.macro.log=false -Dquill.binds.log=true clean coverage test coverageReport scalastyle
+  - sbt -Dscala.version=$TRAVIS_SCALA_VERSION coverageAggregate
 
 after_success:
-  - sbt ++$TRAVIS_SCALA_VERSION coveralls
+  - sbt -Dscala.version=$TRAVIS_SCALA_VERSION coveralls
    # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name "*.lock" | xargs rm -f
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm -f
