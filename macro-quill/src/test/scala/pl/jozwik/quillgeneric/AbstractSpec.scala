@@ -7,18 +7,18 @@ import com.typesafe.scalalogging.StrictLogging
 import io.getquill.NamingStrategy
 import org.scalatest.concurrent.{ AsyncTimeLimitedTests, TimeLimitedTests }
 import org.scalatest.time.{ Seconds, Span }
-import org.scalatest.{ AsyncWordSpecLike, BeforeAndAfterAll, Matchers, WordSpecLike }
-import org.scalatestplus.scalacheck.Checkers
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.wordspec.AsyncWordSpecLike
 import pl.jozwik.quillgeneric.model.AddressId
-
-trait AbstractSpecScalaCheck extends AbstractSpec with Checkers
 
 trait Spec extends StrictLogging {
   val TIMEOUT_SECONDS = 600
   val timeLimit       = Span(TIMEOUT_SECONDS, Seconds)
 }
 
-trait AbstractSpec extends WordSpecLike with TimeLimitedTests with Spec with Matchers with BeforeAndAfterAll {
+trait AbstractSpec extends AnyWordSpecLike with TimeLimitedTests with Spec with Matchers with BeforeAndAfterAll {
 
   protected val now: Instant             = Instant.now().truncatedTo(ChronoUnit.SECONDS)
   protected val today: LocalDate         = LocalDate.now
