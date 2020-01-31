@@ -1,6 +1,6 @@
 logLevel := Level.Warn
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.6")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.1")
 
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.9")
 
