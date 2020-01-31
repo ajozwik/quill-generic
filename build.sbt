@@ -74,7 +74,7 @@ val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.1.0" % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.2" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
