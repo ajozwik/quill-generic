@@ -2,7 +2,7 @@ logLevel := Level.Warn
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.1")
 
-addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.9")
+addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.1.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
 
