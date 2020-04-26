@@ -10,7 +10,7 @@ val targetJdk = "1.8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
-ThisBuild / scapegoatVersion := "1.4.1"
+ThisBuild / scapegoatVersion := "1.4.3"
 
 //ThisBuild / turbo := true
 
@@ -48,7 +48,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = "3.4.10"
+val quillVersion = "3.5.1"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -72,9 +72,11 @@ val `io.getquill_quill-jdbc-monix` = "io.getquill" %% "quill-jdbc-monix" % quill
 
 val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.1.1" % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.2" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
+
+val `org.scalatestplus_scalacheck-1-14` = "org.scalatestplus" %% "scalacheck-1-14" % "3.1.1.1" % "test"
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
@@ -159,10 +161,10 @@ lazy val cassandraModules =
   Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-cassandra-macro`, `quill-cassandra-monix-macro`)
 
 lazy val scala213Modules =
-  baseModules ++ dbModules ++ cassandraModules
+  baseModules ++ dbModules
 
 lazy val allModules =
-  scala213Modules ++ asyncDbModules
+  scala213Modules ++ asyncDbModules ++ cassandraModules
 
 def projectWithNameOnly12(name: String, file: File): Project =
   projectWithName(name, file).settings(
