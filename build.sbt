@@ -1,8 +1,8 @@
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 
-val `scalaVersion_2.13` = "2.13.1"
+val `scalaVersion_2.13` = "2.13.2"
 
-val `scalaVersion_2.12` = "2.12.10"
+val `scalaVersion_2.12` = "2.12.11"
 
 val `only2_12` = Seq(`scalaVersion_2.12`)
 
@@ -48,7 +48,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = "3.5.0"
+val quillVersion = "3.4.10"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -72,9 +72,9 @@ val `io.getquill_quill-jdbc-monix` = "io.getquill" %% "quill-jdbc-monix" % quill
 
 val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.1.0" % Test
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.2" % Test
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
@@ -159,10 +159,10 @@ lazy val cassandraModules =
   Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-cassandra-macro`, `quill-cassandra-monix-macro`)
 
 lazy val scala213Modules =
-  baseModules ++ dbModules
+  baseModules ++ dbModules ++ cassandraModules
 
 lazy val allModules =
-  scala213Modules ++ asyncDbModules ++ cassandraModules
+  scala213Modules ++ asyncDbModules
 
 def projectWithNameOnly12(name: String, file: File): Project =
   projectWithName(name, file).settings(
@@ -173,7 +173,8 @@ def projectWithNameOnly12(name: String, file: File): Project =
 def projectWithName(name: String, file: File): Project = Project(name, file).settings(
   libraryDependencies ++= Seq(
         `org.scalatest_scalatest`,
-        `org.scalacheck_scalacheck`
+        `org.scalacheck_scalacheck`,
+        `org.scalatestplus_scalacheck-1-14`
       ),
   licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
   licenseSelection := Seq(LicenseCategory.MIT),

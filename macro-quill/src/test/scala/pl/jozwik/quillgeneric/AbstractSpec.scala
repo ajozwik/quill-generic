@@ -11,7 +11,13 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AsyncWordSpecLike
+import org.scalatest.wordspec.{ AnyWordSpecLike, AsyncWordSpecLike }
+import org.scalatest.{ BeforeAndAfterAll }
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.scalacheck.Checkers
 import pl.jozwik.quillgeneric.model.AddressId
+
+trait AbstractSpecScalaCheck extends AbstractSpec with Checkers
 
 trait Spec extends StrictLogging {
   val TIMEOUT_SECONDS = 600
