@@ -1,6 +1,6 @@
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 
-val `scalaVersion_2.13` = "2.13.2"
+val `scalaVersion_2.13` = "2.13.1"
 
 val `scalaVersion_2.12` = "2.12.11"
 
@@ -10,7 +10,12 @@ val targetJdk = "1.8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
-ThisBuild / scapegoatVersion := "1.4.4"
+ThisBuild / scapegoatVersion := {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, n)) if n >= 13 => "1.4.4"
+    case _                       => "1.3.11"
+  }
+}
 
 //ThisBuild / turbo := true
 
@@ -19,11 +24,10 @@ resolvers += Resolver.sonatypeRepo("releases")
 lazy val scalaVersionFromProps = sys.props.getOrElse("macro.scala.version", `scalaVersion_2.12`)
 
 ThisBuild / scalaVersion := {
-  if (is213Version(scalaVersionFromProps)) {
+  if (is213Version(scalaVersionFromProps))
     `scalaVersion_2.13`
-  } else {
+  else
     `scalaVersion_2.12`
-  }
 }
 
 ThisBuild / crossScalaVersions := Set(scalaVersion.value, `scalaVersion_2.12`).toSeq
@@ -72,7 +76,7 @@ val `io.getquill_quill-jdbc-monix` = "io.getquill" %% "quill-jdbc-monix" % quill
 
 val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.1.1" % Test
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.1.2" % Test
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
 
@@ -85,11 +89,10 @@ val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
 def modulesFromProps: Seq[ClasspathDep[ProjectReference]] =
-  if (is213Version(scalaVersionFromProps)) {
+  if (is213Version(scalaVersionFromProps))
     scala213Modules
-  } else {
+  else
     allModules
-  }
 
 lazy val `quill-macro-parent` =
   (project in file("."))
@@ -172,13 +175,14 @@ def projectWithNameOnly12(name: String, file: File): Project =
     skip in publish := is213Version(scalaVersion.value)
   )
 
-def projectWithName(name: String, file: File): Project = Project(name, file).settings(
-  libraryDependencies ++= Seq(
-        `org.scalatest_scalatest`,
-        `org.scalacheck_scalacheck`,
-        `org.scalatestplus_scalacheck-1-14`
-      ),
-  licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
-  licenseSelection := Seq(LicenseCategory.MIT),
-  sources in (Compile, doc) := Seq.empty
-)
+def projectWithName(name: String, file: File): Project =
+  Project(name, file).settings(
+    libraryDependencies ++= Seq(
+          `org.scalatest_scalatest`,
+          `org.scalacheck_scalacheck`,
+          `org.scalatestplus_scalacheck-1-14`
+        ),
+    licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
+    licenseSelection := Seq(LicenseCategory.MIT),
+    sources in (Compile, doc) := Seq.empty
+  )
