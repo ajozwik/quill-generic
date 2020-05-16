@@ -10,11 +10,7 @@ object CrudWithContext {
   type CrudWithContextDateQuotesLong = CrudWithContextDateQuotes[Long]
 }
 
-trait CrudWithContextDateQuotes[U] extends CrudWithContext[U] with DateQuotes {
-  this: Context[_, _] =>
-}
-
-trait CrudWithContext[U] {
+trait CrudWithContextDateQuotes[U] extends DateQuotes {
   this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 

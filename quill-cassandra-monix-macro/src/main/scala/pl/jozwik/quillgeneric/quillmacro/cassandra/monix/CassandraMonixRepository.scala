@@ -3,11 +3,11 @@ package pl.jozwik.quillgeneric.quillmacro.cassandra.monix
 import io.getquill.{ CassandraMonixContext, NamingStrategy }
 import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository.CassandraMonixContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.monix.MonixRepository
-import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContextDateQuotes.MonixWithContextDateQuotesUnit
+import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContextDateQuotes.MonixWithContextUnit
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
 object CassandraMonixRepository {
-  type CassandraMonixContextDateQuotes[N <: NamingStrategy] = CassandraMonixContext[N] with MonixWithContextDateQuotesUnit
+  type CassandraMonixContextDateQuotes[N <: NamingStrategy] = CassandraMonixContext[N] with MonixWithContextUnit
 }
 
 trait CassandraMonixRepository[K, T <: WithId[K], N <: NamingStrategy] extends MonixRepository[K, T] with WithUpdate[Unit] with WithCassandraMonixContext[N] {

@@ -8,16 +8,12 @@ import scala.language.experimental.macros
 
 object AsyncCrudWithContext {
 
-  type AsyncCrudWithContextDateQuotesUnit = AsyncCrudWithContextDateQuotes[Unit]
-  type AsyncCrudWithContextDateQuotesLong = AsyncCrudWithContextDateQuotes[Long]
+  type AsyncCrudWithContextUnit = AsyncCrudWithContext[Unit]
+  type AsyncCrudWithContextLong = AsyncCrudWithContext[Long]
 
 }
 
-trait AsyncCrudWithContextDateQuotes[U] extends AsyncCrudWithContext[U] with DateQuotes {
-  this: Context[_, _] =>
-}
-
-trait AsyncCrudWithContext[U] {
+trait AsyncCrudWithContext[U] extends DateQuotes {
   this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 

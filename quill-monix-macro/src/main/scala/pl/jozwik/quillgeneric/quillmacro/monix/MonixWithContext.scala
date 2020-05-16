@@ -2,11 +2,11 @@ package pl.jozwik.quillgeneric.quillmacro.monix
 
 import io.getquill.context.Context
 import monix.eval.Task
-import pl.jozwik.quillgeneric.quillmacro.WithId
+import pl.jozwik.quillgeneric.quillmacro.{ DateQuotes, WithId }
 
 import scala.language.experimental.macros
 
-trait MonixWithContext[U] {
+trait MonixWithContext[U] extends DateQuotes {
   this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]
 

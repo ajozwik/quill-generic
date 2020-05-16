@@ -1,14 +1,14 @@
 package pl.jozwik.quillgeneric.quillmacro.cassandra.async
 
 import io.getquill.{ CassandraAsyncContext, NamingStrategy }
-import pl.jozwik.quillgeneric.quillmacro.async.AsyncCrudWithContext.AsyncCrudWithContextDateQuotesUnit
+import pl.jozwik.quillgeneric.quillmacro.async.AsyncCrudWithContext.AsyncCrudWithContextUnit
 import pl.jozwik.quillgeneric.quillmacro.async.AsyncRepository
 import pl.jozwik.quillgeneric.quillmacro.cassandra.async.CassandraAsyncRepository.CassandraAsyncContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
 object CassandraAsyncRepository {
 
-  type CassandraAsyncContextDateQuotes[N <: NamingStrategy] = CassandraAsyncContext[N] with AsyncCrudWithContextDateQuotesUnit
+  type CassandraAsyncContextDateQuotes[N <: NamingStrategy] = CassandraAsyncContext[N] with AsyncCrudWithContextUnit
 }
 
 trait CassandraAsyncRepository[K, T <: WithId[K], N <: NamingStrategy] extends AsyncRepository[K, T] with WithUpdate[Unit] with WithCassandraAsyncContext[N] {

@@ -10,7 +10,7 @@ import pl.jozwik.quillgeneric.quillmacro.async.AsyncJdbcRepository.AsyncJdbcCont
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
 
 object AsyncJdbcRepository {
-  type ContextDateQuotes[D <: Idiom, N <: NamingStrategy]                              = Context[D, N] with AsyncCrudWithContextDateQuotes[Long]
+  type ContextDateQuotes[D <: Idiom, N <: NamingStrategy]                              = Context[D, N] with AsyncCrudWithContext[Long]
   type AsyncJdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy, C <: Connection] = AsyncContext[D, N, C] with ContextDateQuotes[D, N]
 }
 
