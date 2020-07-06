@@ -52,7 +52,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = "3.5.1"
+val quillVersion = "3.5.2"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
