@@ -12,7 +12,7 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scapegoatVersion := {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n >= 13 => "1.4.4"
+    case Some((2, n)) if n >= 13 => "1.4.5"
     case _                       => "1.3.11"
   }
 }
