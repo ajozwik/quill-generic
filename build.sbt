@@ -6,8 +6,6 @@ val `scalaVersion_2.12` = "2.12.12"
 
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
-val `only2_12` = Seq(`scalaVersion_2.12`)
-
 val targetJdk = "1.8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
