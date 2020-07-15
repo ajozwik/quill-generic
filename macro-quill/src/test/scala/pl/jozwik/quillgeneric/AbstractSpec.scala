@@ -7,12 +7,8 @@ import com.typesafe.scalalogging.StrictLogging
 import io.getquill.NamingStrategy
 import org.scalatest.concurrent.{ AsyncTimeLimitedTests, TimeLimitedTests }
 import org.scalatest.time.{ Seconds, Span }
-import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.wordspec.AsyncWordSpecLike
 import org.scalatest.wordspec.{ AnyWordSpecLike, AsyncWordSpecLike }
-import org.scalatest.{ BeforeAndAfterAll }
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
 import pl.jozwik.quillgeneric.model.AddressId
