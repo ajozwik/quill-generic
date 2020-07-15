@@ -26,34 +26,38 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteCon
 
   override def create(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
     context.transaction { implicit f =>
-      if (generatedId)
+      if (generatedId) {
         context.createAndGenerateId[PersonId, Person](entity)(dSchema, f)
-      else
+      } else {
         context.create[PersonId, Person](entity)(dSchema, f)
+      }
     }
 
   override def createAndRead(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[Person] =
     context.transaction { implicit f =>
-      if (generatedId)
+      if (generatedId) {
         context.createWithGenerateIdAndRead[PersonId, Person](entity)(dSchema, f)
-      else
+      } else {
         context.createAndRead[PersonId, Person](entity)(dSchema, f)
+      }
     }
 
   override def createOrUpdate(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
     context.transaction { implicit f =>
-      if (generatedId)
+      if (generatedId) {
         context.createAndGenerateIdOrUpdate[PersonId, Person](entity)(dSchema, f)
-      else
+      } else {
         context.createOrUpdate[PersonId, Person](entity)(dSchema, f)
+      }
     }
 
   override def createOrUpdateAndRead(entity: Person, generatedId: Boolean = true)(implicit ex: ExecutionContext): Future[Person] =
     context.transaction { implicit f =>
-      if (generatedId)
+      if (generatedId) {
         context.createWithGenerateIdOrUpdateAndRead[PersonId, Person](entity)(dSchema, f)
-      else
+      } else {
         context.createOrUpdateAndRead[PersonId, Person](entity)(dSchema, f)
+      }
     }
 
   override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Option[Person]] =
