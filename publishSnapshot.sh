@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PATH=$HOME/bin:$PATH sbt clean test publishSigned
+PATH=$HOME/bin:$PATH sbt -Dquill.macro.log=false clean +test +publishSigned
