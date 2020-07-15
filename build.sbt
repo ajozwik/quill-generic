@@ -4,7 +4,7 @@ val `scalaVersion_2.13` = "2.13.3"
 
 val `scalaVersion_2.12` = "2.12.12"
 
-ThisBuild / scalaVersion := `scalaVersion_2.13`
+ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 val targetJdk = "1.8"
 
