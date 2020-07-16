@@ -31,7 +31,7 @@ trait PersonCustomRepositorySuite extends AbstractJdbcSpec {
           }
         }
         .success
-        .get
+        .value
       repository.all shouldBe Try(Seq())
       repository.deleteAll shouldBe Symbol("success")
 
