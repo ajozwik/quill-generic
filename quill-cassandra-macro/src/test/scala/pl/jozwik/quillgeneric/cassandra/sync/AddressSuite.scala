@@ -10,18 +10,18 @@ trait AddressSuite extends AbstractSyncSpec {
 
   "really simple transformation" should {
 
-      "run sync" in {
-        val id      = AddressId.random
-        val address = createAddress(id)
-        repository.create(address)
-        repository.create(address)
-        val v = repository.read(id).success.get
-        v shouldBe Option(address)
-        repository.all.success.get shouldBe Seq(address)
-        repository.deleteAll
-        repository.all.success.get shouldBe Seq.empty
-      }
-
+    "run sync" in {
+      val id      = AddressId.random
+      val address = createAddress(id)
+      repository.create(address).success.value
+      repository.create(address).success.value
+      val v = repository.read(id).success.value
+      v shouldBe Option(address)
+      repository.all.success.value shouldBe Seq(address)
+      repository.deleteAll.success.value
+      repository.all.success.value shouldBe Seq.empty
     }
+
+  }
 
 }

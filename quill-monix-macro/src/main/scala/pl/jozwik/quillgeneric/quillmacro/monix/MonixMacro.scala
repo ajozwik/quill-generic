@@ -19,7 +19,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
         t <- if(result == 0){ run($dSchema.insertValue($entity).returningGenerated(_.id)) } else { monix.eval.Task.now(id)}
        } yield {
         t
-       } 
+       }
     """
   }
 

@@ -18,7 +18,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
         t <- if(result == 0){ run($dSchema.insertValue($entity).returningGenerated(_.id)) } else { concurrent.Future.successful(id)}
        } yield {
         t
-       }   
+       }
     """
   }
 

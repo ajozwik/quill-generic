@@ -17,9 +17,9 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
       val personWithoutId = Person(PersonId.empty, "firstName", "lastName", today)
       val maybePerson     = personRepository.createAndRead(personWithoutId)
       maybePerson shouldBe Symbol("success")
-      val person           = maybePerson.success.get
+      val person           = maybePerson.success.value
       val productWithoutId = Product(ProductId.empty, "productName")
-      val product          = productRepository.createAndRead(productWithoutId).success.get
+      val product          = productRepository.createAndRead(productWithoutId).success.value
       val saleId           = SaleId(product.id, person.id)
       val sale             = Sale(saleId, now)
       repository.createAndRead(sale) shouldBe Symbol("success")
@@ -41,7 +41,7 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
             Failure(th)
         }
         .success
-        .get
+        .value
     }
   }
 

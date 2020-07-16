@@ -49,7 +49,7 @@ trait PersonRepositoryNotGeneratedIdSuite extends AbstractJdbcSpec {
           } yield { () }
         }
         .success
-        .get
+        .value
       repository.deleteAll shouldBe Symbol("success")
     }
   }
