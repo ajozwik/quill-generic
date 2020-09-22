@@ -45,6 +45,8 @@ ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-sour
 
 val quillVersion = "3.5.2"
 
+val scalaTestVersion = "3.2.2"
+
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
@@ -67,15 +69,15 @@ val `io.getquill_quill-jdbc-monix` = "io.getquill" %% "quill-jdbc-monix" % quill
 
 val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.2.0" % Test
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
 
-val `org.scalatestplus_scalacheck-1-14` = "org.scalatestplus" %% "scalacheck-1-14" % "3.2.0.0" % "test"
+val `org.scalatestplus_scalacheck-1-14` = "org.scalatestplus" %% "scalacheck-1-14" % s"$scalaTestVersion.0" % "test"
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
-val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.9.0"
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.10.2"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
