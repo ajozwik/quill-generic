@@ -23,6 +23,8 @@ resolvers += Resolver.sonatypeRepo("releases")
 
 ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
+ThisBuild / fork in Test := true
+
 ThisBuild / organization := "com.github.ajozwik"
 
 ThisBuild / scalacOptions ++= Seq(
