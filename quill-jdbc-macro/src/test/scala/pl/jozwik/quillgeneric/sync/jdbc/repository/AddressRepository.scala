@@ -4,14 +4,13 @@ import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Address, AddressId }
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
 import scala.util.Try
 
 final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[D, N],
-    tableName: String
-) extends JdbcRepositoryWithGeneratedId[AddressId, Address, D, N] {
+    tableName: String = "Address"
+) extends AbstractAddressRepository[D, N] {
 
   protected implicit val dynamicSchema: context.DynamicEntityQuery[Address] = context.dynamicQuerySchema[Address](tableName)
 
@@ -72,15 +71,17 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
       }
     }
 
-  override def update(entity: Address): Try[Long] = Try {
-    context.update[AddressId, Address](entity)
-  }
-
-  override def updateAndRead(entity: Address): Try[Address] = Try {
-    context.transaction {
-      context.updateAndRead[AddressId, Address](entity)
+  override def update(entity: Address): Try[Long] =
+    Try {
+      context.update[AddressId, Address](entity)
     }
-  }
+
+  override def updateAndRead(entity: Address): Try[Address] =
+    Try {
+      context.transaction {
+        context.updateAndRead[AddressId, Address](entity)
+      }
+    }
 
   override def delete(id: AddressId): Try[Long] =
     Try {
