@@ -73,7 +73,7 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
       val q = $filter
       for {
         result <- run(q.updateValue($entity))
-        t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { monix.eval.Task.now(())}
+        t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { monix.eval.Task.unit }
         r <- run(q)
        } yield {
          r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
