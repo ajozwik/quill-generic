@@ -12,7 +12,7 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scapegoatVersion := {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n >= 13 => "1.4.5"
+    case Some((2, n)) if n >= 13 => "1.4.6"
     case _                       => "1.3.11"
   }
 }
@@ -47,7 +47,7 @@ ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-sour
 
 val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.5.2")
 
-val scalaTestVersion = "3.2.2"
+val scalaTestVersion = "3.2.3"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -75,7 +75,7 @@ val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersio
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
 
-val `org.scalatestplus_scalacheck-1-14` = "org.scalatestplus" %% "scalacheck-1-14" % s"$scalaTestVersion.0" % "test"
+val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-15" % s"$scalaTestVersion.0" % "test"
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
@@ -159,7 +159,7 @@ def projectWithName(name: String, file: File): Project =
     libraryDependencies ++= Seq(
           `org.scalatest_scalatest`,
           `org.scalacheck_scalacheck`,
-          `org.scalatestplus_scalacheck-1-14`
+          `org.scalatestplus_scalacheck-1-15`
         ),
     licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection := Seq(LicenseCategory.MIT),
