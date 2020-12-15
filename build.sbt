@@ -73,7 +73,7 @@ val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.1" % Test
 
 val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-15" % s"$scalaTestVersion.0" % "test"
 
@@ -87,11 +87,11 @@ skip in publish := true
 
 lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).settings(
   libraryDependencies ++= Seq(
-        `io.getquill_quill-core`,
-        `ch.qos.logback_logback-classic`           % Test,
-        `com.typesafe.scala-logging_scala-logging` % Test,
-        `com.h2database_h2`                        % Test
-      ),
+    `io.getquill_quill-core`,
+    `ch.qos.logback_logback-classic`           % Test,
+    `com.typesafe.scala-logging_scala-logging` % Test,
+    `com.h2database_h2`                        % Test
+  ),
   scapegoatIgnoredFiles := Seq(".*/*Macro.*.scala", ".*/.*Queries.*.scala")
 )
 
@@ -107,10 +107,10 @@ lazy val `quill-monix-macro` = projectWithName("quill-monix-macro", file("quill-
 lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-macro", file("quill-cassandra-monix-macro"))
   .settings(
     libraryDependencies ++= Seq(
-          `io.getquill_quill-cassandra-monix`,
-          `org.cassandraunit_cassandra-unit`               % Test,
-          `com.datastax.cassandra_cassandra-driver-extras` % Test
-        ),
+      `io.getquill_quill-cassandra-monix`,
+      `org.cassandraunit_cassandra-unit`               % Test,
+      `com.datastax.cassandra_cassandra-driver-extras` % Test
+    ),
     Test / fork := true
   )
   .dependsOn(`quill-monix-macro`)
@@ -119,10 +119,10 @@ lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-
 lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file("quill-cassandra-macro"))
   .settings(
     libraryDependencies ++= Seq(
-          `io.getquill_quill-cassandra`,
-          `org.cassandraunit_cassandra-unit`               % Test,
-          `com.datastax.cassandra_cassandra-driver-extras` % Test
-        ),
+      `io.getquill_quill-cassandra`,
+      `org.cassandraunit_cassandra-unit`               % Test,
+      `com.datastax.cassandra_cassandra-driver-extras` % Test
+    ),
     Test / fork := true
   )
   .dependsOn(`macro-quill`)
@@ -157,10 +157,10 @@ lazy val allModules =
 def projectWithName(name: String, file: File): Project =
   Project(name, file).settings(
     libraryDependencies ++= Seq(
-          `org.scalatest_scalatest`,
-          `org.scalacheck_scalacheck`,
-          `org.scalatestplus_scalacheck-1-15`
-        ),
+      `org.scalatest_scalatest`,
+      `org.scalacheck_scalacheck`,
+      `org.scalatestplus_scalacheck-1-15`
+    ),
     licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection := Seq(LicenseCategory.MIT),
     sources in (Compile, doc) := Seq.empty
