@@ -91,8 +91,7 @@ lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).set
     `ch.qos.logback_logback-classic`           % Test,
     `com.typesafe.scala-logging_scala-logging` % Test,
     `com.h2database_h2`                        % Test
-  ),
-  scapegoatIgnoredFiles := Seq(".*/*Macro.*.scala", ".*/.*Queries.*.scala")
+  )
 )
 
 lazy val `quill-jdbc-monix-macro` = projectWithName("quill-jdbc-monix-macro", file("quill-jdbc-monix-macro"))
@@ -163,5 +162,6 @@ def projectWithName(name: String, file: File): Project =
     ),
     licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection := Seq(LicenseCategory.MIT),
-    sources in (Compile, doc) := Seq.empty
+    sources in (Compile, doc) := Seq.empty,
+    wartremoverWarnings in (Compile, compile) ++= Warts.all.filterNot(Set(Wart.ImplicitParameter, Wart.DefaultArguments).contains)
   )
