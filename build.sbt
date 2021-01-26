@@ -1,8 +1,8 @@
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 
-val `scalaVersion_2.13` = "2.13.3"
+val `scalaVersion_2.13` = "2.13.4"
 
-val `scalaVersion_2.12` = "2.12.12"
+val `scalaVersion_2.12` = "2.12.13"
 
 ThisBuild / scalaVersion := `scalaVersion_2.12`
 
@@ -12,7 +12,7 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scapegoatVersion := {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n >= 13 => "1.4.6"
+    case Some((2, n)) if n >= 13 => "1.4.7"
     case _                       => "1.3.11"
   }
 }
