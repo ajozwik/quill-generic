@@ -10,12 +10,7 @@ val targetJdk = "1.8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
-ThisBuild / scapegoatVersion := {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n >= 13 => "1.4.7"
-    case _                       => "1.3.11"
-  }
-}
+ThisBuild / scapegoatVersion := "1.4.7"
 
 //ThisBuild / turbo := true
 
@@ -73,7 +68,7 @@ val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.1" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.2" % Test
 
 val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-15" % s"$scalaTestVersion.0" % "test"
 
