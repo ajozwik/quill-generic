@@ -2,7 +2,7 @@
 Library of generic CRUD operation for quill library. Only dynamic queries are supported.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/84d50129877e41068bc0eeb4943b825d)](https://app.codacy.com/manual/ajozwik/quill-generic?utm_source=github.com&utm_medium=referral&utm_content=ajozwik/quill-generic&utm_campaign=Badge_Grade_Dashboard)
-[![Build Status](https://travis-ci.org/ajozwik/quill-generic.svg?branch=master)](https://travis-ci.org/ajozwik/quill-generic)
+[![Build Status](https://travis-ci.com/ajozwik/quill-generic.svg?branch=master)](https://travis-ci.com/ajozwik/quill-generic)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.ajozwik/macro-quill_2.12.svg?label=latest%20release%20for%202.12)](http://search.maven.org/#search|ga|1|g%3A%22com.github.ajozwik%22%20AND%20a%3A%22macro-quill_2.12%22)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.ajozwik/macro-quill_2.13.svg?label=latest%20release%20for%202.13)](http://search.maven.org/#search|ga|1|g%3A%22com.github.ajozwik%22%20AND%20a%3A%22macro-quill_2.13%22)
 [![Coverage Status](https://coveralls.io/repos/github/ajozwik/quill-generic/badge.svg?branch=master)](https://coveralls.io/github/ajozwik/quill-generic?branch=master)
