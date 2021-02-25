@@ -1,6 +1,6 @@
-val `scalaVersion_2.13` = "2.13.4"
+val `scalaVersion_2.13` = "2.13.5"
 
-val `scalaVersion_2.12` = "2.12.12"
+val `scalaVersion_2.12` = "2.12.13"
 
 ThisBuild / scalaVersion := `scalaVersion_2.12`
 
@@ -36,7 +36,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.5.2")
+val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.6.1")
 
 val scalaTestVersion = "3.2.3"
 
