@@ -38,7 +38,7 @@ ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-sour
 
 val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.6.1")
 
-val scalaTestVersion = "3.2.3"
+val scalaTestVersion = "3.2.5"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -64,7 +64,7 @@ val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.2" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.3" % Test
 
 val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-15" % s"$scalaTestVersion.0" % "test"
 
