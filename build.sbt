@@ -38,7 +38,7 @@ ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-sour
 
 val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.6.1")
 
-val scalaTestVersion = "3.2.5"
+val scalaTestVersion = "3.2.6"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -154,5 +154,6 @@ def projectWithName(name: String, file: File): Project =
     licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection := Seq(LicenseCategory.MIT),
     sources in (Compile, doc) := Seq.empty,
-    wartremoverWarnings in (Compile, compile) ++= Warts.all.filterNot(Set(Wart.ImplicitParameter, Wart.DefaultArguments).contains)
+    wartremoverWarnings in (Compile, compile) ++= Warts.all.filterNot(Set(Wart.ImplicitParameter, Wart.DefaultArguments).contains),
+    coverageScalacPluginVersion := "1.4.2"
   )
