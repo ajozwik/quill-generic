@@ -1,6 +1,6 @@
 val `scalaVersion_2.13` = "2.13.5"
 
-val `scalaVersion_2.12` = "2.12.12"
+val `scalaVersion_2.12` = "2.12.13"
 
 ThisBuild / scalaVersion := `scalaVersion_2.12`
 
@@ -42,7 +42,7 @@ val scalaTestVersion = "3.2.7"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
-val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.3"
 
 val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
 
