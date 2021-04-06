@@ -14,7 +14,7 @@ resolvers += Resolver.sonatypeRepo("releases")
 
 ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
-ThisBuild / fork in Test := true
+ThisBuild / Test / fork := true
 
 ThisBuild / organization := "com.github.ajozwik"
 
@@ -36,9 +36,9 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.6.1")
+val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.7.0")
 
-val scalaTestVersion = "3.2.6"
+val scalaTestVersion = "3.2.7"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -74,7 +74,7 @@ val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" 
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
-skip in publish := true
+publish / skip := true
 
 lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).settings(
   libraryDependencies ++= Seq(
@@ -153,7 +153,6 @@ def projectWithName(name: String, file: File): Project =
     ),
     licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection := Seq(LicenseCategory.MIT),
-    sources in (Compile, doc) := Seq.empty,
-    wartremoverWarnings in (Compile, compile) ++= Warts.all.filterNot(Set(Wart.ImplicitParameter, Wart.DefaultArguments).contains),
-    coverageScalacPluginVersion := "1.4.2"
+    Compile / doc / sources := Seq.empty,
+    Compile / compile / wartremoverWarnings ++= Warts.all.filterNot(Set(Wart.ImplicitParameter, Wart.DefaultArguments).contains)
   )
