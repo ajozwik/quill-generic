@@ -8,30 +8,29 @@ import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuot
 
 import scala.util.Try
 
-class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
-    protected val context: JdbcContextDateQuotes[D, N],
+final class ConfigurationRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
+    protected val context: JdbcContextDateQuotes[Dialect, Naming],
     protected val tableName: String = "Configuration"
-) extends JdbcRepository[ConfigurationId, Configuration, D, N] {
+) extends JdbcRepository[ConfigurationId, Configuration, Dialect, Naming] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[Configuration] = dSchema
 
-  private val aliases = {
+  private implicit val dSchema: context.DynamicEntityQuery[Configuration] = {
     import context._
-    Seq(
-      alias[Configuration](_.id, "key"),
-      alias[Configuration](_.value, "value")
-    )
-  }
-  private implicit val dSchema: context.DynamicEntityQuery[Configuration] =
-    context.dynamicQuerySchema[Configuration](tableName, aliases: _*)
-
-  override def all: Try[Seq[Configuration]] = Try {
-    context.all[Configuration]
+    context.dynamicQuerySchema[Configuration](tableName, alias(_.id, "key"))
   }
 
-  override def create(entity: Configuration): Try[ConfigurationId] = Try {
-    context.create[ConfigurationId, Configuration](entity)
-  }
+  override def all: Try[Seq[Configuration]] =
+    Try {
+      context.all[Configuration](dSchema)
+    }
+
+  override def create(entity: Configuration): Try[ConfigurationId] =
+    Try {
+      context.transaction {
+        context.create[ConfigurationId, Configuration](entity)(dSchema)
+      }
+    }
 
   override def createAndRead(entity: Configuration): Try[Configuration] =
     Try {
@@ -40,45 +39,56 @@ class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
       }
     }
 
-  override def createOrUpdate(entity: Configuration): Try[ConfigurationId] = Try {
-    context.transaction {
-      context.createOrUpdate[ConfigurationId, Configuration](entity)
+  override def createOrUpdate(entity: Configuration): Try[ConfigurationId] =
+    Try {
+      context.transaction {
+        context.createOrUpdate[ConfigurationId, Configuration](entity)
+      }
     }
-  }
 
-  override def createOrUpdateAndRead(entity: Configuration): Try[Configuration] = Try {
-    context.transaction {
-      context.createOrUpdateAndRead[ConfigurationId, Configuration](entity)
+  override def createOrUpdateAndRead(entity: Configuration): Try[Configuration] =
+    Try {
+      context.transaction {
+        context.createOrUpdateAndRead[ConfigurationId, Configuration](entity)
+      }
     }
-  }
 
   override def read(id: ConfigurationId): Try[Option[Configuration]] =
     Try {
-      context.read[ConfigurationId, Configuration](id)
+      context.read[ConfigurationId, Configuration](id)(dSchema)
     }
 
   override def readUnsafe(id: ConfigurationId): Try[Configuration] =
     Try {
-      context.readUnsafe[ConfigurationId, Configuration](id)
+      context.readUnsafe[ConfigurationId, Configuration](id)(dSchema)
     }
 
-  override def update(entity: Configuration): Try[Long] = Try {
-    context.update[ConfigurationId, Configuration](entity)
-  }
-
-  override def updateAndRead(entity: Configuration): Try[Configuration] = Try {
-    context.transaction {
-      context.updateAndRead[ConfigurationId, Configuration](entity)
+  override def update(entity: Configuration): Try[Long] =
+    Try {
+      context.transaction {
+        context.update[ConfigurationId, Configuration](entity)(dSchema)
+      }
     }
-  }
+
+  override def updateAndRead(entity: Configuration): Try[Configuration] =
+    Try {
+      context.transaction {
+        context.updateAndRead[ConfigurationId, Configuration](entity)
+      }
+    }
+
   override def delete(id: ConfigurationId): Try[Long] =
     Try {
-      context.delete[ConfigurationId, Configuration](id)
+      context.transaction {
+        context.delete[ConfigurationId, Configuration](id)(dSchema)
+      }
     }
 
   override def deleteAll: Try[Long] =
     Try {
-      context.deleteAll
+      context.transaction {
+        context.deleteAll(dSchema)
+      }
     }
 
 }

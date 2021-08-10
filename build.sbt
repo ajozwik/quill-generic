@@ -1,6 +1,6 @@
 val `scalaVersion_2.13` = "2.13.6"
 
-val `scalaVersion_2.12` = "2.12.13"
+val `scalaVersion_2.12` = "2.12.14"
 
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
@@ -36,7 +36,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.7.2")
+val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.9.0")
 
 val scalaTestVersion = "3.2.9"
 
@@ -44,7 +44,7 @@ val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
 
-val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
+val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.5"
 
 val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
 
@@ -70,7 +70,7 @@ val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-1
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
-val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.10.2"
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.11.0"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
