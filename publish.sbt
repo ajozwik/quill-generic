@@ -9,13 +9,7 @@ ThisBuild / developers := List(
 
 ThisBuild / publishTo := sonatypePublishTo.value
 
-ThisBuild / publishMavenStyle := true
-
 Test / publishArtifact := false
-
-ThisBuild / pomIncludeRepository := { _ =>
-  false
-}
 
 ThisBuild / licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php"))
 
@@ -33,3 +27,5 @@ ThisBuild / scmInfo := Option(
 ThisBuild / organizationHomepage := Option(url(organizationUrl))
 
 ThisBuild / homepage := Option(url(projectUrl))
+
+ThisBuild / versionScheme := Option("semver-spec")
