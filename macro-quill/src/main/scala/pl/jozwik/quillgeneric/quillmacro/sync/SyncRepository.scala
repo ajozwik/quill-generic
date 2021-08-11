@@ -2,10 +2,12 @@ package pl.jozwik.quillgeneric.quillmacro.sync
 
 import pl.jozwik.quillgeneric.quillmacro.{ Repository, RepositoryWithGeneratedId, WithId, WithTransaction }
 
-trait SyncRepository[K, T <: WithId[K]] extends Repository[K, T] with WithSync
+import scala.util.Try
 
-trait SyncRepositoryWithGeneratedId[K, T <: WithId[K]] extends RepositoryWithGeneratedId[K, T] with WithSync
+trait SyncRepository[K, T <: WithId[K], UP] extends Repository[Try, K, T, UP]
 
-trait SyncRepositoryWithTransaction[K, T <: WithId[K]] extends SyncRepository[K, T] with WithTransaction
+trait SyncRepositoryWithGeneratedId[K, T <: WithId[K], UP] extends RepositoryWithGeneratedId[Try, K, T, UP]
 
-trait SyncRepositoryWithGeneratedIdWithTransaction[K, T <: WithId[K]] extends SyncRepositoryWithGeneratedId[K, T] with WithTransaction
+trait SyncRepositoryWithTransaction[K, T <: WithId[K], UP] extends SyncRepository[K, T, UP] with WithTransaction[Try]
+
+trait SyncRepositoryWithGeneratedIdWithTransaction[K, T <: WithId[K], UP] extends SyncRepositoryWithGeneratedId[K, T, UP] with WithTransaction[Try]

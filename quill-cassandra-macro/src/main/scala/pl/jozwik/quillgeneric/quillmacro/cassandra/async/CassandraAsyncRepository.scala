@@ -4,14 +4,14 @@ import io.getquill.{ CassandraAsyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.quillmacro.async.AsyncCrudWithContext.AsyncCrudWithContextUnit
 import pl.jozwik.quillgeneric.quillmacro.async.AsyncRepository
 import pl.jozwik.quillgeneric.quillmacro.cassandra.async.CassandraAsyncRepository.CassandraAsyncContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 object CassandraAsyncRepository {
 
   type CassandraAsyncContextDateQuotes[N <: NamingStrategy] = CassandraAsyncContext[N] with AsyncCrudWithContextUnit
 }
 
-trait CassandraAsyncRepository[K, T <: WithId[K], N <: NamingStrategy] extends AsyncRepository[K, T] with WithUpdate[Unit] with WithCassandraAsyncContext[N] {
+trait CassandraAsyncRepository[K, T <: WithId[K], N <: NamingStrategy] extends AsyncRepository[K, T, Unit] with WithCassandraAsyncContext[N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 

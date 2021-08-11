@@ -10,7 +10,7 @@ import scala.util.{ Success, Try }
 trait ConfigurationRepositorySuite extends AbstractJdbcSpec {
   "ConfigurationRepository" should {
     "Handle simple Configuration with custom id" in {
-      val repository: SyncRepository[ConfigurationId, Configuration] = new ConfigurationRepository(ctx)
+      val repository: SyncRepository[ConfigurationId, Configuration, Long] = new ConfigurationRepository(ctx)
       //      logger.debug("configuration")
       val entity  = Configuration(ConfigurationId("firstName"), "lastName")
       val entity2 = Configuration(ConfigurationId("nextName"), "nextName")

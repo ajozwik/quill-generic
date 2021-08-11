@@ -4,13 +4,13 @@ import io.getquill.{ CassandraMonixContext, NamingStrategy }
 import pl.jozwik.quillgeneric.quillmacro.cassandra.monix.CassandraMonixRepository.CassandraMonixContextDateQuotes
 import pl.jozwik.quillgeneric.quillmacro.monix.MonixRepository
 import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContextDateQuotes.MonixWithContextUnit
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 object CassandraMonixRepository {
   type CassandraMonixContextDateQuotes[N <: NamingStrategy] = CassandraMonixContext[N] with MonixWithContextUnit
 }
 
-trait CassandraMonixRepository[K, T <: WithId[K], N <: NamingStrategy] extends MonixRepository[K, T] with WithUpdate[Unit] with WithCassandraMonixContext[N] {
+trait CassandraMonixRepository[K, T <: WithId[K], N <: NamingStrategy] extends MonixRepository[K, T, Unit] with WithCassandraMonixContext[N] {
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
