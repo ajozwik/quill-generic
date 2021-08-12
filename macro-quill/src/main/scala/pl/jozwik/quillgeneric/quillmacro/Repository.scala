@@ -45,3 +45,7 @@ trait BaseRepository[F[_], K, T <: WithId[K], UP] {
   def deleteAll: F[UP]
 
 }
+
+trait RepositoryWithTransaction[F[_], K, T <: WithId[K], UP] extends Repository[F, K, T, UP] with WithTransaction[F]
+
+trait RepositoryWithTransactionWithGeneratedId[F[_], K, T <: WithId[K], UP] extends RepositoryWithGeneratedId[F, K, T, UP] with WithTransaction[F]
