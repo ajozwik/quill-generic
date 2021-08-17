@@ -72,7 +72,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
       val q = $filter
       for {
         result <- run(q.updateValue($entity))
-        t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { concurrent.Future.successful(())}
+        _ <- if(result == 0){ run($dSchema.insertValue($entity)) } else { concurrent.Future.successful(())}
         r <- run(q)
        } yield {
          r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))

@@ -2,11 +2,11 @@ val `scalaVersion_2.13` = "2.13.6"
 
 val `scalaVersion_2.12` = "2.12.14"
 
-ThisBuild / scalaVersion := `scalaVersion_2.13`
+ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 val targetJdk = "1.8"
 
-ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
+ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false", "-language:higherKinds")
 
 //ThisBuild / turbo := true
 

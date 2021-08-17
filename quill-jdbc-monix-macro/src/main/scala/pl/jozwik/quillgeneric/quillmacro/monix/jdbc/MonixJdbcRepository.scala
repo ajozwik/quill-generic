@@ -6,15 +6,14 @@ import io.getquill.context.sql.idiom.SqlIdiom
 import monix.eval.Task
 import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContextDateQuotes.MonixWithContextLong
 import pl.jozwik.quillgeneric.quillmacro.monix.jdbc.MonixJdbcRepository.MonixJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.monix.{ MonixRepositoryLongWithTransaction, MonixRepositoryWithGeneratedIdLongWithTransaction }
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, RepositoryWithTransaction, RepositoryWithTransactionWithGeneratedId, WithId }
 
 object MonixJdbcRepository {
   type MonixJdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = MonixJdbcContext[D, N] with MonixWithContextLong
 }
 
 trait MonixJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
-  extends MonixRepositoryLongWithTransaction[K, T]
+  extends RepositoryWithTransaction[Task, K, T, Long]
   with WithMonixJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
@@ -25,7 +24,7 @@ trait MonixJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
 }
 
 trait MonixJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
-  extends MonixRepositoryWithGeneratedIdLongWithTransaction[K, T]
+  extends RepositoryWithTransactionWithGeneratedId[Task, K, T, Long]
   with WithMonixJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]

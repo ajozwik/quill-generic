@@ -15,7 +15,11 @@ package pl.jozwik.quillgeneric.quillmacro
 
 import scala.language.higherKinds
 
-trait RepositoryWithGeneratedId[K, T <: WithId[K]] extends BaseRepository[K, T] {
+trait WithTransaction[F[_]] {
+  def inTransaction[A](task: F[A]): F[A]
+}
+
+trait RepositoryWithGeneratedId[F[_], K, T <: WithId[K], UP] extends BaseRepository[F, K, T, UP] {
   def create(entity: T, generatedId: Boolean = true): F[K]
 
   def createAndRead(entity: T, generatedId: Boolean = true): F[T]
@@ -25,9 +29,9 @@ trait RepositoryWithGeneratedId[K, T <: WithId[K]] extends BaseRepository[K, T] 
   def createOrUpdateAndRead(entity: T, generatedId: Boolean = true): F[T]
 }
 
-trait RepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K]] extends Repository[K, T]
+trait RepositoryCompositeKey[F[_], K <: CompositeKey[_, _], T <: WithId[K], UP] extends Repository[F, K, T, UP]
 
-trait Repository[K, T <: WithId[K]] extends BaseRepository[K, T] {
+trait Repository[F[_], K, T <: WithId[K], UP] extends BaseRepository[F, K, T, UP] {
   def create(entity: T): F[K]
 
   def createAndRead(entity: T): F[T]
@@ -37,7 +41,7 @@ trait Repository[K, T <: WithId[K]] extends BaseRepository[K, T] {
   def createOrUpdateAndRead(entity: T): F[T]
 }
 
-trait BaseRepository[K, T <: WithId[K]] extends WithMonad {
+trait BaseRepository[F[_], K, T <: WithId[K], UP] {
 
   def all: F[Seq[T]]
 
@@ -45,16 +49,14 @@ trait BaseRepository[K, T <: WithId[K]] extends WithMonad {
 
   def readUnsafe(id: K): F[T]
 
-  def update(t: T): F[Long]
+  def update(t: T): F[UP]
 
   def updateAndRead(t: T): F[T]
 
-  def delete(id: K): F[Long]
+  def delete(id: K): F[UP]
 
-}
+  def deleteAll: F[UP]
 
-trait WithMonad {
-  type F[_]
 }
 ```
 

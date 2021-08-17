@@ -6,7 +6,7 @@ import io.getquill.context.jdbc.JdbcContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import io.getquill.idiom.Idiom
 import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository.JdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 import scala.util.Try
 
@@ -16,8 +16,7 @@ object JdbcRepository {
 }
 
 trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
-  extends SyncRepositoryWithGeneratedIdWithTransaction[K, T]
-  with WithUpdate[Long]
+  extends SyncRepositoryWithGeneratedIdWithTransaction[K, T, Long]
   with WithJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
@@ -26,10 +25,7 @@ trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: Namin
     context.transaction(task)
 }
 
-trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
-  extends SyncRepositoryWithTransaction[K, T]
-  with WithUpdate[Long]
-  with WithJdbcContext[D, N] {
+trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepositoryWithTransaction[K, T, Long] with WithJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 

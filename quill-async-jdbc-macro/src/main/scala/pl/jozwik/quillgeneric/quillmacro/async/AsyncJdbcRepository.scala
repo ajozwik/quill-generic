@@ -7,7 +7,7 @@ import io.getquill.context.jasync.JAsyncContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import io.getquill.idiom.Idiom
 import pl.jozwik.quillgeneric.quillmacro.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId, WithUpdate }
+import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 object AsyncJdbcRepository {
   type ContextDateQuotes[D <: Idiom, N <: NamingStrategy]                                      = Context[D, N] with AsyncCrudWithContext[Long]
@@ -15,16 +15,14 @@ object AsyncJdbcRepository {
 }
 
 trait AsyncJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection]
-  extends AsyncRepositoryWithGeneratedId[K, T]
-  with WithUpdate[Long]
+  extends AsyncRepositoryWithGeneratedId[K, T, Long]
   with WithAsyncJdbcContext[D, N, C] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
 trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection]
-  extends AsyncRepository[K, T]
-  with WithUpdate[Long]
+  extends AsyncRepository[K, T, Long]
   with WithAsyncJdbcContext[D, N, C] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
