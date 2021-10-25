@@ -5,6 +5,7 @@ import java.util.Date
 
 import io.getquill.context.Context
 
+@SuppressWarnings(Array("org.wartremover.warts.PublicInference"))
 trait DateQuotes {
   this: Context[_, _] =>
 

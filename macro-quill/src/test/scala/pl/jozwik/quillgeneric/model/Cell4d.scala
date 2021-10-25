@@ -1,9 +1,8 @@
 package pl.jozwik.quillgeneric.model
 
-import io.getquill.Embedded
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey4, WithId }
 
-final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Int) extends Embedded with CompositeKey4[Int, Int, Int, Int] {
+final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Int) extends CompositeKey4[Int, Int, Int, Int] {
   def x: Int = fk1
 
   def y: Int = fk2

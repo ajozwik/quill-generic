@@ -1,6 +1,8 @@
 package pl.jozwik.quillgeneric.quillmacro
 
-trait CompositeKey[K1, K2] {
+import io.getquill.Embedded
+
+trait CompositeKey[K1, K2] extends Embedded {
   def fk1: K1
 
   def fk2: K2

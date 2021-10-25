@@ -1,6 +1,6 @@
 val `scalaVersion_2.13` = "2.13.6"
 
-val `scalaVersion_2.12` = "2.12.12"
+val `scalaVersion_2.12` = "2.12.15"
 
 ThisBuild / scalaVersion := `scalaVersion_2.12`
 
@@ -36,15 +36,15 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.9.0")
+val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.10.0")
 
-val scalaTestVersion = "3.2.9"
+val scalaTestVersion = "3.2.10"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
 
-val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.5"
+val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.6"
 
 val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
 
