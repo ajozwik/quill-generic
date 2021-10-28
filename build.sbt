@@ -154,5 +154,5 @@ def projectWithName(name: String, file: File): Project =
     licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection := Seq(LicenseCategory.MIT),
     Compile / doc / sources := Seq.empty,
-    Compile / compile / wartremoverWarnings ++= Warts.all.filterNot(Set(Wart.ImplicitParameter, Wart.DefaultArguments).contains)
+    Compile / compile / wartremoverWarnings ++= Warts.allBut(Wart.ImplicitParameter, Wart.DefaultArguments)
   )
