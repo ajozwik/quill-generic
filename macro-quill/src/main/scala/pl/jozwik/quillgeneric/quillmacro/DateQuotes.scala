@@ -9,10 +9,10 @@ import io.getquill.context.Context
 trait DateQuotes {
   this: Context[_, _] =>
 
-  implicit val instantEncoder: MappedEncoding[Date, Instant] = MappedEncoding[Date, Instant](_.toInstant)
-  implicit val instantDecoder: MappedEncoding[Instant, Date] = MappedEncoding[Instant, Date](Date.from)
+  implicit val instantMappedEncoder: MappedEncoding[Date, Instant] = MappedEncoding[Date, Instant](_.toInstant)
+  implicit val instantMappedDecoder: MappedEncoding[Instant, Date] = MappedEncoding[Instant, Date](Date.from)
 
-  //scalastyle:off
+  // scalastyle:off
   implicit class LocalDateTimeQuotes(left: LocalDateTime) {
     def >(right: LocalDateTime) = quote(infix"$left > $right".as[Boolean])
 
@@ -72,5 +72,5 @@ trait DateQuotes {
 
     def <=(right: Option[Instant]) = quote(infix"$left <= $right".as[Boolean])
   }
-  //scalastyle:on
+  // scalastyle:on
 }
