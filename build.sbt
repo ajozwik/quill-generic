@@ -1,10 +1,10 @@
-val `scalaVersion_2.13` = "2.13.6"
+val `scalaVersion_2.13` = "2.13.10"
 
-val `scalaVersion_2.12` = "2.12.15"
+val `scalaVersion_2.12` = "2.12.17"
 
 //val `scalaVersion_3` = "3.1.1"
 
-ThisBuild / scalaVersion := `scalaVersion_2.12`
+ThisBuild / scalaVersion := `scalaVersion_2.13`
 
 val targetJdk = "1.8"
 
@@ -12,9 +12,7 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false", "-language:higherKi
 
 //ThisBuild / turbo := true
 
-resolvers += Resolver.sonatypeRepo("releases")
-
-//ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`, `scalaVersion_3`)
+resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
@@ -40,15 +38,15 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "3.16.3")
+val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.6.0")
 
-val scalaTestVersion = "3.2.11"
+val scalaTestVersion = "3.2.14"
 
-val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
+val `com.h2database_h2` = "com.h2database" % "h2" % "2.1.214"
 
-val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
+val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
 
-val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.11"
+val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.4.4"
 
 val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
 
@@ -68,13 +66,13 @@ val `io.getquill_quill-monix` = "io.getquill" %% "quill-monix" % quillVersion
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.4" % Test
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
 
-val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-15" % s"$scalaTestVersion.0" % Test
+val `org.scalatestplus_scalacheck` = "org.scalatestplus" %% "scalacheck-1-17" % s"$scalaTestVersion.0" % Test
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "4.3.1.0"
 
-val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.11.1"
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.11.3"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
@@ -153,7 +151,7 @@ def projectWithName(name: String, file: File): Project =
     libraryDependencies ++= Seq(
       `org.scalatest_scalatest`,
       `org.scalacheck_scalacheck`,
-      `org.scalatestplus_scalacheck-1-15`
+      `org.scalatestplus_scalacheck`
     ),
     licenseReportTitle      := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection        := Seq(LicenseCategory.MIT),
