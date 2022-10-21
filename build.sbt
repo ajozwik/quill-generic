@@ -6,7 +6,7 @@ val `scalaVersion_2.12` = "2.12.17"
 
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
-val targetJdk = "1.8"
+val targetJdk = "8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false", "-language:higherKinds")
 
@@ -32,9 +32,15 @@ ThisBuild / scalacOptions ++= Seq(
   //  "-Ywarn-inaccessible",
   "-Ywarn-dead-code",
   "-language:reflectiveCalls",
-  "-Ydelambdafy:method",
-  s"-target:jvm-$targetJdk"
-)
+  "-Ydelambdafy:method"
+) ++ {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, n)) if n <= 12 =>
+      Seq(s"-target:jvm-$targetJdk")
+    case _ =>
+      Seq(s"-release:$targetJdk")
+  }
+}
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
@@ -42,7 +48,7 @@ val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.6.0")
 
 val scalaTestVersion = "3.2.14"
 
-val `com.h2database_h2` = "com.h2database" % "h2" % "2.1.214"
+val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
 

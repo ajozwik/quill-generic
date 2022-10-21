@@ -1,7 +1,7 @@
 package pl.jozwik.quillgeneric.quillmacro
 
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
 
   import c.universe._

@@ -2,7 +2,7 @@ package pl.jozwik.quillgeneric.quillmacro.async
 
 import scala.concurrent.ExecutionContext
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
 
   import c.universe._

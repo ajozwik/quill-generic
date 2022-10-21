@@ -3,7 +3,7 @@ package pl.jozwik.quillgeneric.quillmacro.monix
 import pl.jozwik.quillgeneric.quillmacro.AbstractCrudMacro
 
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
 
   import c.universe._

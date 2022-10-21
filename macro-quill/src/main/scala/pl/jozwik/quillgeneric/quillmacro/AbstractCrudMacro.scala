@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.quillmacro
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 trait FilterCrudMacro {
   val c: MacroContext
   import c.universe._
@@ -36,7 +36,7 @@ trait FilterCrudMacro {
     callFilterOnId[K](id)(dSchema)
   }
 }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 trait AbstractCrudMacro extends FilterCrudMacro {
   val c: MacroContext
   import c.universe._

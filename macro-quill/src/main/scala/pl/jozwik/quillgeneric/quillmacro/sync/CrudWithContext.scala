@@ -9,7 +9,7 @@ object CrudWithContext {
   type CrudWithContextDateQuotesUnit = CrudWithContextDateQuotes[Unit]
   type CrudWithContextDateQuotesLong = CrudWithContextDateQuotes[Long]
 }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 trait CrudWithContextDateQuotes[U] extends DateQuotes {
   this: Context[_, _] =>
   type dQuery[T] = this.DynamicEntityQuery[T]

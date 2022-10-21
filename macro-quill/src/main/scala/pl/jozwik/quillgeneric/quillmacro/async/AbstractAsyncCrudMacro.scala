@@ -4,7 +4,7 @@ import pl.jozwik.quillgeneric.quillmacro.FilterCrudMacro
 
 import scala.concurrent.ExecutionContext
 import scala.reflect.macros.whitebox.{ Context => MacroContext }
-
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 trait AbstractAsyncCrudMacro extends FilterCrudMacro {
   val c: MacroContext
   import c.universe._
