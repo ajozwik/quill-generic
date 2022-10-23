@@ -52,7 +52,7 @@ val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
 
-val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.4.4"
+val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.11"
 
 val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
 
