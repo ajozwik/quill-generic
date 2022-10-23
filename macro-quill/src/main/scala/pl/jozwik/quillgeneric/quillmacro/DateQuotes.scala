@@ -1,9 +1,9 @@
 package pl.jozwik.quillgeneric.quillmacro
 
+import io.getquill.context.Context
+
 import java.time.{ Instant, LocalDate, LocalDateTime }
 import java.util.Date
-
-import io.getquill.context.Context
 
 @SuppressWarnings(Array("org.wartremover.warts.PublicInference"))
 trait DateQuotes {
