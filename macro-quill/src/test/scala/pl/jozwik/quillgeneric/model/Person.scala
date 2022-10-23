@@ -15,5 +15,5 @@ final case class Person(
     lastName: String,
     birthDate: LocalDate,
     addressId: Option[AddressId] = Option(AddressId.empty),
-    createDateTime: Option[LocalDateTime] = None
+    createDateTime: Option[LocalDateTime] = Option(LocalDateTime.now)
 ) extends WithId[PersonId]

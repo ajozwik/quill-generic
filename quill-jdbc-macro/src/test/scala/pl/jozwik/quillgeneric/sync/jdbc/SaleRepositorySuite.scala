@@ -21,7 +21,7 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
       val productWithoutId = Product(ProductId.empty, "productName")
       val product          = productRepository.createAndRead(productWithoutId).success.value
       val saleId           = SaleId(product.id, person.id)
-      val sale             = Sale(saleId, now)
+      val sale             = Sale(saleId, now, dateTime, today)
       repository.createAndRead(sale) shouldBe Symbol("success")
 
       repository.createOrUpdateAndRead(sale) shouldBe Symbol("success")
@@ -35,10 +35,9 @@ trait SaleRepositorySuite extends AbstractJdbcSpec {
             actualSeq shouldBe Seq(sale)
           }
         }
-        .recoverWith {
-          case th =>
-            logger.error("", th)
-            Failure(th)
+        .recoverWith { case th =>
+          logger.error("", th)
+          Failure(th)
         }
         .success
         .value

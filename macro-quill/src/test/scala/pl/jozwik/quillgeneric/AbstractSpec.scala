@@ -1,8 +1,7 @@
 package pl.jozwik.quillgeneric
 
 import java.time.temporal.ChronoUnit
-import java.time.{ Instant, LocalDate }
-
+import java.time.{ Instant, LocalDate, LocalDateTime, ZoneOffset }
 import com.typesafe.scalalogging.StrictLogging
 import io.getquill.NamingStrategy
 import org.scalatest.concurrent.{ AsyncTimeLimitedTests, TimeLimitedTests }
@@ -24,6 +23,7 @@ trait AbstractSpec extends AnyWordSpecLike with TimeLimitedTests with Spec with 
 
   protected val now: Instant             = Instant.now().truncatedTo(ChronoUnit.SECONDS)
   protected val today: LocalDate         = LocalDate.now
+  protected val dateTime: LocalDateTime  = LocalDateTime.ofInstant(now, ZoneOffset.UTC)
   protected val strategy: NamingStrategy = Strategy.namingStrategy
 
   protected val (offset, limit) = (0, 100)

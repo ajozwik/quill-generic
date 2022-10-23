@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.model
 
-import java.time.{ Instant, LocalDateTime }
+import java.time.{ Instant, LocalDate, LocalDateTime }
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey2, WithId }
 
 final case class SaleId(fk1: ProductId, fk2: PersonId) extends CompositeKey2[ProductId, PersonId] {
@@ -8,5 +8,4 @@ final case class SaleId(fk1: ProductId, fk2: PersonId) extends CompositeKey2[Pro
   def personId: PersonId   = fk2
 }
 
-
-final case class Sale(id: SaleId, saleDate: Instant, saleDateTime: LocalDateTime = LocalDateTime.now) extends WithId[SaleId]
+final case class Sale(id: SaleId, saleDate: Instant, saleDateTime: LocalDateTime, createDate: LocalDate) extends WithId[SaleId]

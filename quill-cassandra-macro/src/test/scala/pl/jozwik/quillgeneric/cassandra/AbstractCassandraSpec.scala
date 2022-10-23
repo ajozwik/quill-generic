@@ -13,7 +13,7 @@ trait AbstractCassandraSpec extends AbstractSpec with BeforeAndAfterAll {
 
   protected lazy val session = {
     EmbeddedCassandraServerHelper.startEmbeddedCassandra()
-    EmbeddedCassandraServerHelper.getSession()
+    EmbeddedCassandraServerHelper.getSession
   }
 
   protected val keySpace = "demo"
