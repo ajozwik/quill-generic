@@ -2,7 +2,7 @@ val `scalaVersion_2.13` = "2.13.10"
 
 val `scalaVersion_2.12` = "2.12.17"
 
-//val `scalaVersion_3` = "3.1.1"
+//val `scalaVersion_3` = "3.2.0"
 
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
@@ -54,7 +54,9 @@ val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %%
 
 val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.11"
 
-val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
+//val `io.getquill_quill-core` = "io.getquill" %% "quill-core" % quillVersion
+
+val `io.getquill_quill-sql` = "io.getquill" %% "quill-sql" % quillVersion
 
 val `io.getquill_quill-jasync` = "io.getquill" %% "quill-jasync" % quillVersion
 
@@ -86,7 +88,7 @@ publish / skip := true
 
 lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).settings(
   libraryDependencies ++= Seq(
-    `io.getquill_quill-core`,
+    `io.getquill_quill-sql`,
     `ch.qos.logback_logback-classic`           % Test,
     `com.typesafe.scala-logging_scala-logging` % Test,
     `com.h2database_h2`                        % Test
