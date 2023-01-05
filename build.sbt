@@ -10,7 +10,12 @@ val targetJdk = "8"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false", "-language:higherKinds")
 
-//ThisBuild / turbo := true
+def init(): Unit = {
+  sys.props.put("quill.macro.log", false.toString)
+  sys.props.put("quill.binds.log", true.toString)
+}
+
+val fake = init()
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
