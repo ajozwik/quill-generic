@@ -51,7 +51,7 @@ ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-sour
 
 val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.6.0")
 
-val scalaTestVersion = "3.2.14"
+val scalaTestVersion = "3.2.15"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
