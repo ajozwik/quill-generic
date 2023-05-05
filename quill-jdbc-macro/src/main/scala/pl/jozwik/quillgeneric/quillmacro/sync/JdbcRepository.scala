@@ -11,14 +11,14 @@ import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 import scala.util.Try
 
 object JdbcRepository {
-  type ContextDateQuotes[D <: Idiom, N <: NamingStrategy] = Context[D, N] with CrudWithContextDateQuotes[Long]
-  type JdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = JdbcContext[D, N]
+  type ContextDateQuotes[+D <: Idiom, +N <: NamingStrategy] = Context[D, N] with CrudWithContextDateQuotes[Long]
+  type JdbcContextDateQuotes[+D <: SqlIdiom, +N <: NamingStrategy] = JdbcContext[D, N]
     with ContextDateQuotes[D, N]
     with ObjectGenericTimeEncoders
     with ObjectGenericTimeDecoders
 }
 
-trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
+trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy]
   extends SyncRepositoryWithGeneratedIdWithTransaction[K, T, Long]
   with WithJdbcContext[D, N] {
 
@@ -28,7 +28,7 @@ trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: Namin
     context.transaction(task)
 }
 
-trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends SyncRepositoryWithTransaction[K, T, Long] with WithJdbcContext[D, N] {
+trait JdbcRepository[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] extends SyncRepositoryWithTransaction[K, T, Long] with WithJdbcContext[D, N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
@@ -37,8 +37,8 @@ trait JdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] exte
 
 }
 
-trait JdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends JdbcRepository[K, T, D, N]
+trait JdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] extends JdbcRepository[K, T, D, N]
 
-trait WithJdbcContext[D <: SqlIdiom, N <: NamingStrategy] {
+trait WithJdbcContext[+D <: SqlIdiom, +N <: NamingStrategy] {
   protected val context: JdbcContextDateQuotes[D, N]
 }

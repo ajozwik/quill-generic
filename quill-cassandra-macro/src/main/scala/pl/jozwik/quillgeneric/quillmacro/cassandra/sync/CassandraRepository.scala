@@ -7,15 +7,15 @@ import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
 
 object CassandraRepository {
-  type CassandraContextDateQuotes[N <: NamingStrategy] = CassandraSyncContext[N] with CrudWithContextDateQuotesUnit
+  type CassandraContextDateQuotes[+N <: NamingStrategy] = CassandraSyncContext[N] with CrudWithContextDateQuotesUnit
 }
 
-trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy] extends SyncRepository[K, T, Unit] with WithCassandraContext[N] {
+trait CassandraRepository[K, T <: WithId[K], +N <: NamingStrategy] extends SyncRepository[K, T, Unit] with WithCassandraContext[N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
 }
 
-trait CassandraRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], N <: NamingStrategy] extends CassandraRepository[K, T, N]
+trait CassandraRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], +N <: NamingStrategy] extends CassandraRepository[K, T, N]
 
-trait WithCassandraContext[N <: NamingStrategy] { protected val context: CassandraContextDateQuotes[N] }
+trait WithCassandraContext[+N <: NamingStrategy] { protected val context: CassandraContextDateQuotes[N] }

@@ -7,15 +7,15 @@ import pl.jozwik.quillgeneric.quillmacro.monix.MonixWithContextDateQuotes.MonixW
 import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, Repository, WithId }
 
 object CassandraMonixRepository {
-  type CassandraMonixContextDateQuotes[N <: NamingStrategy] = CassandraMonixContext[N] with MonixWithContextUnit
+  type CassandraMonixContextDateQuotes[+N <: NamingStrategy] = CassandraMonixContext[N] with MonixWithContextUnit
 }
 
-trait CassandraMonixRepository[K, T <: WithId[K], N <: NamingStrategy] extends Repository[Task, K, T, Unit] with WithCassandraMonixContext[N] {
+trait CassandraMonixRepository[K, T <: WithId[K], +N <: NamingStrategy] extends Repository[Task, K, T, Unit] with WithCassandraMonixContext[N] {
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 }
 
-trait CassandraMonixRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], N <: NamingStrategy] extends CassandraMonixRepository[K, T, N]
+trait CassandraMonixRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], +N <: NamingStrategy] extends CassandraMonixRepository[K, T, N]
 
-trait WithCassandraMonixContext[N <: NamingStrategy] {
+trait WithCassandraMonixContext[+N <: NamingStrategy] {
   protected val context: CassandraMonixContextDateQuotes[N]
 }
