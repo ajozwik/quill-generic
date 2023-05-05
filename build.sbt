@@ -53,7 +53,7 @@ val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.6.0")
 
 val scalaTestVersion = "3.2.15"
 
-val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
+val `com.h2database_h2` = "com.h2database" % "h2" % "2.1.214"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
 

@@ -17,7 +17,7 @@ final class ConfigurationRepository[Dialect <: SqlIdiom, Naming <: NamingStrateg
 
   private implicit val dSchema: context.DynamicEntityQuery[Configuration] = {
     import context._
-    context.dynamicQuerySchema[Configuration](tableName, alias(_.id, "key"))
+    context.dynamicQuerySchema[Configuration](tableName, alias(_.id, "`KEY`"), alias(_.value, "`VALUE`"))
   }
 
   override def all: Try[Seq[Configuration]] =

@@ -14,7 +14,7 @@ trait ConfigurationRepositorySuite extends AbstractJdbcSpec {
       //      logger.debug("configuration")
       val entity  = Configuration(ConfigurationId("firstName"), "lastName")
       val entity2 = Configuration(ConfigurationId("nextName"), "nextName")
-      repository.all shouldBe Try(Seq())
+      repository.all.success.value shouldBe empty
       val entityId = repository.createOrUpdate(entity)
       entityId shouldBe Symbol("success")
       val entityIdProvided = entityId.success.value

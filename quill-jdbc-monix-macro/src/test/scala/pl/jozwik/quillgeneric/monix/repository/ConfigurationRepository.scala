@@ -17,8 +17,8 @@ class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
   private val aliases = {
     import context._
     Seq(
-      alias[Configuration](_.id, "key"),
-      alias[Configuration](_.value, "value")
+      alias[Configuration](_.id, "`key`"),
+      alias[Configuration](_.value, "`value`")
     )
   }
   private implicit val dSchema: context.DynamicEntityQuery[Configuration] =
