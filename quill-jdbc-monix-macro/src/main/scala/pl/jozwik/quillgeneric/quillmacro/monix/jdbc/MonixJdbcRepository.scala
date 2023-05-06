@@ -18,27 +18,19 @@ object MonixJdbcRepository {
 
 trait MonixJdbcRepository[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy]
   extends RepositoryWithTransaction[Task, K, T, Long]
-  with WithMonixJdbcContext[D, N] {
-
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
-
-  def inTransaction[A](task: Task[A]): Task[A] =
-    context.transaction(task)
-
-}
+  with WithMonixJdbcContext[K, T, D, N]
 
 trait MonixJdbcRepositoryWithGeneratedId[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy]
   extends RepositoryWithTransactionWithGeneratedId[Task, K, T, Long]
-  with WithMonixJdbcContext[D, N] {
+  with WithMonixJdbcContext[K, T, D, N]
+
+trait WithMonixJdbcContext[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] {
+  protected val context: MonixJdbcContextDateQuotes[D, N]
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
   def inTransaction[A](task: Task[A]): Task[A] =
     context.transaction(task)
-}
-
-trait WithMonixJdbcContext[+D <: SqlIdiom, +N <: NamingStrategy] {
-  protected val context: MonixJdbcContextDateQuotes[D, N]
 }
 
 trait MonixJdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] extends MonixJdbcRepository[K, T, D, N]

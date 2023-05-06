@@ -20,25 +20,18 @@ object JdbcRepository {
 
 trait JdbcRepositoryWithGeneratedId[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy]
   extends SyncRepositoryWithGeneratedIdWithTransaction[K, T, Long]
-  with WithJdbcContext[D, N] {
+  with WithJdbcContext[K, T, D, N]
 
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
-
-  def inTransaction[A](task: Try[A]): Try[A] =
-    context.transaction(task)
-}
-
-trait JdbcRepository[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] extends SyncRepositoryWithTransaction[K, T, Long] with WithJdbcContext[D, N] {
-
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
-
-  def inTransaction[A](task: Try[A]): Try[A] =
-    context.transaction(task)
-
-}
+trait JdbcRepository[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] extends SyncRepositoryWithTransaction[K, T, Long] with WithJdbcContext[K, T, D, N]
 
 trait JdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] extends JdbcRepository[K, T, D, N]
 
-trait WithJdbcContext[+D <: SqlIdiom, +N <: NamingStrategy] {
+trait WithJdbcContext[K, T <: WithId[K], +D <: SqlIdiom, +N <: NamingStrategy] {
   protected val context: JdbcContextDateQuotes[D, N]
+
+  protected def dynamicSchema: context.DynamicEntityQuery[T]
+
+  def inTransaction[A](task: Try[A]): Try[A] =
+    context.transaction(task)
+
 }
