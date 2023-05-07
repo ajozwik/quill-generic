@@ -65,21 +65,8 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
     """
   }
 
-  def createOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      val q = $filter
-      for {
-        result <- run(q.updateValue($entity))
-        t <- if(result == 0){ run($dSchema.insertValue($entity)) } else { monix.eval.Task.unit }
-        r <- run(q)
-       } yield {
-         r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
-       }
-    """
-  }
+
+
 
   def create[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
@@ -91,40 +78,6 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
       }
     """
 
-  def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      val q = $filter
-      for{
-        _ <- run($dSchema.insertValue($entity))
-        r <- run(q)
-      } yield {
-        r.headOption
-        .getOrElse(throw new NoSuchElementException(s"$$id"))
-      }
-    """
-  }
-
-  def updateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val q = $filter
-      for{
-         _ <-  run(q.updateValue($entity))
-         seq <- run(q)
-       } yield {
-        seq.headOption
-        .getOrElse{
-          val id = $entity.id
-          throw new NoSuchElementException(s"$$id")
-         }
-       }
-    """
-  }
-
   def read[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
     val filter = callFilterOnId[K](id)(dSchema)
     q"""
@@ -134,19 +87,6 @@ class MonixMacro(val c: MacroContext) extends AbstractCrudMacro {
         r <- run(q)
       } yield {
         r.headOption
-      }
-    """
-  }
-
-  def readUnsafe[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilterOnId[K](id)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val q = $filter
-      for {
-        r <- run(q)
-      } yield {
-        r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
       }
     """
   }

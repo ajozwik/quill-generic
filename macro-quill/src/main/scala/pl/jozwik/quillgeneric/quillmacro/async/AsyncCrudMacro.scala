@@ -64,21 +64,7 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
     """
   }
 
-  def createOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      val q = $filter
-      for {
-        result <- run(q.updateValue($entity))
-        _ <- if(result == 0){ run($dSchema.insertValue($entity)) } else { concurrent.Future.successful(())}
-        r <- run(q)
-       } yield {
-         r.headOption.getOrElse(throw new NoSuchElementException(s"$$id"))
-       }
-    """
-  }
+
 
   def create[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree =
     q"""
@@ -90,39 +76,9 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
       }
     """
 
-  def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      val q = $filter
-      for{
-        _ <- run($dSchema.insertValue($entity))
-        r <- run(q)
-      } yield {
-        r.headOption
-        .getOrElse(throw new NoSuchElementException(s"$$id"))
-      }
-    """
-  }
 
-  def updateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val q = $filter
-      for{
-         _ <-  run(q.updateValue($entity))
-         seq <- run(q)
-       } yield {
-        seq.headOption
-        .getOrElse{
-          val id = $entity.id
-          throw new NoSuchElementException(s"$$id")
-         }
-       }
-    """
-  }
+
+
 
   def read[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree = {
     val filter = callFilterOnId[K](id)(dSchema)
@@ -137,18 +93,6 @@ class AsyncCrudMacro(val c: MacroContext) extends AbstractAsyncCrudMacro {
     """
   }
 
-  def readUnsafe[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_], ex: c.Expr[ExecutionContext]): Tree = {
-    val filter = callFilterOnId[K](id)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val q = $filter
-      for {
-        r <- run(q)
-      } yield {
-        r.headOption
-        .getOrElse(throw new NoSuchElementException(s"$$id"))
-      }
-    """
-  }
+
 
 }

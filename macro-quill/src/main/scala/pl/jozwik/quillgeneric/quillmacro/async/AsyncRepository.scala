@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.quillmacro.async
 
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey, WithId }
+import pl.jozwik.quillgeneric.repository.{ CompositeKey, WithId }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -32,11 +32,22 @@ trait AsyncBaseRepository[K, T <: WithId[K], UP] {
 
   def read(id: K)(implicit ex: ExecutionContext): Future[Option[T]]
 
-  def readUnsafe(id: K)(implicit ex: ExecutionContext): Future[T]
+  def readUnsafe(id: K)(implicit ex: ExecutionContext): Future[T] =
+    for {
+      opt <- read(id)
+    } yield {
+      opt.getOrElse(throw new NoSuchElementException(s"$id"))
+    }
 
   def update(t: T)(implicit ex: ExecutionContext): Future[UP]
 
-  def updateAndRead(t: T)(implicit ex: ExecutionContext): Future[T]
+  def updateAndRead(t: T)(implicit ex: ExecutionContext): Future[T] =
+    for {
+      _  <- update(t)
+      el <- readUnsafe(t.id)
+    } yield {
+      el
+    }
 
   def delete(id: K)(implicit ex: ExecutionContext): Future[UP]
 

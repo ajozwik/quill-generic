@@ -1,7 +1,8 @@
 package pl.jozwik.quillgeneric.quillmacro.sync
 
 import io.getquill.context.Context
-import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.quillmacro.{ CrudMacro, DateQuotes }
+import pl.jozwik.quillgeneric.repository.WithId
 
 import scala.language.experimental.macros
 
@@ -21,9 +22,6 @@ trait CrudWithContextDateQuotes[U] extends DateQuotes {
   def create[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): K = macro CrudMacro.create[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def createAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T = macro CrudMacro.createAndRead[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): K = macro CrudMacro.createAndGenerateId[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
@@ -31,9 +29,6 @@ trait CrudWithContextDateQuotes[U] extends DateQuotes {
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def createOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): K = macro CrudMacro.createOrUpdate[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def createOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T = macro CrudMacro.createOrUpdateAndRead[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def createAndGenerateIdOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): K = macro CrudMacro.createAndGenerateIdOrUpdate[K, T]
@@ -46,13 +41,7 @@ trait CrudWithContextDateQuotes[U] extends DateQuotes {
   def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): U = macro CrudMacro.update[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def updateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T]): T = macro CrudMacro.updateAndRead[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): Option[T] = macro CrudMacro.read[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def readUnsafe[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): T = macro CrudMacro.readUnsafe[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T]): U = macro CrudMacro.delete[K]

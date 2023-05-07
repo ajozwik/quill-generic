@@ -1,7 +1,8 @@
 package pl.jozwik.quillgeneric.quillmacro.async
 
 import io.getquill.context.Context
-import pl.jozwik.quillgeneric.quillmacro.{ DateQuotes, WithId }
+import pl.jozwik.quillgeneric.quillmacro.DateQuotes
+import pl.jozwik.quillgeneric.repository.WithId
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.experimental.macros
@@ -24,9 +25,6 @@ trait AsyncCrudWithContext[U] extends DateQuotes {
   def create[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[K] = macro AsyncCrudMacro.create[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def createAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[T] = macro AsyncCrudMacro.createAndRead[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def createAndGenerateId[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[K] =
     macro AsyncCrudMacro.createAndGenerateId[K, T]
 
@@ -36,10 +34,6 @@ trait AsyncCrudWithContext[U] extends DateQuotes {
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def createOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[K] = macro AsyncCrudMacro.createOrUpdate[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def createOrUpdateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[T] =
-    macro AsyncCrudMacro.createOrUpdateAndRead[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def createAndGenerateIdOrUpdate[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[K] =
@@ -53,13 +47,7 @@ trait AsyncCrudWithContext[U] extends DateQuotes {
   def update[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[U] = macro AsyncCrudMacro.update[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def updateAndRead[K, T <: WithId[K]](entity: T)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[T] = macro AsyncCrudMacro.updateAndRead[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def read[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[Option[T]] = macro AsyncCrudMacro.read[K, T]
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def readUnsafe[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[T] = macro AsyncCrudMacro.readUnsafe[K, T]
 
   @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def delete[K, T <: WithId[K]](id: K)(implicit dSchema: dQuery[T], ex: ExecutionContext): Future[U] = macro AsyncCrudMacro.delete[K]

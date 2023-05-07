@@ -68,23 +68,7 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
     """
   }
 
-  def createOrUpdateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      val q = $filter
-      val result = run(
-          q.updateValue($entity)
-       )
-       if(result == 0){
-         run($dSchema.insertValue($entity))
-       }
-       run(q)
-       .headOption
-       .getOrElse(throw new NoSuchElementException(s"$$id"))
-    """
-  }
+
 
   def create[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree =
     q"""
@@ -95,33 +79,7 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
       $entity.id
     """
 
-  def createAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val id = $entity.id
-      run($dSchema.insertValue($entity))
-      val q = $filter
-      run(q)
-      .headOption
-      .getOrElse(throw new NoSuchElementException(s"$$id"))
-    """
-  }
 
-  def updateAndRead[K: c.WeakTypeTag, T: c.WeakTypeTag](entity: Tree)(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilter[K, T](entity)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val q = $filter
-      run(q.updateValue($entity))
-      run(q)
-      .headOption
-      .getOrElse{
-        val id = $entity.id
-        throw new NoSuchElementException(s"$$id")
-       }
-    """
-  }
 
   def read[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
     val filter = callFilterOnId[K](id)(dSchema)
@@ -133,15 +91,6 @@ class CrudMacro(val c: MacroContext) extends AbstractCrudMacro {
     """
   }
 
-  def readUnsafe[K: c.WeakTypeTag, T: c.WeakTypeTag](id: c.Expr[K])(dSchema: c.Expr[_]): Tree = {
-    val filter = callFilterOnId[K](id)(dSchema)
-    q"""
-      import ${c.prefix}._
-      val q = $filter
-      run(q)
-      .headOption
-      .getOrElse(throw new NoSuchElementException(s"$$id"))
-    """
-  }
+
 
 }

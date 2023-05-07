@@ -4,8 +4,8 @@ import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import monix.eval.Task
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.monix.jdbc.MonixJdbcRepository.MonixJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.monix.jdbc.MonixJdbcRepositoryWithGeneratedId
+import pl.jozwik.quillgeneric.monix.jdbc.MonixJdbcRepository.MonixJdbcContextDateQuotes
+import pl.jozwik.quillgeneric.monix.jdbc.MonixJdbcRepositoryWithGeneratedId
 
 final class PersonCustomRepositoryJdbc[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: MonixJdbcContextDateQuotes[D, N],
@@ -33,20 +33,12 @@ final class PersonCustomRepositoryJdbc[D <: SqlIdiom, N <: NamingStrategy](
       context.create[PersonId, Person](entity)
     }
 
-  override def createAndRead(entity: Person, generateId: Boolean = true): Task[Person] =
-    context.transaction {
-      if (generateId) {
-        context.createWithGenerateIdAndRead[PersonId, Person](entity)
-      } else {
-        context.createAndRead[PersonId, Person](entity)
-      }
-    }
+
 
   override def read(id: PersonId): Task[Option[Person]] =
     context.read[PersonId, Person](id)
 
-  override def readUnsafe(id: PersonId): Task[Person] =
-    context.readUnsafe[PersonId, Person](id)
+
 
   override def createOrUpdate(entity: Person, generateId: Boolean = true): Task[PersonId] =
     context.transaction {
@@ -57,22 +49,10 @@ final class PersonCustomRepositoryJdbc[D <: SqlIdiom, N <: NamingStrategy](
       }
     }
 
-  override def createOrUpdateAndRead(entity: Person, generateId: Boolean = true): Task[Person] =
-    context.transaction {
-      if (generateId) {
-        context.createWithGenerateIdOrUpdateAndRead[PersonId, Person](entity)
-      } else {
-        context.createOrUpdateAndRead[PersonId, Person](entity)
-      }
-    }
 
   override def update(entity: Person): Task[Long] =
     context.update[PersonId, Person](entity)
 
-  override def updateAndRead(entity: Person): Task[Person] =
-    context.transaction {
-      context.updateAndRead[PersonId, Person](entity)
-    }
 
   override def delete(id: PersonId): Task[Long] =
     context.delete[PersonId, Person](id)

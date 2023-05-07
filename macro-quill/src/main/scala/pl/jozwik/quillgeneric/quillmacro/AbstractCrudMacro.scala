@@ -4,7 +4,7 @@ import scala.reflect.macros.whitebox.{ Context => MacroContext }
 trait FilterCrudMacro {
   val c: MacroContext
   import c.universe._
-  import pl.jozwik.quillgeneric.quillmacro.Keys._
+  import pl.jozwik.quillgeneric.repository.Keys._
 
   def callFilterOnIdTree[K: c.WeakTypeTag](id: Tree)(dSchema: c.Expr[_]): Tree =
     callFilterOnId[K](c.Expr[K](q"$id"))(dSchema)

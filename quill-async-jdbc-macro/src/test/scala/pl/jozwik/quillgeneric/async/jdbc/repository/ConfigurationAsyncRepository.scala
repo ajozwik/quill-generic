@@ -3,9 +3,9 @@ package pl.jozwik.quillgeneric.async.jdbc.repository
 import com.github.jasync.sql.db.ConcreteConnection
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
+import pl.jozwik.quillgeneric.async.AsyncJdbcRepository
+import pl.jozwik.quillgeneric.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.quillmacro.async.AsyncJdbcRepository
-import pl.jozwik.quillgeneric.quillmacro.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -27,34 +27,16 @@ class ConfigurationAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: Conc
   override def create(entity: Configuration)(implicit ex: ExecutionContext): Future[ConfigurationId] =
     context.create[ConfigurationId, Configuration](entity)
 
-  override def createAndRead(entity: Configuration)(implicit ex: ExecutionContext): Future[Configuration] =
-    context.transaction { f =>
-      context.createAndRead[ConfigurationId, Configuration](entity)(dSchema, f)
-    }
-
   override def createOrUpdate(entity: Configuration)(implicit ex: ExecutionContext): Future[ConfigurationId] =
     context.transaction { f =>
       context.createOrUpdate[ConfigurationId, Configuration](entity)(dSchema, f)
     }
 
-  override def createOrUpdateAndRead(entity: Configuration)(implicit ex: ExecutionContext): Future[Configuration] =
-    context.transaction { f =>
-      context.createOrUpdateAndRead[ConfigurationId, Configuration](entity)(dSchema, f)
-    }
-
   override def read(id: ConfigurationId)(implicit ex: ExecutionContext): Future[Option[Configuration]] =
     context.read[ConfigurationId, Configuration](id)
 
-  override def readUnsafe(id: ConfigurationId)(implicit ex: ExecutionContext): Future[Configuration] =
-    context.readUnsafe[ConfigurationId, Configuration](id)
-
   override def update(t: Configuration)(implicit ex: ExecutionContext): Future[Long] =
     context.update[ConfigurationId, Configuration](t)
-
-  override def updateAndRead(entity: Configuration)(implicit ex: ExecutionContext): Future[Configuration] =
-    context.transaction { f =>
-      context.updateAndRead[ConfigurationId, Configuration](entity)(dSchema, f)
-    }
 
   override def delete(id: ConfigurationId)(implicit ex: ExecutionContext): Future[Long] =
     context.delete(id)

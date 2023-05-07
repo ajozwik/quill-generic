@@ -1,7 +1,6 @@
 package pl.jozwik.quillgeneric.cassandra.model
 
-import pl.jozwik.quillgeneric.quillmacro.WithId
-
+import pl.jozwik.quillgeneric.repository.WithId
 import java.time.LocalDate
 import java.util.{ Date, UUID }
 

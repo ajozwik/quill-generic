@@ -3,9 +3,9 @@ package pl.jozwik.quillgeneric.async.jdbc.repository
 import com.github.jasync.sql.db.ConcreteConnection
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
+import pl.jozwik.quillgeneric.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
+import pl.jozwik.quillgeneric.async.AsyncJdbcRepositoryWithGeneratedId
 import pl.jozwik.quillgeneric.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.quillmacro.async.AsyncJdbcRepositoryWithGeneratedId
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -33,15 +33,6 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteCon
       }
     }
 
-  override def createAndRead(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[Person] =
-    context.transaction { implicit f =>
-      if (generatedId) {
-        context.createWithGenerateIdAndRead[PersonId, Person](entity)(dSchema, f)
-      } else {
-        context.createAndRead[PersonId, Person](entity)(dSchema, f)
-      }
-    }
-
   override def createOrUpdate(entity: Person, generatedId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
     context.transaction { implicit f =>
       if (generatedId) {
@@ -51,28 +42,11 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteCon
       }
     }
 
-  override def createOrUpdateAndRead(entity: Person, generatedId: Boolean = true)(implicit ex: ExecutionContext): Future[Person] =
-    context.transaction { implicit f =>
-      if (generatedId) {
-        context.createWithGenerateIdOrUpdateAndRead[PersonId, Person](entity)(dSchema, f)
-      } else {
-        context.createOrUpdateAndRead[PersonId, Person](entity)(dSchema, f)
-      }
-    }
-
   override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Option[Person]] =
     context.read[PersonId, Person](id)
 
-  override def readUnsafe(id: PersonId)(implicit ex: ExecutionContext): Future[Person] =
-    context.readUnsafe[PersonId, Person](id)
-
   override def update(t: Person)(implicit ex: ExecutionContext): Future[Long] =
     context.update[PersonId, Person](t)
-
-  override def updateAndRead(entity: Person)(implicit ex: ExecutionContext): Future[Person] =
-    context.transaction { f =>
-      context.updateAndRead[PersonId, Person](entity)(dSchema, f)
-    }
 
   override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[Long] =
     context.delete(id)

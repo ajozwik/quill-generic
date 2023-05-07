@@ -1,8 +1,8 @@
 package pl.jozwik.quillgeneric.model
 
-import java.time.Instant
+import pl.jozwik.quillgeneric.repository.WithId
 
-import pl.jozwik.quillgeneric.quillmacro.WithId
+import java.time.Instant
 
 object AddressId {
   val empty: AddressId = AddressId(0)

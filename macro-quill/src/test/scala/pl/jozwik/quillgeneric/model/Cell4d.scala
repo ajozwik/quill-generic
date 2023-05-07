@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.model
 
-import pl.jozwik.quillgeneric.quillmacro.{ CompositeKey4, WithId }
+import pl.jozwik.quillgeneric.repository.{CompositeKey4, WithId}
 
 final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Int) extends CompositeKey4[Int, Int, Int, Int] {
   def x: Int = fk1

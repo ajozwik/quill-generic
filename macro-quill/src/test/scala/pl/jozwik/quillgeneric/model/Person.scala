@@ -1,7 +1,7 @@
 package pl.jozwik.quillgeneric.model
 
+import pl.jozwik.quillgeneric.repository.WithId
 import java.time.{ LocalDate, LocalDateTime }
-import pl.jozwik.quillgeneric.quillmacro.WithId
 
 object PersonId {
   val empty: PersonId = PersonId(0)
