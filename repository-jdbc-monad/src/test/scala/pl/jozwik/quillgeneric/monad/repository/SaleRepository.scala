@@ -36,7 +36,7 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
     inTransaction {
       val id = entity.id
       for {
-        el <- Try(run(dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2)).updateValue(entity)))
+        el <- Try(run(find(id).updateValue(entity)))
         id <- el match {
           case 0 =>
             create(entity)
@@ -48,6 +48,9 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
       }
     }
 
+  private def find(id: SaleId) =
+    dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2))
+
   override def all: Try[Seq[Sale]] =
     Try {
       run(dynamicSchema)
@@ -56,7 +59,7 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
   override def read(id: SaleId): Try[Option[Sale]] = {
     for {
       seq <- Try(run {
-        dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2))
+        find(id)
       })
     } yield {
       seq.headOption
@@ -65,12 +68,12 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
 
   override def update(entity: Sale): Try[Long] = Try {
     val id = entity.id
-    run(dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2)).updateValue(entity))
+    run(find(id).updateValue(entity))
   }
 
   override def delete(id: SaleId): Try[Long] =
     Try {
-      run(dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2)).delete)
+      run(find(id).delete)
     }
 
   override def deleteAll: Try[Long] =

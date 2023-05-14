@@ -17,6 +17,9 @@ final class AddressMonixRepository[Naming <: NamingStrategy](
     context.dynamicQuerySchema[Address](tableName, alias(_.city, "city"))
   }
 
+  private def find(id: AddressId) =
+    dynamicSchema.filter(_.id == lift(id))
+
   override def all: Task[Seq[Address]] =
     run(dynamicSchema)
 
@@ -48,10 +51,10 @@ final class AddressMonixRepository[Naming <: NamingStrategy](
     }
 
   override def update(entity: Address): Task[Unit] =
-    run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+    run(find(entity.id).updateValue(entity))
 
   override def delete(id: AddressId): Task[Unit] =
-    run(dynamicSchema.filter(_.id == lift(id)).delete)
+    run(find(id).delete)
 
   override def deleteAll: Task[Unit] =
     run(dynamicSchema.delete)

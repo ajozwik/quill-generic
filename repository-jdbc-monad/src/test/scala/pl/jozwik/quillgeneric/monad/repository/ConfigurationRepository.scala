@@ -19,6 +19,9 @@ final class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
     context.dynamicQuerySchema[Configuration](tableName, alias(_.id, "`KEY`"), alias(_.value, "`VALUE`"))
   }
 
+  private def find(id: ConfigurationId) =
+    dynamicSchema.filter(_.id == lift(id))
+
   override def all: Try[Seq[Configuration]] =
     Try {
       run(dynamicSchema)
@@ -34,7 +37,7 @@ final class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
   override def createOrUpdate(entity: Configuration): Try[ConfigurationId] =
     inTransaction {
       for {
-        el <- Try(run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity)))
+        el <- Try(run(find(entity.id).updateValue(entity)))
         id <- el match {
           case 0 =>
             create(entity)
@@ -56,13 +59,13 @@ final class ConfigurationRepository[D <: SqlIdiom, N <: NamingStrategy](
   override def update(entity: Configuration): Try[Long] =
     Try {
       context.transaction {
-        run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+        run(find(entity.id).updateValue(entity))
       }
     }
 
   override def delete(id: ConfigurationId): Try[Long] =
     Try {
-      run(dynamicSchema.filter(_.id == lift(id)).delete)
+      run(find(id).delete)
     }
 
 

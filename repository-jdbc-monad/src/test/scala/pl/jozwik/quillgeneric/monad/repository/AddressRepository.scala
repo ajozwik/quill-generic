@@ -16,6 +16,9 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
   import context.*
   protected val dynamicSchema: context.DynamicEntityQuery[Address]  = context.dynamicQuerySchema[Address](tableName)
 
+  private def find(id: AddressId) =
+    dynamicSchema.filter(_.id == lift(id))
+
   override def all: Try[Seq[Address]] =
     Try {
       run(dynamicSchema)
@@ -40,7 +43,7 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
   override def createOrUpdate(entity: Address, generateId: Boolean = true): Try[AddressId] =
     inTransaction {
       for {
-        el <- Try(run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity)))
+        el <- Try(run(find(entity.id).updateValue(entity)))
         id <- el match {
           case 0 =>
             create(entity, generateId)
@@ -54,12 +57,12 @@ final class AddressRepository[D <: SqlIdiom, N <: NamingStrategy](
 
   override def update(entity: Address): Try[Long] =
     Try {
-      run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+      run(find(entity.id).updateValue(entity))
     }
 
   override def delete(id: AddressId): Try[Long] =
     Try {
-      run(dynamicSchema.filter(_.id == lift(id)).delete)
+      run(find(id).delete)
     }
 
   override def deleteAll: Try[Long] =

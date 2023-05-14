@@ -12,26 +12,30 @@ import scala.concurrent.{ ExecutionContext, Future }
 class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection](
     protected val context: AsyncJdbcContextDateQuotes[D, N, C],
     tableName: String
-) extends AsyncJdbcRepositoryWithGeneratedId[PersonId, Person, D, N, C] {
+)(implicit protected val ec: ExecutionContext)
+  extends AsyncJdbcRepositoryWithGeneratedId[PersonId, Person, D, N, C] {
   import context.*
 
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Person] =
     context.dynamicQuerySchema[Person](tableName)
 
-  override def all(implicit ex: ExecutionContext): Future[Seq[Person]] =
+  override def all: Future[Seq[Person]] =
     run(dynamicSchema)
 
-  override def create(entity: Person, generateId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
+  private def find(id: PersonId) =
+    dynamicSchema.filter(_.id == lift(id))
+
+  override def create(entity: Person, generateId: Boolean): Future[PersonId] =
     if (generateId) {
       run(dynamicSchema.insertValue(entity).returningGenerated(_.id))
     } else {
       run(dynamicSchema.insertValue(entity).returning(_.id))
     }
 
-  override def createOrUpdate(entity: Person, generateId: Boolean)(implicit ex: ExecutionContext): Future[PersonId] =
+  override def createOrUpdate(entity: Person, generateId: Boolean): Future[PersonId] =
     context.transaction { implicit f =>
       for {
-        el <- run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+        el <- run(find(entity.id).updateValue(entity))
         id <- el match {
           case 0 =>
             create(entity, generateId)
@@ -43,20 +47,20 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteCon
       }
     }
 
-  override def read(id: PersonId)(implicit ex: ExecutionContext): Future[Option[Person]] =
+  override def read(id: PersonId): Future[Option[Person]] =
     for {
       seq <- run(dynamicSchema.filter(_.id == lift(id)))
     } yield {
       seq.headOption
     }
 
-  override def update(entity: Person)(implicit ex: ExecutionContext): Future[Long] =
-    run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+  override def update(entity: Person): Future[Long] =
+    run(find(entity.id).updateValue(entity))
 
-  override def delete(id: PersonId)(implicit ex: ExecutionContext): Future[Long] =
-    run(dynamicSchema.filter(_.id == lift(id)).delete)
+  override def delete(id: PersonId): Future[Long] =
+    run(find(id).delete)
 
-  override def deleteAll(implicit ex: ExecutionContext): Future[Long] =
+  override def deleteAll: Future[Long] =
     run(dynamicSchema.delete)
 
 }

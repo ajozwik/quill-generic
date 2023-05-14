@@ -5,9 +5,9 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jasync.JAsyncContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{AsyncRepository, AsyncRepositoryWithGeneratedId, CompositeKey, DateQuotes, WithId}
+import pl.jozwik.quillgeneric.repository.{ AsyncRepository, AsyncRepositoryWithGeneratedId, CompositeKey, DateQuotes, WithId }
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future
 
 object AsyncJdbcRepository {
   type AsyncJdbcContextDateQuotes[D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] = JAsyncContext[D, N, C] with DateQuotes
@@ -18,21 +18,21 @@ trait AsyncJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, +N <:
   with WithAsyncJdbcContext[K, T, D, N, C] {
 
   import context.toFuture
-  override final def createAndRead(entity: T, generateId: Boolean = true)(implicit ex: ExecutionContext): Future[T] =
-    context.transaction { f =>
+  override final def createAndRead(entity: T, generateId: Boolean = true): Future[T] =
+    context.transaction { implicit f =>
       for {
-        id <- create(entity, generateId)(f)
-        el <- readUnsafe(id)(f)
+        id <- create(entity, generateId)
+        el <- readUnsafe(id)
       } yield {
         el
       }
     }
 
-  override final def createOrUpdateAndRead(entity: T, generateId: Boolean = true)(implicit ex: ExecutionContext): Future[T] =
-    context.transaction { f =>
+  override final def createOrUpdateAndRead(entity: T, generateId: Boolean = true): Future[T] =
+    context.transaction { implicit f =>
       for {
-        id <- createOrUpdate(entity, generateId)(f)
-        el <- readUnsafe(id)(f)
+        id <- createOrUpdate(entity, generateId)
+        el <- readUnsafe(id)
       } yield {
         el
       }
@@ -44,21 +44,21 @@ trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy
   with WithAsyncJdbcContext[K, T, D, N, C] {
 
   import context.toFuture
-  override final def createAndRead(entity: T)(implicit ex: ExecutionContext): Future[T] =
-    context.transaction { f =>
+  override final def createAndRead(entity: T): Future[T] =
+    context.transaction { implicit f =>
       for {
-        id <- create(entity)(f)
-        el <- readUnsafe(id)(f)
+        id <- create(entity)
+        el <- readUnsafe(id)
       } yield {
         el
       }
     }
 
-  def createOrUpdateAndRead(entity: T)(implicit ex: ExecutionContext): Future[T] =
-    context.transaction { f =>
+  def createOrUpdateAndRead(entity: T): Future[T] =
+    context.transaction { implicit f =>
       for {
-        id <- createOrUpdate(entity)(f)
-        el <- readUnsafe(id)(f)
+        id <- createOrUpdate(entity)
+        el <- readUnsafe(id)
       } yield {
         el
       }

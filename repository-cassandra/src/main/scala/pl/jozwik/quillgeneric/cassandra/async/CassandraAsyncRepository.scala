@@ -1,10 +1,10 @@
 package pl.jozwik.quillgeneric.cassandra.async
 
-import io.getquill.{CassandraAsyncContext, NamingStrategy}
+import io.getquill.{ CassandraAsyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.cassandra.async.CassandraAsyncRepository.CassandraAsyncContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{AsyncRepository, CompositeKey, DateQuotes, WithId}
+import pl.jozwik.quillgeneric.repository.{ AsyncRepository, CompositeKey, DateQuotes, WithId }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 object CassandraAsyncRepository {
 
@@ -15,22 +15,21 @@ trait CassandraAsyncRepository[K, T <: WithId[K], +N <: NamingStrategy] extends 
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
-  override final def createAndRead(entity: T)(implicit ex: ExecutionContext): Future[T] =
-      for {
-        id <- create(entity)
-        el <- readUnsafe(entity.id)
-      } yield {
-        el
-      }
+  override final def createAndRead(entity: T): Future[T] =
+    for {
+      id <- create(entity)
+      el <- readUnsafe(entity.id)
+    } yield {
+      el
+    }
 
-  override final def createOrUpdateAndRead(entity: T)(implicit ex: ExecutionContext): Future[T] =
-      for {
-        id <- createOrUpdate(entity)
-        el <- readUnsafe(id)
-      } yield {
-        el
-      }
-
+  override final def createOrUpdateAndRead(entity: T): Future[T] =
+    for {
+      id <- createOrUpdate(entity)
+      el <- readUnsafe(id)
+    } yield {
+      el
+    }
 
 }
 

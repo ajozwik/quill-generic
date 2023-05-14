@@ -18,6 +18,9 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Product] =
     context.dynamicQuerySchema[Product](tableName)
 
+  private def find(id: ProductId) =
+    dynamicSchema.filter(_.id == lift(id))
+
   override def create(entity: Product, generateId: Boolean = true): Try[ProductId] =
     Try {
       if (generateId) {
@@ -30,7 +33,7 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](
   override def createOrUpdate(entity: Product, generateId: Boolean = true): Try[ProductId] =
     inTransaction {
       for {
-        el <- Try(run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue((entity))))
+        el <- Try(run(find(entity.id).updateValue((entity))))
         id <- el match {
           case 0 =>
             create(entity, generateId)
@@ -54,12 +57,12 @@ class ProductRepository[D <: SqlIdiom, N <: NamingStrategy](
     }
 
   override def update(entity: Product): Try[Long] = Try {
-    run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+    run(find(entity.id).updateValue(entity))
   }
 
   override def delete(id: ProductId): Try[Long] =
     Try {
-      run(dynamicSchema.filter(_.id == lift(id)).delete)
+      run(find(id).delete)
     }
 
   override def deleteAll: Try[Long] =

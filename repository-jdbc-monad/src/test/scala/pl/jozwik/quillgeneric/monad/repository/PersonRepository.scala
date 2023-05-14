@@ -15,6 +15,9 @@ final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](protected val c
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Person] =
     context.dynamicQuerySchema[Person](tableName)
 
+  private def find(id: PersonId) =
+    dynamicSchema.filter(_.id == lift(id))
+
   override def all: Try[Seq[Person]] = Try {
     run(dynamicSchema)
   }
@@ -31,7 +34,7 @@ final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](protected val c
   override def createOrUpdate(entity: Person, generateId: Boolean = true): Try[PersonId] =
     inTransaction {
       for {
-        el <- Try(run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity)))
+        el <- Try(run(find(entity.id).updateValue(entity)))
         id <- el match {
           case 0 =>
             create(entity, generateId)
@@ -51,12 +54,12 @@ final class PersonRepository[D <: SqlIdiom, N <: NamingStrategy](protected val c
     }
 
   override def update(entity: Person): Try[Long] = Try {
-    run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+    run(find(entity.id).updateValue(entity))
   }
 
   override def delete(id: PersonId): Try[Long] =
     Try {
-      run(dynamicSchema.filter(_.id == lift(id)).delete)
+      run(find(id).delete)
     }
 
   override def deleteAll: Try[Long] =

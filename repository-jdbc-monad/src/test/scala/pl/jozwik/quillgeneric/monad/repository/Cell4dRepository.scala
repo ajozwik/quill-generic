@@ -20,6 +20,9 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     context.dynamicQuerySchema[Cell4d](tableName, alias(_.id.fk1, "x"), alias(_.id.fk2, "y"), alias(_.id.fk3, "z"), alias(_.id.fk4, "t"))
   }
 
+  private def find(id: Cell4dId) =
+    dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2)).filter(_.id.fk3 == lift(id.fk3)).filter(_.id.fk4 == lift(id.fk4))
+
   override def all: Try[Seq[Cell4d]] = Try {
     run(dynamicSchema)
   }
@@ -34,7 +37,7 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
   override def read(id: Cell4dId): Try[Option[Cell4d]] =
     for {
       seq <- Try(
-        run(dynamicSchema.filter(_.id.fk1 == lift(id.fk1)).filter(_.id.fk2 == lift(id.fk2)).filter(_.id.fk3 == lift(id.fk3)).filter(_.id.fk4 == lift(id.fk4)))
+        run(find(id))
       )
     } yield {
       seq.headOption
@@ -42,15 +45,10 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
 
   override def createOrUpdate(entity: Cell4d): Try[Cell4dId] =
     inTransaction {
-      val id = entity.id
       for {
         el <- Try(
           run(
-            dynamicSchema
-              .filter(_.id.fk1 == lift(id.fk1))
-              .filter(_.id.fk2 == lift(id.fk2))
-              .filter(_.id.fk3 == lift(id.fk3))
-              .filter(_.id.fk4 == lift(id.fk4))
+            find(entity.id)
               .updateValue(entity)
           )
         )
@@ -67,25 +65,14 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
 
   override def update(entity: Cell4d): Try[Long] =
     Try {
-      val id = entity.id
       run(
-        dynamicSchema
-          .filter(_.id.fk1 == lift(id.fk1))
-          .filter(_.id.fk2 == lift(id.fk2))
-          .filter(_.id.fk3 == lift(id.fk3))
-          .filter(_.id.fk4 == lift(id.fk4))
-          .updateValue(entity)
+        find(entity.id).updateValue(entity)
       )
     }
 
   override def delete(id: Cell4dId): Try[Long] = Try {
     run(
-      dynamicSchema
-        .filter(_.id.fk1 == lift(id.fk1))
-        .filter(_.id.fk2 == lift(id.fk2))
-        .filter(_.id.fk3 == lift(id.fk3))
-        .filter(_.id.fk4 == lift(id.fk4))
-        .delete
+      find(id).delete
     )
   }
 
