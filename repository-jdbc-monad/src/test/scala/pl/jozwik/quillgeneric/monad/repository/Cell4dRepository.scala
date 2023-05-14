@@ -4,8 +4,8 @@ import cats.Monad
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.model.{ Cell4d, Cell4dId }
+import pl.jozwik.quillgeneric.monad.TryJdbcRepository
 import pl.jozwik.quillgeneric.monad.TryJdbcRepository.*
-import pl.jozwik.quillgeneric.monad.TryJdbcRepositoryCompositeKey
 
 import scala.util.Try
 
@@ -13,7 +13,7 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: JdbcContextDateQuotes[Dialect, Naming],
     protected val tableName: String = "Cell4d"
 )(implicit protected val monad: Monad[Try])
-  extends TryJdbcRepositoryCompositeKey[Cell4dId, Cell4d, Dialect, Naming] {
+  extends TryJdbcRepository[Cell4dId, Cell4d, Dialect, Naming] {
   import context.*
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Cell4d] = {
 

@@ -5,7 +5,7 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jasync.JAsyncContext
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{ AsyncRepository, AsyncRepositoryWithGeneratedId, CompositeKey, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.repository.{ AsyncRepository, AsyncRepositoryWithGeneratedId, DateQuotes, WithId }
 
 import scala.concurrent.Future
 
@@ -64,9 +64,6 @@ trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy
       }
     }
 }
-
-trait AsyncJdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection]
-  extends AsyncJdbcRepository[K, T, D, N, C]
 
 trait WithAsyncJdbcContext[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] {
   protected val context: AsyncJdbcContextDateQuotes[D, N, C]

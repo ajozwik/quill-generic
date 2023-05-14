@@ -3,7 +3,7 @@ package pl.jozwik.quillgeneric.cassandra.sync
 import io.getquill.{ CassandraSyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.cassandra.monad.CassandraMonadRepository
 import pl.jozwik.quillgeneric.cassandra.sync.CassandraRepository.CassandraContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{CompositeKey, DateQuotes, WithId}
+import pl.jozwik.quillgeneric.repository.{ DateQuotes, WithId }
 
 import scala.util.Try
 
@@ -18,8 +18,6 @@ trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy]
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
 }
-
-trait CassandraRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], N <: NamingStrategy] extends CassandraRepository[K, T, N]
 
 trait WithCassandraContext[+N <: NamingStrategy] {
   protected val context: CassandraContextDateQuotes[N]

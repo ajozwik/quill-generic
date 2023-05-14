@@ -24,8 +24,6 @@ trait TryJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
   extends RepositoryMonadWithTransaction[Try, K, T, TryJdbcRepository.JdbcContextDateQuotes[D, N], D, N, Long]
   with WithJdbcContext[K, T, D, N]
 
-trait TryJdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends TryJdbcRepository[K, T, D, N]
-
 trait WithJdbcContext[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends WithTransaction[Try] {
   protected val context: TryJdbcRepository.JdbcContextDateQuotes[D, N]
 

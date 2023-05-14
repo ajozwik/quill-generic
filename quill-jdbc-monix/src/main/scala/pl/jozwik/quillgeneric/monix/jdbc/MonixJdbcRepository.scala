@@ -7,7 +7,7 @@ import io.getquill.context.sql.idiom.SqlIdiom
 import monix.eval.Task
 import pl.jozwik.quillgeneric.monad.{ RepositoryMonadWithTransaction, RepositoryMonadWithTransactionWithGeneratedId }
 import pl.jozwik.quillgeneric.monix.jdbc.MonixJdbcRepository.MonixJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{BaseRepository, CompositeKey, DateQuotes, WithId}
+import pl.jozwik.quillgeneric.repository.{ BaseRepository, DateQuotes, WithId }
 
 object MonixJdbcRepository {
   type MonixJdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = MonixJdbcContext[D, N]
@@ -33,5 +33,3 @@ trait WithMonixJdbcContext[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy
     context.transaction(task)
 
 }
-
-trait MonixJdbcRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] extends MonixJdbcRepository[K, T, D, N]

@@ -2,7 +2,7 @@ package pl.jozwik.quillgeneric.cassandra.async
 
 import io.getquill.{ CassandraAsyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.cassandra.async.CassandraAsyncRepository.CassandraAsyncContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{ AsyncRepository, CompositeKey, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.repository.{ AsyncRepository, DateQuotes, WithId }
 
 import scala.concurrent.Future
 
@@ -32,8 +32,6 @@ trait CassandraAsyncRepository[K, T <: WithId[K], +N <: NamingStrategy] extends 
     }
 
 }
-
-trait CassandraAsyncRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], +N <: NamingStrategy] extends CassandraAsyncRepository[K, T, N]
 
 trait WithCassandraAsyncContext[+N <: NamingStrategy] {
   protected val context: CassandraAsyncContextDateQuotes[N]

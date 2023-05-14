@@ -1,6 +1,5 @@
 package pl.jozwik.quillgeneric.repository
 
-
 trait WithTransaction[F[_]] {
   def inTransaction[A](task: F[A]): F[A]
 }
@@ -14,8 +13,6 @@ trait RepositoryWithGeneratedId[F[_], K, T <: WithId[K], UP] extends BaseReposit
 
   def createOrUpdateAndRead(entity: T, generatedId: Boolean = true): F[T]
 }
-
-trait RepositoryCompositeKey[F[_], K <: CompositeKey[_, _], T <: WithId[K], UP] extends Repository[F, K, T, UP]
 
 trait Repository[F[_], K, T <: WithId[K], UP] extends BaseRepository[F, K, T, UP] {
   def create(entity: T): F[K]

@@ -1,6 +1,6 @@
 package pl.jozwik.quillgeneric.repository
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait AsyncRepositoryWithGeneratedId[K, T <: WithId[K], UP] extends AsyncBaseRepository[K, T, UP] {
   def create(entity: T, generatedId: Boolean = true): Future[K]
@@ -11,9 +11,6 @@ trait AsyncRepositoryWithGeneratedId[K, T <: WithId[K], UP] extends AsyncBaseRep
 
   def createOrUpdateAndRead(entity: T, generatedId: Boolean = true): Future[T]
 }
-
-trait AsyncRepositoryCompositeKey[K <: CompositeKey[_, _], T <: WithId[K], UP] extends AsyncRepository[K, T, UP]
-
 trait AsyncRepository[K, T <: WithId[K], UP] extends AsyncBaseRepository[K, T, UP] {
   def create(entity: T): Future[K]
 
@@ -31,7 +28,7 @@ trait AsyncBaseRepository[K, T <: WithId[K], UP] {
   def all: Future[Seq[T]]
 
   def read(id: K): Future[Option[T]]
-
+  @SuppressWarnings(Array("org.wartremover.warts.Throw", "org.wartremover.warts.StringPlusAny"))
   def readUnsafe(id: K): Future[T] =
     for {
       opt <- read(id)
