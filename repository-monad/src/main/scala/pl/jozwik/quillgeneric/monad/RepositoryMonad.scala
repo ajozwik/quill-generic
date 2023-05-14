@@ -16,7 +16,7 @@ trait RepositoryMonad[F[_], K, T <: WithId[K], C <: Context[D, N], +D <: Idiom, 
   with RepositoryMonadBase[F, K, T, C, D, N, UP]
 
 trait RepositoryMonadBase[F[_], K, T <: WithId[K], C <: Context[D, N], +D <: Idiom, +N <: NamingStrategy, UP] extends BaseRepository[F, K, T, UP] {
-  protected implicit val monad: Monad[F]
+  protected implicit def monad: Monad[F]
 
   protected val context: C
 

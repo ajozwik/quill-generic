@@ -2,8 +2,6 @@ val `scalaVersion_2.13` = "2.13.10"
 
 val `scalaVersion_2.12` = "2.12.17"
 
-//val `scalaVersion_3` = "3.2.0"
-
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
 val targetJdk = "8"
@@ -28,11 +26,11 @@ ThisBuild / organization := "com.github.ajozwik"
 ThisBuild / scalacOptions ++= Seq(
   "-encoding",
   "UTF-8",
-  "-deprecation",         // warning and location for usages of deprecated APIs
-  "-feature",             // warning and location for usages of features that should be imported explicitly
-  "-unchecked",           // additional warnings where generated code depends on assumptions
-  "-Xlint",               // recommended additional warnings
-  "-Ywarn-value-discard", // Warn when non-Unit expression results are unused
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-Xlint",
+  "-Ywarn-value-discard",
   "-Ywarn-dead-code",
   "-language:reflectiveCalls",
   "-Ydelambdafy:method",
@@ -74,7 +72,7 @@ def is213Version(version: String): Boolean = version.startsWith("2.13")
 
 publish / skip := true
 
-lazy val `macro-quill` = projectWithName("macro-quill", file("macro-quill")).settings(
+lazy val `repository` = projectWithName("repository", file("repository")).settings(
   libraryDependencies ++= Seq(
     `io.getquill_quill-sql`,
     `ch.qos.logback_logback-classic`           % Test,
@@ -87,19 +85,15 @@ lazy val `repository-monad` = projectWithName("repository-monad", file("reposito
   .settings(
     libraryDependencies ++= Seq(`org.typelevel_cats-core`)
   )
-  .dependsOn(`macro-quill`)
-  .dependsOn(`macro-quill` % "test->test")
+  .dependsOn(`repository`)
+  .dependsOn(`repository` % "test->test")
 
-lazy val `quill-jdbc-monix-macro` = projectWithName("quill-jdbc-monix-macro", file("quill-jdbc-monix-macro"))
-  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-monix`))
-  .dependsOn(`quill-monix-macro`)
-  .dependsOn(Seq(`macro-quill`, `quill-monix-macro`).map(_ % "test->test"): _*)
+lazy val `quill-jdbc-monix` = projectWithName("quill-jdbc-monix", file("quill-jdbc-monix"))
+  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-monix`, `io.getquill_quill-monix`))
+  .dependsOn(`repository-monad`)
+  .dependsOn(Seq(`repository`).map(_ % "test->test")*)
 
-lazy val `quill-monix-macro` = projectWithName("quill-monix-macro", file("quill-monix-macro"))
-  .settings(libraryDependencies ++= Seq(`io.getquill_quill-monix`))
-  .dependsOn(`repository-monad`, `macro-quill` % "test->test")
-
-lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-macro", file("quill-cassandra-monix-macro"))
+lazy val `quill-cassandra-monix` = projectWithName("quill-cassandra-monix", file("quill-cassandra-monix"))
   .settings(
     libraryDependencies ++= Seq(
       `io.getquill_quill-cassandra-monix`,
@@ -108,10 +102,10 @@ lazy val `quill-cassandra-monix-macro` = projectWithName("quill-cassandra-monix-
     ),
     Test / fork := true
   )
-  .dependsOn(`quill-monix-macro`, `quill-cassandra-macro`)
-  .dependsOn(Seq(`macro-quill`, `quill-monix-macro`, `quill-cassandra-macro`).map(_ % "test->test"): _*)
+  .dependsOn(`repository-monad`, `repository-cassandra`)
+  .dependsOn(Seq(`repository`, `repository-cassandra`).map(_ % "test->test")*)
 
-lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file("quill-cassandra-macro"))
+lazy val `repository-cassandra` = projectWithName("repository-cassandra", file("repository-cassandra"))
   .settings(
     libraryDependencies ++= Seq(
       `io.getquill_quill-cassandra`,
@@ -121,27 +115,27 @@ lazy val `quill-cassandra-macro` = projectWithName("quill-cassandra-macro", file
     Test / fork := true
   )
   .dependsOn(`repository-monad`)
-  .dependsOn(Seq(`macro-quill`).map(_ % "test->test"): _*)
+  .dependsOn(Seq(`repository`).map(_ % "test->test")*)
 
-lazy val `quill-jdbc-macro` = projectWithName("quill-jdbc-macro", file("quill-jdbc-macro"))
+lazy val `repository-jdbc-monad` = projectWithName("repository-jdbc-monad", file("repository-jdbc-monad"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc`))
-  .dependsOn(`repository-monad`, `macro-quill` % "test->test")
+  .dependsOn(`repository-monad`, `repository` % "test->test")
 
-lazy val `quill-async-jdbc-macro` = projectWithName("quill-async-jdbc-macro", file("quill-async-jdbc-macro"))
+lazy val `quill-async-jdbc` = projectWithName("quill-async-jdbc", file("quill-async-jdbc"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jasync`, `io.getquill_quill-jasync-mysql` % Test))
-  .dependsOn(`macro-quill`, `macro-quill` % "test->test")
+  .dependsOn(`repository`, `repository` % "test->test")
 
 lazy val baseModules =
-  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`macro-quill`)
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository`)
 
 lazy val dbModules =
-  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-jdbc-macro`, `quill-jdbc-monix-macro`, `quill-monix-macro`)
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository-jdbc-monad`, `quill-jdbc-monix`)
 
 lazy val asyncDbModules =
-  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-async-jdbc-macro`)
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-async-jdbc`)
 
 lazy val cassandraModules =
-  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-cassandra-macro`, `quill-cassandra-monix-macro`)
+  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository-cassandra`, `quill-cassandra-monix`)
 
 lazy val scala213Modules =
   baseModules ++ dbModules ++ asyncDbModules
