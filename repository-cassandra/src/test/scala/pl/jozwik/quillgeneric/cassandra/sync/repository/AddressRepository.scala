@@ -18,6 +18,9 @@ final class AddressRepository[Naming <: NamingStrategy](
     context.dynamicQuerySchema[Address](tableName, alias(_.city, "city"))
   }
 
+  private def find(id: AddressId) =
+    dynamicSchema.filter(_.id == lift(id))
+
   override def all: Try[Seq[Address]] =
     Try(run(dynamicSchema))
 
@@ -51,11 +54,11 @@ final class AddressRepository[Naming <: NamingStrategy](
     }
 
   override def update(entity: Address): Try[Unit] = Try {
-    run(dynamicSchema.filter(_.id == lift(entity.id)).updateValue(entity))
+    run(find(entity.id).updateValue(entity))
   }
 
   override def delete(id: AddressId): Try[Unit] = Try {
-    run(dynamicSchema.filter(_.id == lift(id)).delete)
+    run(find(id).delete)
   }
 
   override def deleteAll: Try[Unit] =
