@@ -123,7 +123,7 @@ lazy val `repository-jdbc-monad` = projectWithName("repository-jdbc-monad", file
 
 lazy val `quill-async-jdbc` = projectWithName("quill-async-jdbc", file("quill-async-jdbc"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jasync`, `io.getquill_quill-jasync-mysql` % Test))
-  .dependsOn(`repository`, `repository` % "test->test")
+  .dependsOn(`repository-monad`, `repository` % "test->test")
 
 lazy val baseModules =
   Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository`)
