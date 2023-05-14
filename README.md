@@ -64,8 +64,34 @@ trait RepositoryWithTransactionWithGeneratedId[F[_], K, T <: WithId[K], UP] exte
 
 ```
 
-Because macro is created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/WithId.scala)
-If you have composite key - it has to extends io.getquill.Embedded and one of traits [CompositeKey](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/CompositeKey.scala)
+Because protoquill-macro's are created in compile time - we need to know primary key. Case class for database entity has to have field id - the primary key [WithId](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/WithId.scala)
+If you have composite key you need to create case class like [Cell4dId](/repository/src/main/scala/pl/jozwik/quillgeneric/model/Cell4dId.scala):
+
+For table
+```sql
+CREATE TABLE IF NOT EXISTS CELL4D (
+    `X`  INT NOT NULL,
+    `Y`  INT NOT NULL,
+    `Z`  INT NOT NULL,
+    `T`  INT NOT NULL,
+    `OCCUPIED` BOOLEAN,
+    PRIMARY KEY (`X`, `Y`, `Z`, `T`)
+)
+```
+Compose key can look like:
+
+```scala
+final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Long) {
+  def x: Int = fk1
+
+  def y: Int = fk2
+
+  def z: Int = fk3
+
+  def t: Long = fk4
+
+}
+```
 
 General [Repository and RepositoryCompositeKey](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/Repository.scala)
 
