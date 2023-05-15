@@ -15,15 +15,13 @@ final class SaleRepository[D <: SqlIdiom, N <: NamingStrategy](
   extends AbstractSaleRepository[D, N] {
 
   import context.*
-  private val aliases = {
-
+  private val aliases =
     Seq(
       alias[Sale](_.id.fk1, "PRODUCT_ID"),
       alias[Sale](_.id.fk2, "PERSON_ID")
     )
-  }
 
-  protected lazy val dynamicSchema: context.DynamicEntityQuery[Sale] = context.dynamicQuerySchema[Sale](tableName, aliases: _*)
+  protected lazy val dynamicSchema: context.DynamicEntityQuery[Sale] = context.dynamicQuerySchema[Sale](tableName, aliases*)
 
   override def create(entity: Sale): Try[SaleId] =
     for {

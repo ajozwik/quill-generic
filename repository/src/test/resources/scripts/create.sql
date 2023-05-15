@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS CELL4D (
     `X`  INT NOT NULL,
     `Y`  INT NOT NULL,
     `Z`  INT NOT NULL,
-    `T`  INT NOT NULL,
+    `T`  BIGINT NOT NULL,
     `OCCUPIED` BOOLEAN,
     PRIMARY KEY (`X`, `Y`, `Z`, `T`)
 );

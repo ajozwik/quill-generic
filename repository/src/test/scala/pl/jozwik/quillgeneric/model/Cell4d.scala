@@ -2,14 +2,14 @@ package pl.jozwik.quillgeneric.model
 
 import pl.jozwik.quillgeneric.repository.WithId
 
-final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Int) {
+final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Long) {
   def x: Int = fk1
 
   def y: Int = fk2
 
   def z: Int = fk3
 
-  def t: Int = fk4
+  def t: Long = fk4
 
 }
 

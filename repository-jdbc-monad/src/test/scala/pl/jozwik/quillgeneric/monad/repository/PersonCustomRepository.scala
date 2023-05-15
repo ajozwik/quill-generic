@@ -14,11 +14,10 @@ final class PersonCustomRepository[D <: SqlIdiom, N <: NamingStrategy](protected
 ) extends TryJdbcRepositoryWithGeneratedId[PersonId, Person, D, N] {
   import context.*
 
-  private val aliases = {
+  private val aliases =
     Seq {
       alias[Person](_.birthDate, "dob")
     }
-  }
 
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Person] = context.dynamicQuerySchema[Person](tableName, aliases*)
 

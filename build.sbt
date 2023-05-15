@@ -17,6 +17,8 @@ val fake = init()
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
+ThisBuild / libraryDependencySchemes += "org.typelevel" %% "cats-effect" % "always"
+
 ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
 ThisBuild / Test / fork := true
@@ -34,7 +36,8 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ywarn-dead-code",
   "-language:reflectiveCalls",
   "-Ydelambdafy:method",
-  "-Xsource:3"
+  "-Xsource:3",
+  "-language:implicitConversions"
 ) ++ {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, n)) if n <= 12 =>
@@ -54,19 +57,21 @@ val `ch.qos.logback_logback-classic`                 = "ch.qos.logback"         
 val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra"      % "cassandra-driver-extras" % "3.11.3"
 val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.1.214"
 val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.5"
+val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.0.0.4"
 val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillVersion
 val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillVersion
 val `io.getquill_quill-jasync-mysql`                 = "io.getquill"                %% "quill-jasync-mysql"      % quillVersion
 val `io.getquill_quill-jasync`                       = "io.getquill"                %% "quill-jasync"            % quillVersion
 val `io.getquill_quill-jdbc-monix`                   = "io.getquill"                %% "quill-jdbc-monix"        % quillVersion
 val `io.getquill_quill-jdbc`                         = "io.getquill"                %% "quill-jdbc"              % quillVersion
-val `io.getquill_quill-monix`                        = "io.getquill"                %% "quill-monix"             % quillVersion
+val `io.getquill_quill-jdbc-zio`                     = "io.getquill"                %% "quill-jdbc-zio"          % quillVersion
 val `io.getquill_quill-sql`                          = "io.getquill"                %% "quill-sql"               % quillVersion
 val `org.cassandraunit_cassandra-unit`               = "org.cassandraunit"           % "cassandra-unit"          % "4.3.1.0"
 val `org.scalacheck_scalacheck`                      = "org.scalacheck"             %% "scalacheck"              % "1.17.0"               % Test
 val `org.scalatest_scalatest`                        = "org.scalatest"              %% "scalatest"               % scalaTestVersion       % Test
 val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-17"         % s"$scalaTestVersion.0" % Test
 val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.9.0"
+val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.5.0"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
@@ -89,9 +94,14 @@ lazy val `repository-monad` = projectWithName("repository-monad", file("reposito
   .dependsOn(`repository` % "test->test")
 
 lazy val `quill-jdbc-monix` = projectWithName("quill-jdbc-monix", file("quill-jdbc-monix"))
-  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-monix`, `io.getquill_quill-monix`))
+  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-monix`))
   .dependsOn(`repository-monad`)
   .dependsOn(Seq(`repository`).map(_ % "test->test")*)
+
+lazy val `quill-jdbc-zio` = projectWithName("quill-jdbc-zio", file("quill-jdbc-zio"))
+  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-zio`, `dev.zio_zio-interop-cats`, `org.typelevel_cats-effect`))
+  .dependsOn(`repository-monad`)
+  .dependsOn(Seq(`repository`, `repository-jdbc-monad`).map(_ % "test->test")*)
 
 lazy val `quill-cassandra-monix` = projectWithName("quill-cassandra-monix", file("quill-cassandra-monix"))
   .settings(
