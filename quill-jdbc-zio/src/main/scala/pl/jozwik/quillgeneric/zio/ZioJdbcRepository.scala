@@ -12,6 +12,7 @@ object ZioJdbcRepository {
   type ZioJdbcContextWithDateQuotes[+Dialect <: SqlIdiom, +Naming <: NamingStrategy] = ZioJdbcContext[Dialect, Naming]
     with ObjectGenericTimeDecoders
     with ObjectGenericTimeEncoders
+    with DateQuotes
 }
 trait ZioJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy]
   extends RepositoryMonadWithTransactionWithGeneratedId[Task, K, T, ZioJdbcRepository.ZioJdbcContextWithDateQuotes[D, N], D, N, Long]

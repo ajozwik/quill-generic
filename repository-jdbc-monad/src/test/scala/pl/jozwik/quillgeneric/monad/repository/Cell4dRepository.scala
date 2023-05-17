@@ -47,10 +47,7 @@ final class Cell4dRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     inTransaction {
       for {
         el <- Try(
-          run(
-            find(entity.id)
-              .updateValue(entity)
-          )
+          run(find(entity.id).updateValue(entity))
         )
         id <- el match {
           case 0 =>

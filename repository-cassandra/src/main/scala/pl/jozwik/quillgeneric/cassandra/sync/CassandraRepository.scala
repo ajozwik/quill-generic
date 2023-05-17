@@ -13,11 +13,7 @@ object CassandraRepository {
 
 trait CassandraRepository[K, T <: WithId[K], N <: NamingStrategy]
   extends CassandraMonadRepository[Try, K, T, CassandraContextDateQuotes[N], N]
-  with WithCassandraContext[N] {
-
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
-
-}
+  with WithCassandraContext[N]
 
 trait WithCassandraContext[+N <: NamingStrategy] {
   protected val context: CassandraContextDateQuotes[N]

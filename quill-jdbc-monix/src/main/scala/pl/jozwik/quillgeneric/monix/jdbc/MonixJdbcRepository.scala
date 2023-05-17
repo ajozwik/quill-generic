@@ -27,7 +27,6 @@ trait MonixJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: 
 trait WithMonixJdbcContext[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] {
   this: BaseRepository[Task, K, T, Long] =>
   protected val context: MonixJdbcContextDateQuotes[D, N]
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
 
   def inTransaction[A](task: Task[A]): Task[A] =
     context.transaction(task)

@@ -1,10 +1,11 @@
 package pl.jozwik.quillgeneric.zio
 
 import io.getquill.*
-import io.getquill.context.jdbc.{ ObjectGenericTimeDecoders, ObjectGenericTimeEncoders }
+import io.getquill.context.jdbc.{ObjectGenericTimeDecoders, ObjectGenericTimeEncoders}
 import org.scalatest.BeforeAndAfterAll
 import pl.jozwik.quillgeneric.AbstractSpec
 import pl.jozwik.quillgeneric.monad.HelperSpec
+import pl.jozwik.quillgeneric.repository.DateQuotes
 import zio.*
 
 object ZioHelperSpec {
@@ -26,7 +27,7 @@ trait AbstractZioJdbcSpec extends AbstractSpec with BeforeAndAfterAll {
       zio.Runtime.default.unsafe.run(io).getOrThrow()
     }
 
-  lazy protected val ctx = new H2ZioJdbcContext(strategy) with ObjectGenericTimeDecoders with ObjectGenericTimeEncoders
+  lazy protected val ctx = new H2ZioJdbcContext(strategy) with ObjectGenericTimeDecoders with ObjectGenericTimeEncoders with DateQuotes
 
   override def afterAll(): Unit = {
     ctx.close()
