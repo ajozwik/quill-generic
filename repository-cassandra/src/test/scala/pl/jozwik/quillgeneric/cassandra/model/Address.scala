@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.util.{ Date, UUID }
 
 object AddressId {
-  val random: AddressId = AddressId(UUID.randomUUID())
+  def random: AddressId = AddressId(UUID.randomUUID())
 }
 
 final case class AddressId(value: UUID) extends AnyVal

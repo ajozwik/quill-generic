@@ -9,19 +9,22 @@ trait AddressSuite extends AbstractMonixMonixSpec {
 
   "AddressSuite simple transformation" should {
 
-      "run async crud operations" in {
-        val id      = AddressId.random
-        val address = createAddress(id)
-        repository.create(address).runSyncUnsafe()
-        repository.create(address).runSyncUnsafe()
-        val all = repository.all.runSyncUnsafe()
-        logger.debug(s"$all")
-        repository.read(id).runSyncUnsafe() shouldBe Option(address)
-        repository.all.runSyncUnsafe() shouldBe Seq(address)
-        repository.deleteAll.runSyncUnsafe()
-        repository.all.runSyncUnsafe() shouldBe Seq.empty
-      }
+    "run async crud operations" in {
+      val id      = AddressId.random
+      val id2     = AddressId.random
+      val address = createAddress(id)
+      repository.create(address).runSyncUnsafe()
+      val a2 = address.copy(id = id2)
+      repository.createOrUpdateAndRead(a2).runSyncUnsafe() shouldBe a2
+//        repository.updateAndRead(a2).runSyncUnsafe() shouldBe a2
+      repository.createAndRead(a2).runSyncUnsafe() shouldBe a2
+      repository.read(id).runSyncUnsafe() shouldBe Option(address)
+      repository.all.runSyncUnsafe().toSet shouldBe Set(address, a2)
+      repository.deleteAll.runSyncUnsafe()
+      repository.all.runSyncUnsafe() shouldBe empty
 
     }
+
+  }
 
 }

@@ -10,7 +10,6 @@ import scala.util.Try
 
 object TryJdbcRepository {
   type JdbcContextDateQuotes[D <: SqlIdiom, N <: NamingStrategy] = JdbcContext[D, N]
-    with DateQuotes
     with ObjectGenericTimeEncoders
     with ObjectGenericTimeDecoders
     with DateQuotes
