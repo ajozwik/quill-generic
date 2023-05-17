@@ -20,6 +20,8 @@ trait RepositoryMonadBase[F[_], K, T <: WithId[K], C <: Context[D, N], +D <: Idi
 
   protected val context: C
 
+  protected def dynamicSchema: context.DynamicEntityQuery[T]
+
   @SuppressWarnings(Array("org.wartremover.warts.Throw","org.wartremover.warts.StringPlusAny"))
   override final def readUnsafe(id: K): F[T] =
     for {

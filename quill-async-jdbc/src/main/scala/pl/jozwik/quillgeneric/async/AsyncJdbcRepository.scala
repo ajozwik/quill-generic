@@ -2,10 +2,10 @@ package pl.jozwik.quillgeneric.async
 
 import com.github.jasync.sql.db.ConcreteConnection
 import io.getquill.NamingStrategy
-import io.getquill.context.jasync.JAsyncContext
+import io.getquill.context.jasync.{ JAsyncContext, TransactionalExecutionContext }
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{ AsyncRepository, AsyncRepositoryWithGeneratedId, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.repository.{ AsyncBaseRepository, AsyncRepository, AsyncRepositoryWithGeneratedId, DateQuotes, WithId }
 
 import scala.concurrent.Future
 
@@ -65,8 +65,14 @@ trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy
     }
 }
 
-trait WithAsyncJdbcContext[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] {
+trait WithAsyncJdbcContext[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] extends AsyncBaseRepository[K, T, Long] {
   protected val context: AsyncJdbcContextDateQuotes[D, N, C]
+
+  import context.toFuture
+
   protected def dynamicSchema: context.DynamicEntityQuery[T]
+
+  def inTransaction[A](f: TransactionalExecutionContext => Future[A]): Future[A] =
+    context.transaction(f)
 
 }

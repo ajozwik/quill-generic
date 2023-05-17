@@ -28,7 +28,6 @@ trait WithJdbcContext[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy] ext
   protected val context: TryJdbcRepository.JdbcContextDateQuotes[D, N]
 
   protected implicit def monad: Monad[Try]
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
 
   def inTransaction[A](task: Try[A]): Try[A] =
     context.transaction(task)

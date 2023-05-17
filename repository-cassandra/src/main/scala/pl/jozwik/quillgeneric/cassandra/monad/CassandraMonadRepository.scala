@@ -10,7 +10,6 @@ import pl.jozwik.quillgeneric.repository.WithId
 trait CassandraMonadRepository[F[_], K, T <: WithId[K], C <: CassandraCqlSessionContext[N], N <: NamingStrategy]
   extends RepositoryMonad[F, K, T, C, CqlIdiom, N, Unit]
   with WithCassandraMonadContext[F, N, C] {
-  protected def dynamicSchema: context.DynamicEntityQuery[T]
 
   override final def updateAndRead(entity: T): F[T] =
     for {
