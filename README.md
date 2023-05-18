@@ -93,7 +93,7 @@ final case class Cell4dId(fk1: Int, fk2: Int, fk3: Int, fk4: Long) {
 }
 ```
 
-General [Repository and RepositoryCompositeKey](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/Repository.scala)
+General [Repository](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/Repository.scala) is designed for manual handling of primary key. If database generate for you key - use [RepositoryWithGeneratedId](/repository/src/main/scala/pl/jozwik/quillgeneric/repository/Repository.scala)
 
 Current we support Try:
 
