@@ -1,15 +1,17 @@
 package pl.jozwik.quillgeneric.doobie.repository
 
+import cats.Monad
 import doobie.ConnectionIO
 import io.getquill.*
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.doobie.{ DoobieJdbcContextWithDateQuotes, DoobieRepository }
+import pl.jozwik.quillgeneric.doobie.DoobieRepository
+import pl.jozwik.quillgeneric.doobie.DoobieRepository.DoobieJdbcContextWithDateQuotes
 import pl.jozwik.quillgeneric.model.{ Cell4d, Cell4dId }
 
 final class Cell4DRepository[D <: SqlIdiom, N <: NamingStrategy](
     protected val context: DoobieJdbcContextWithDateQuotes[D, N],
     tableName: String = "Cell4d"
-)(implicit protected val monad: cats.Monad[ConnectionIO])
+)(implicit protected val monad: Monad[ConnectionIO])
   extends DoobieRepository[Cell4dId, Cell4d, D, N] {
 
   import context.*

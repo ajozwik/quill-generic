@@ -1,15 +1,18 @@
 package pl.jozwik.quillgeneric.doobie.repository
 
+import cats.Monad
 import doobie.ConnectionIO
 import io.getquill.*
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.doobie.{ DoobieJdbcContextWithDateQuotes, DoobieRepository }
+import pl.jozwik.quillgeneric.doobie.DoobieRepository
+import pl.jozwik.quillgeneric.doobie.DoobieRepository.DoobieJdbcContextWithDateQuotes
 import pl.jozwik.quillgeneric.model.{ Configuration, ConfigurationId }
 
 final class ConfigurationRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy](
     protected val context: DoobieJdbcContextWithDateQuotes[Dialect, Naming],
     tableName: String = "Configuration"
-)(implicit protected val monad: cats.Monad[ConnectionIO])  extends DoobieRepository[ConfigurationId, Configuration, Dialect, Naming] {
+)(implicit protected val monad: Monad[ConnectionIO])
+  extends DoobieRepository[ConfigurationId, Configuration, Dialect, Naming] {
 
   import context.*
 

@@ -3,7 +3,8 @@ package pl.jozwik.quillgeneric.doobie.repository
 import doobie.ConnectionIO
 import io.getquill.*
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.doobie.{ DoobieJdbcContextWithDateQuotes, DoobieRepository }
+import pl.jozwik.quillgeneric.doobie.DoobieRepository
+import pl.jozwik.quillgeneric.doobie.DoobieRepository.DoobieJdbcContextWithDateQuotes
 import pl.jozwik.quillgeneric.model.{ Sale, SaleId }
 
 final class SaleRepositoryGen[Dialect <: SqlIdiom, Naming <: NamingStrategy](

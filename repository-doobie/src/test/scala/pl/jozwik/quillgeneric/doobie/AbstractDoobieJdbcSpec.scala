@@ -10,6 +10,7 @@ import io.getquill.context.jdbc.{ ObjectGenericTimeDecoders, ObjectGenericTimeEn
 import io.getquill.doobie.DoobieContext
 import org.scalatest.{ BeforeAndAfterAll, EitherValues }
 import pl.jozwik.quillgeneric.AbstractSpec
+import pl.jozwik.quillgeneric.repository.DateQuotes
 
 import scala.concurrent.ExecutionContext
 
@@ -35,7 +36,7 @@ trait AbstractDoobieJdbcSpec extends AbstractSpec with BeforeAndAfterAll with Ei
       ExecutionContext.global
     )
 
-  lazy protected val ctx = new DoobieContext.H2(strategy) with ObjectGenericTimeDecoders with ObjectGenericTimeEncoders
+  lazy protected val ctx = new DoobieContext.H2(strategy) with ObjectGenericTimeDecoders with ObjectGenericTimeEncoders with DateQuotes
 
   override def afterAll(): Unit = {
     ctx.close()
