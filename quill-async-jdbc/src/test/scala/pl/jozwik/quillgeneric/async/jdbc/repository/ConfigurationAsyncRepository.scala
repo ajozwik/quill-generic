@@ -1,5 +1,6 @@
 package pl.jozwik.quillgeneric.async.jdbc.repository
 
+import cats.Monad
 import com.github.jasync.sql.db.ConcreteConnection
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
@@ -12,7 +13,8 @@ import scala.concurrent.{ ExecutionContext, Future }
 class ConfigurationAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection](
     protected val context: AsyncJdbcContextDateQuotes[D, N, C],
     tableName: String
-)(implicit protected val ec: ExecutionContext) extends AsyncJdbcRepository[ConfigurationId, Configuration, D, N, C] {
+)(implicit protected val ec: ExecutionContext, protected val monad: Monad[Future])
+  extends AsyncJdbcRepository[ConfigurationId, Configuration, D, N, C] {
   import context.*
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Configuration] =
     context.dynamicQuerySchema[Configuration](tableName)

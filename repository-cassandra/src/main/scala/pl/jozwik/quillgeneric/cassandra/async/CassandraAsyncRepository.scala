@@ -2,7 +2,8 @@ package pl.jozwik.quillgeneric.cassandra.async
 
 import io.getquill.{ CassandraAsyncContext, NamingStrategy }
 import pl.jozwik.quillgeneric.cassandra.async.CassandraAsyncRepository.CassandraAsyncContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{ AsyncRepository, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.cassandra.monad.CassandraMonadRepository
+import pl.jozwik.quillgeneric.repository.{ DateQuotes, WithId }
 
 import scala.concurrent.Future
 
@@ -11,28 +12,8 @@ object CassandraAsyncRepository {
   type CassandraAsyncContextDateQuotes[+N <: NamingStrategy] = CassandraAsyncContext[N] with DateQuotes
 }
 
-trait CassandraAsyncRepository[K, T <: WithId[K], +N <: NamingStrategy] extends AsyncRepository[K, T, Unit] with WithCassandraAsyncContext[N] {
+trait CassandraAsyncRepository[K, T <: WithId[K], N <: NamingStrategy] extends CassandraMonadRepository[Future, K, T, CassandraAsyncContextDateQuotes[N], N] {
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
-  override final def createAndRead(entity: T): Future[T] =
-    for {
-      id <- create(entity)
-      el <- readUnsafe(entity.id)
-    } yield {
-      el
-    }
-
-  override final def createOrUpdateAndRead(entity: T): Future[T] =
-    for {
-      id <- createOrUpdate(entity)
-      el <- readUnsafe(id)
-    } yield {
-      el
-    }
-
-}
-
-trait WithCassandraAsyncContext[+N <: NamingStrategy] {
-  protected val context: CassandraAsyncContextDateQuotes[N]
 }

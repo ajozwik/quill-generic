@@ -1,5 +1,6 @@
 package pl.jozwik.quillgeneric.cassandra.async.repository
 
+import cats.Monad
 import io.getquill.NamingStrategy
 import pl.jozwik.quillgeneric.cassandra.model.{Address, AddressId}
 import pl.jozwik.quillgeneric.cassandra.async.CassandraAsyncRepository
@@ -10,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 final class AddressRepositoryGen[Naming <: NamingStrategy](
     protected val context: CassandraAsyncContextDateQuotes[Naming],
     protected val tableName: String = "Address"
-)(implicit protected val ec: ExecutionContext) extends CassandraAsyncRepository[AddressId, Address, Naming] {
+)(implicit protected val ec: ExecutionContext, protected val monad:Monad[Future]) extends CassandraAsyncRepository[AddressId, Address, Naming] {
   import context.*
   protected lazy val dynamicSchema: context.DynamicEntityQuery[Address] = {
     context.dynamicQuerySchema[Address](tableName)
@@ -49,8 +50,6 @@ final class AddressRepositoryGen[Naming <: NamingStrategy](
       seq.headOption
     }
 
-  override def update(entity: Address): Future[Unit] =
-    run(find(entity.id).updateValue(entity))
 
   override def delete(id: AddressId): Future[Unit] =
     run(find(id).delete)

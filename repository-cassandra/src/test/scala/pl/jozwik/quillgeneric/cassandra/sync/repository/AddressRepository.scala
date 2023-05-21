@@ -53,10 +53,6 @@ final class AddressRepository[Naming <: NamingStrategy](
       id
     }
 
-  override def update(entity: Address): Try[Unit] = Try {
-    run(find(entity.id).updateValue(entity))
-  }
-
   override def delete(id: AddressId): Try[Unit] = Try {
     run(find(id).delete)
   }

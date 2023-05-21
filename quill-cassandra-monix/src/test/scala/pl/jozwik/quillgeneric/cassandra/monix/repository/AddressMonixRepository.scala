@@ -50,9 +50,6 @@ final class AddressMonixRepository[Naming <: NamingStrategy](
       id
     }
 
-  override def update(entity: Address): Task[Unit] =
-    run(find(entity.id).updateValue(entity))
-
   override def delete(id: AddressId): Task[Unit] =
     run(find(id).delete)
 

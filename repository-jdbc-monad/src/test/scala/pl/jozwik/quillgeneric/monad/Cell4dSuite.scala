@@ -13,6 +13,7 @@ trait Cell4dSuite extends AbstractJdbcSpec {
       repository.createOrUpdateAndRead(entity) shouldBe Symbol("success")
       repository.delete(entity.id) shouldBe Symbol("success")
       repository.deleteAll shouldBe Symbol("success")
+      repository.readUnsafe(entity.id) shouldBe Symbol("failure")
     }
   }
 }

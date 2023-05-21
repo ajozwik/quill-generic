@@ -5,11 +5,11 @@ import cats.implicits.*
 import io.getquill.{ CassandraCqlSessionContext, NamingStrategy }
 import io.getquill.context.cassandra.CqlIdiom
 import pl.jozwik.quillgeneric.monad.RepositoryMonad
-import pl.jozwik.quillgeneric.repository.WithId
+import pl.jozwik.quillgeneric.repository.{ Repository, WithId }
 
 trait CassandraMonadRepository[F[_], K, T <: WithId[K], C <: CassandraCqlSessionContext[N], N <: NamingStrategy]
   extends RepositoryMonad[F, K, T, C, CqlIdiom, N, Unit]
-  with WithCassandraMonadContext[F, N, C] {
+  with WithCassandraMonadContext[F, K, T, N, C] {
 
   override final def updateAndRead(entity: T): F[T] =
     for {
@@ -37,7 +37,12 @@ trait CassandraMonadRepository[F[_], K, T <: WithId[K], C <: CassandraCqlSession
 
 }
 
-trait WithCassandraMonadContext[F[_], +N <: NamingStrategy, C <: CassandraCqlSessionContext[N]] {
+trait WithCassandraMonadContext[F[_], K, T <: WithId[K], +N <: NamingStrategy, C <: CassandraCqlSessionContext[N]] extends Repository[F, K, T, Unit] {
   protected val context: C
   protected implicit def monad: Monad[F]
+
+  override final def update(t: T): F[Unit] =
+    for {
+      _ <- create(t)
+    } yield {}
 }

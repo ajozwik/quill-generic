@@ -5,16 +5,17 @@ import io.getquill.NamingStrategy
 import io.getquill.context.jasync.{ JAsyncContext, TransactionalExecutionContext }
 import io.getquill.context.sql.idiom.SqlIdiom
 import pl.jozwik.quillgeneric.async.AsyncJdbcRepository.AsyncJdbcContextDateQuotes
-import pl.jozwik.quillgeneric.repository.{ AsyncBaseRepository, AsyncRepository, AsyncRepositoryWithGeneratedId, DateQuotes, WithId }
+import pl.jozwik.quillgeneric.monad.{ RepositoryMonad, RepositoryMonadWithGeneratedId }
+import pl.jozwik.quillgeneric.repository.{ BaseRepository, DateQuotes, WithId }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 object AsyncJdbcRepository {
   type AsyncJdbcContextDateQuotes[D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] = JAsyncContext[D, N, C] with DateQuotes
 }
 
-trait AsyncJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection]
-  extends AsyncRepositoryWithGeneratedId[K, T, Long]
+trait AsyncJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection]
+  extends RepositoryMonadWithGeneratedId[Future, K, T, AsyncJdbcContextDateQuotes[D, N, C], D, N, Long]
   with WithAsyncJdbcContext[K, T, D, N, C] {
 
   import context.toFuture
@@ -39,8 +40,8 @@ trait AsyncJdbcRepositoryWithGeneratedId[K, T <: WithId[K], D <: SqlIdiom, +N <:
     }
 }
 
-trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection]
-  extends AsyncRepository[K, T, Long]
+trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection]
+  extends RepositoryMonad[Future, K, T, AsyncJdbcContextDateQuotes[D, N, C], D, N, Long]
   with WithAsyncJdbcContext[K, T, D, N, C] {
 
   import context.toFuture
@@ -65,14 +66,26 @@ trait AsyncJdbcRepository[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy
     }
 }
 
-trait WithAsyncJdbcContext[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] extends AsyncBaseRepository[K, T, Long] {
+trait WithAsyncJdbcContext[K, T <: WithId[K], D <: SqlIdiom, +N <: NamingStrategy, C <: ConcreteConnection] extends BaseRepository[Future, K, T, Long] {
   protected val context: AsyncJdbcContextDateQuotes[D, N, C]
 
   import context.toFuture
+
+  implicit protected def ec: ExecutionContext
 
   protected def dynamicSchema: context.DynamicEntityQuery[T]
 
   def inTransaction[A](f: TransactionalExecutionContext => Future[A]): Future[A] =
     context.transaction(f)
+
+  override final def updateAndRead(entity: T): Future[T] =
+    context.transaction { implicit f =>
+      for {
+        _  <- update(entity)
+        el <- readUnsafe(entity.id)
+      } yield {
+        el
+      }
+    }
 
 }

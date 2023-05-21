@@ -1,5 +1,6 @@
 package pl.jozwik.quillgeneric.async.jdbc.repository
 
+import cats.Monad
 import com.github.jasync.sql.db.ConcreteConnection
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
@@ -12,7 +13,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteConnection](
     protected val context: AsyncJdbcContextDateQuotes[D, N, C],
     tableName: String
-)(implicit protected val ec: ExecutionContext)
+)(implicit protected val ec: ExecutionContext, protected val monad: Monad[Future])
   extends AsyncJdbcRepositoryWithGeneratedId[PersonId, Person, D, N, C] {
   import context.*
 
@@ -33,7 +34,7 @@ class PersonAsyncRepository[D <: SqlIdiom, N <: NamingStrategy, C <: ConcreteCon
     }
 
   override def createOrUpdate(entity: Person, generateId: Boolean): Future[PersonId] =
-    context.transaction { implicit f =>
+    inTransaction { implicit f =>
       for {
         el <- run(find(entity.id).updateValue(entity))
         id <- el match {
