@@ -60,16 +60,18 @@ val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-loggi
 val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.0.0.4"
 val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillVersion
 val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillVersion
+val `io.getquill_quill-doobie`                       = "io.getquill"                %% "quill-doobie"            % quillVersion
 val `io.getquill_quill-jasync-mysql`                 = "io.getquill"                %% "quill-jasync-mysql"      % quillVersion
 val `io.getquill_quill-jasync`                       = "io.getquill"                %% "quill-jasync"            % quillVersion
 val `io.getquill_quill-jdbc-monix`                   = "io.getquill"                %% "quill-jdbc-monix"        % quillVersion
-val `io.getquill_quill-jdbc`                         = "io.getquill"                %% "quill-jdbc"              % quillVersion
 val `io.getquill_quill-jdbc-zio`                     = "io.getquill"                %% "quill-jdbc-zio"          % quillVersion
+val `io.getquill_quill-jdbc`                         = "io.getquill"                %% "quill-jdbc"              % quillVersion
 val `io.getquill_quill-sql`                          = "io.getquill"                %% "quill-sql"               % quillVersion
 val `org.cassandraunit_cassandra-unit`               = "org.cassandraunit"           % "cassandra-unit"          % "4.3.1.0"
 val `org.scalacheck_scalacheck`                      = "org.scalacheck"             %% "scalacheck"              % "1.17.0"               % Test
 val `org.scalatest_scalatest`                        = "org.scalatest"              %% "scalatest"               % scalaTestVersion       % Test
 val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-17"         % s"$scalaTestVersion.0" % Test
+val `org.tpolecat_doobie-h2`                         = "org.tpolecat"               %% "doobie-h2"               % "1.0.0-RC2"
 val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.9.0"
 val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.5.0"
 
@@ -91,6 +93,11 @@ lazy val `repository-monad` = projectWithName("repository-monad", file("reposito
     libraryDependencies ++= Seq(`org.typelevel_cats-core`)
   )
   .dependsOn(`repository`)
+  .dependsOn(`repository` % "test->test")
+
+lazy val `repository-doobie` = projectWithName("repository-doobie", file("repository-doobie"))
+  .settings(libraryDependencies ++= Seq(`io.getquill_quill-doobie`, `org.tpolecat_doobie-h2` % Test))
+  .dependsOn(`repository-jdbc-monad`)
   .dependsOn(`repository` % "test->test")
 
 lazy val `quill-jdbc-monix` = projectWithName("quill-jdbc-monix", file("quill-jdbc-monix"))
