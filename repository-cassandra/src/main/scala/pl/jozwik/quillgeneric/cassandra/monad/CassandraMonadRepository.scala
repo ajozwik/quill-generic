@@ -43,6 +43,7 @@ trait WithCassandraMonadContext[F[_], K, T <: WithId[K], +N <: NamingStrategy, C
 
   override final def update(t: T): F[Unit] =
     for {
+      _ <- readUnsafe(t.id)
       _ <- create(t)
     } yield {}
 }

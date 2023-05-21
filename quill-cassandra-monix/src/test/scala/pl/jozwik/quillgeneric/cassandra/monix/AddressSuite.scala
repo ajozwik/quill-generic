@@ -19,8 +19,14 @@ trait AddressSuite extends AbstractMonixMonixSpec {
 //        repository.updateAndRead(a2).runSyncUnsafe() shouldBe a2
       repository.createAndRead(a2).runSyncUnsafe() shouldBe a2
       repository.read(id).runSyncUnsafe() shouldBe Option(address)
+      intercept[RuntimeException] {
+        repository.updateAndRead(a2.copy(id = AddressId.random)).runSyncUnsafe()
+      }
+      repository.updateAndRead(a2).runSyncUnsafe() shouldBe a2
+      repository.update(a2).runSyncUnsafe()
       repository.all.runSyncUnsafe().toSet shouldBe Set(address, a2)
       repository.deleteAll.runSyncUnsafe()
+
       repository.all.runSyncUnsafe() shouldBe empty
 
     }
