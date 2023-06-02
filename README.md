@@ -6,6 +6,7 @@ Library of generic CRUD operation for quill library. Only dynamic queries are su
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.ajozwik/repository_2.13.svg?label=latest%20release%20for%202.13)](http://search.maven.org/#search|ga|1|g%3A%22com.github.ajozwik%22%20AND%20a%3A%22repository_2.13%22)
 [![Coverage Status](https://coveralls.io/repos/github/ajozwik/quill-generic/badge.svg?branch=master)](https://coveralls.io/github/ajozwik/quill-generic?branch=master)
 [![Scala CI](https://github.com/ajozwik/quill-generic/actions/workflows/scala.yml/badge.svg)](https://github.com/ajozwik/quill-generic/actions/workflows/scala.yml)
+[![codecov](https://codecov.io/gh/ajozwik/quill-generic/branch/master/graph/badge.svg?token=Fwyqkbx7Qf)](https://codecov.io/gh/ajozwik/quill-generic)
 
 Always when you start new project you must to write a lot of boilerplate code for handling simple CRUD operations. Purpose of this library is to support creating CRUD repository with [Quill](https://github.com/getquill/quill) library.
 
