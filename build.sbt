@@ -1,4 +1,4 @@
-val `scalaVersion_2.13` = "2.13.11"
+val `scalaVersion_2.13` = "2.13.10"
 
 val `scalaVersion_2.12` = "2.12.17"
 
