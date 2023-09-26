@@ -49,7 +49,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.6.1")
+val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.7.0")
 
 val scalaTestVersion = "3.2.16"
 
@@ -71,7 +71,7 @@ val `org.cassandraunit_cassandra-unit`               = "org.cassandraunit"      
 val `org.scalacheck_scalacheck`                      = "org.scalacheck"             %% "scalacheck"              % "1.17.0"               % Test
 val `org.scalatest_scalatest`                        = "org.scalatest"              %% "scalatest"               % scalaTestVersion       % Test
 val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-17"         % s"$scalaTestVersion.0" % Test
-val `org.tpolecat_doobie-h2`                         = "org.tpolecat"               %% "doobie-h2"               % "1.0.0-RC2"
+val `org.tpolecat_doobie-h2`                         = "org.tpolecat"               %% "doobie-h2"               % "1.0.0-RC4"
 val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.9.0"
 val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.5.0"
 
