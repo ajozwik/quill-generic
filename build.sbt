@@ -49,7 +49,8 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion = scala.util.Properties.propOrElse("quill.version", "4.7.0")
+val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.7.0")
+val quillCassandraVersion = "4.6.1"
 
 val scalaTestVersion = "3.2.16"
 
@@ -58,8 +59,8 @@ val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" 
 val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.1.214"
 val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.5"
 val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.0.0.6"
-val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillVersion
-val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillVersion
+val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillCassandraVersion
+val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillCassandraVersion
 val `io.getquill_quill-doobie`                       = "io.getquill"                %% "quill-doobie"            % quillVersion
 val `io.getquill_quill-jasync-mysql`                 = "io.getquill"                %% "quill-jasync-mysql"      % quillVersion
 val `io.getquill_quill-jasync`                       = "io.getquill"                %% "quill-jasync"            % quillVersion
