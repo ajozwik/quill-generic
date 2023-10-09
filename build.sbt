@@ -49,7 +49,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.7.1")
+val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.7.3")
 val quillCassandraVersion = quillVersion
 
 val scalaTestVersion = "3.2.16"
