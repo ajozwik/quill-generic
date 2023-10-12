@@ -13,7 +13,7 @@ def init(): Unit = {
   sys.props.put("quill.binds.log", true.toString)
 }
 
-val fake = init()
+val fake: Unit = init()
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
@@ -55,7 +55,7 @@ val quillCassandraVersion = quillVersion
 val scalaTestVersion = "3.2.17"
 
 val `ch.qos.logback_logback-classic`                 = "ch.qos.logback"              % "logback-classic"         % "1.2.12"
-val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra"      % "cassandra-driver-extras" % "3.11.3"
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra"      % "cassandra-driver-extras" % "3.11.5"
 val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.2.224"
 val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.5"
 val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.0.0.6"
