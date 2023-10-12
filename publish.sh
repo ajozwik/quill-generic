@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PATH=$HOME/bin:$PATH sbt8 -Dquill.macro.log=false clean +publishLocalSigned +publishSigned +sonatypeRelease
+PATH=$HOME/bin:$PATH sbt -Dquill.macro.log=false clean +publishLocalSigned +publishSigned +sonatypeRelease

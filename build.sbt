@@ -4,7 +4,7 @@ val `scalaVersion_2.12` = "2.12.17"
 
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
-val targetJdk = "8"
+val targetJdk = "11"
 
 ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false", "-language:higherKinds")
 
@@ -49,7 +49,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.7.3")
+val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.8.0")
 val quillCassandraVersion = quillVersion
 
 val scalaTestVersion = "3.2.17"
