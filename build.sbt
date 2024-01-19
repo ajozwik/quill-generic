@@ -1,6 +1,6 @@
 val `scalaVersion_2.13` = "2.13.12"
 
-val `scalaVersion_2.12` = "2.12.17"
+val `scalaVersion_2.12` = "2.12.18"
 
 ThisBuild / scalaVersion := `scalaVersion_2.13`
 
@@ -37,15 +37,9 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ydelambdafy:method",
   "-Xsource:3",
-  "-language:implicitConversions"
-) ++ {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n <= 12 =>
-      Seq(s"-target:jvm-$targetJdk")
-    case _ =>
-      Seq(s"-release:$targetJdk")
-  }
-}
+  "-language:implicitConversions",
+  s"-release:$targetJdk"
+)
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
