@@ -1,8 +1,8 @@
 logLevel := Level.Warn
 
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "3.1.4")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "3.1.6")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.0")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
 
 addSbtPlugin("com.github.sbt" % "sbt-license-report" % "1.5.0")
 

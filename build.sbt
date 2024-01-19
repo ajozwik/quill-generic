@@ -1,4 +1,4 @@
-val `scalaVersion_2.13` = "2.13.11"
+val `scalaVersion_2.13` = "2.13.12"
 
 val `scalaVersion_2.12` = "2.12.17"
 
@@ -49,21 +49,19 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.8.0")
+val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.8.1")
 val quillCassandraVersion = quillVersion
 
 val scalaTestVersion = "3.2.17"
 
-val `ch.qos.logback_logback-classic`                 = "ch.qos.logback"              % "logback-classic"         % "1.2.12"
+val `ch.qos.logback_logback-classic`                 = "ch.qos.logback"              % "logback-classic"         % "1.3.14"
 val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra"      % "cassandra-driver-extras" % "3.11.5"
 val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.2.224"
 val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.5"
-val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.0.0.6"
+val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.1.0.0"
 val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillCassandraVersion
 val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillCassandraVersion
 val `io.getquill_quill-doobie`                       = "io.getquill"                %% "quill-doobie"            % quillVersion
-val `io.getquill_quill-jasync-mysql`                 = "io.getquill"                %% "quill-jasync-mysql"      % quillVersion
-val `io.getquill_quill-jasync`                       = "io.getquill"                %% "quill-jasync"            % quillVersion
 val `io.getquill_quill-jdbc-monix`                   = "io.getquill"                %% "quill-jdbc-monix"        % quillVersion
 val `io.getquill_quill-jdbc-zio`                     = "io.getquill"                %% "quill-jdbc-zio"          % quillVersion
 val `io.getquill_quill-jdbc`                         = "io.getquill"                %% "quill-jdbc"              % quillVersion
@@ -73,7 +71,7 @@ val `org.scalacheck_scalacheck`                      = "org.scalacheck"         
 val `org.scalatest_scalatest`                        = "org.scalatest"              %% "scalatest"               % scalaTestVersion       % Test
 val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-17"         % s"$scalaTestVersion.0" % Test
 val `org.tpolecat_doobie-h2`                         = "org.tpolecat"               %% "doobie-h2"               % "1.0.0-RC4"
-val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.9.0"
+val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.10.0"
 val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.5.0"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
@@ -139,24 +137,17 @@ lazy val `repository-jdbc-monad` = projectWithName("repository-jdbc-monad", file
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc`))
   .dependsOn(`repository-monad`, `repository` % "test->test")
 
-lazy val `quill-async-jdbc` = projectWithName("quill-async-jdbc", file("quill-async-jdbc"))
-  .settings(libraryDependencies ++= Seq(`io.getquill_quill-jasync`, `io.getquill_quill-jasync-mysql` % Test))
-  .dependsOn(`repository-monad`, `repository` % "test->test")
-
 lazy val baseModules =
   Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository`)
 
 lazy val dbModules =
   Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository-jdbc-monad`, `quill-jdbc-monix`)
 
-lazy val asyncDbModules =
-  Seq[sbt.ClasspathDep[sbt.ProjectReference]](`quill-async-jdbc`)
-
 lazy val cassandraModules =
   Seq[sbt.ClasspathDep[sbt.ProjectReference]](`repository-cassandra`, `quill-cassandra-monix`)
 
 lazy val scala213Modules =
-  baseModules ++ dbModules ++ asyncDbModules
+  baseModules ++ dbModules
 
 lazy val allModules =
   scala213Modules ++ cassandraModules
