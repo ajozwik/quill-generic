@@ -15,7 +15,7 @@ def init(): Unit = {
 
 val fake: Unit = init()
 
-resolvers ++= Resolver.sonatypeOssRepos("releases")
+resolvers += Resolver.sonatypeCentralSnapshots
 
 ThisBuild / libraryDependencySchemes += "org.typelevel" %% "cats-effect" % "always"
 
