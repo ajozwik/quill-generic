@@ -147,14 +147,15 @@ lazy val allModules =
   scala213Modules ++ cassandraModules
 
 def projectWithName(name: String, file: File): Project =
-  Project(name, file).settings(
-    libraryDependencies ++= Seq(
-      `org.scalatest_scalatest`,
-      `org.scalacheck_scalacheck`,
-      `org.scalatestplus_scalacheck`
-    ),
-    licenseReportTitle      := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
-    licenseSelection        := Seq(LicenseCategory.MIT),
-    Compile / doc / sources := Seq.empty,
-    Compile / compile / wartremoverWarnings ++= Warts.allBut(Wart.ImplicitParameter, Wart.DefaultArguments)
-  )
+  Project(name, file)
+    .settings(
+      libraryDependencies ++= Seq(
+        `org.scalatest_scalatest`,
+        `org.scalacheck_scalacheck`,
+        `org.scalatestplus_scalacheck`
+      ),
+      licenseReportTitle      := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
+      licenseSelection        := Seq(LicenseCategory.MIT),
+      Compile / doc / sources := Seq.empty,
+      Compile / compile / wartremoverWarnings ++= Warts.allBut(Wart.ImplicitParameter, Wart.DefaultArguments)
+    )
