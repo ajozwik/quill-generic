@@ -50,7 +50,7 @@ val scalaTestVersion = "3.2.19"
 
 val `ch.qos.logback_logback-classic`                 = "ch.qos.logback"              % "logback-classic"         % "1.3.14"
 val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra"      % "cassandra-driver-extras" % "3.11.5"
-val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.2.224"
+val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.3.232"
 val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.5"
 val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.1.0.5"
 val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillCassandraVersion
@@ -66,7 +66,7 @@ val `org.scalatest_scalatest`                        = "org.scalatest"          
 val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-18"         % s"$scalaTestVersion.0" % Test
 val `org.tpolecat_doobie-h2`                         = "org.tpolecat"               %% "doobie-h2"               % "1.0.0-RC5"
 val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.13.0"
-val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.6.0"
+val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.6.1"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 
@@ -96,12 +96,12 @@ lazy val `repository-doobie` = projectWithName("repository-doobie", file("reposi
 lazy val `quill-jdbc-monix` = projectWithName("quill-jdbc-monix", file("quill-jdbc-monix"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-monix`))
   .dependsOn(`repository-monad`)
-  .dependsOn(Seq(`repository`).map(_ % "test->test")*)
+  .dependsOn(Seq(`repository`).map(_ % "test->test") *)
 
 lazy val `quill-jdbc-zio` = projectWithName("quill-jdbc-zio", file("quill-jdbc-zio"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc-zio`, `dev.zio_zio-interop-cats`, `org.typelevel_cats-effect`))
   .dependsOn(`repository-monad`)
-  .dependsOn(Seq(`repository`, `repository-jdbc-monad`).map(_ % "test->test")*)
+  .dependsOn(Seq(`repository`, `repository-jdbc-monad`).map(_ % "test->test") *)
 
 lazy val `quill-cassandra-monix` = projectWithName("quill-cassandra-monix", file("quill-cassandra-monix"))
   .settings(
@@ -113,7 +113,7 @@ lazy val `quill-cassandra-monix` = projectWithName("quill-cassandra-monix", file
     Test / fork := true
   )
   .dependsOn(`repository-monad`, `repository-cassandra`)
-  .dependsOn(Seq(`repository`, `repository-cassandra`).map(_ % "test->test")*)
+  .dependsOn(Seq(`repository`, `repository-cassandra`).map(_ % "test->test") *)
 
 lazy val `repository-cassandra` = projectWithName("repository-cassandra", file("repository-cassandra"))
   .settings(
@@ -125,7 +125,7 @@ lazy val `repository-cassandra` = projectWithName("repository-cassandra", file("
     Test / fork := true
   )
   .dependsOn(`repository-monad`)
-  .dependsOn(Seq(`repository`).map(_ % "test->test")*)
+  .dependsOn(Seq(`repository`).map(_ % "test->test") *)
 
 lazy val `repository-jdbc-monad` = projectWithName("repository-jdbc-monad", file("repository-jdbc-monad"))
   .settings(libraryDependencies ++= Seq(`io.getquill_quill-jdbc`))
