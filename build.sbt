@@ -25,6 +25,8 @@ ThisBuild / Test / fork := true
 
 ThisBuild / organization := "com.github.ajozwik"
 
+enablePlugins(MdocPlugin)
+
 ThisBuild / scalacOptions ++= Seq(
   "-encoding",
   "UTF-8",
