@@ -46,8 +46,8 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-source", targetJdk, "-target", targetJdk)
 
-val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.8.6")
-val quillCassandraVersion = quillVersion
+val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.8.5")
+val quillCassandraVersion = "4.8.4"
 
 val scalaTestVersion = "3.2.19"
 
@@ -59,7 +59,7 @@ val `dev.zio_zio-interop-cats`                       = "dev.zio"                
 val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillCassandraVersion
 val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillCassandraVersion
 val `io.getquill_quill-doobie`                       = "io.getquill"                %% "quill-doobie"            % quillVersion
-val `io.getquill_quill-jdbc-monix`                   = "io.getquill"                %% "quill-jdbc-monix"        % quillVersion
+val `io.getquill_quill-jdbc-monix`                   = "io.getquill"                %% "quill-jdbc-monix"        % quillCassandraVersion
 val `io.getquill_quill-jdbc-zio`                     = "io.getquill"                %% "quill-jdbc-zio"          % quillVersion
 val `io.getquill_quill-jdbc`                         = "io.getquill"                %% "quill-jdbc"              % quillVersion
 val `io.getquill_quill-sql`                          = "io.getquill"                %% "quill-sql"               % quillVersion
