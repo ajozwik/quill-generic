@@ -1,4 +1,4 @@
-val `scalaVersion_2.13` = "2.13.17"
+val `scalaVersion_2.13` = "2.13.18"
 
 val `scalaVersion_2.12` = "2.12.18"
 
@@ -49,13 +49,13 @@ ThisBuild / javacOptions ++= Seq("-Xlint:deprecation", "-Xdiags:verbose", "-sour
 val quillVersion          = scala.util.Properties.propOrElse("quill.version", "4.8.5")
 val quillCassandraVersion = "4.8.4"
 
-val scalaTestVersion = "3.2.19"
+val scalaTestVersion = "3.2.20"
 
 val `ch.qos.logback_logback-classic`                 = "ch.qos.logback"              % "logback-classic"         % "1.3.16"
 val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra"      % "cassandra-driver-extras" % "3.11.5"
 val `com.h2database_h2`                              = "com.h2database"              % "h2"                      % "2.4.240"
 val `com.typesafe.scala-logging_scala-logging`       = "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.6"
-val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.1.0.5"
+val `dev.zio_zio-interop-cats`                       = "dev.zio"                    %% "zio-interop-cats"        % "23.1.0.13"
 val `io.getquill_quill-cassandra-monix`              = "io.getquill"                %% "quill-cassandra-monix"   % quillCassandraVersion
 val `io.getquill_quill-cassandra`                    = "io.getquill"                %% "quill-cassandra"         % quillCassandraVersion
 val `io.getquill_quill-doobie`                       = "io.getquill"                %% "quill-doobie"            % quillVersion
@@ -66,10 +66,10 @@ val `io.getquill_quill-sql`                          = "io.getquill"            
 val `org.cassandraunit_cassandra-unit`               = "org.cassandraunit"           % "cassandra-unit"          % "4.3.1.0"
 val `org.scalacheck_scalacheck`                      = "org.scalacheck"             %% "scalacheck"              % "1.19.0"               % Test
 val `org.scalatest_scalatest`                        = "org.scalatest"              %% "scalatest"               % scalaTestVersion       % Test
-val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-18"         % s"$scalaTestVersion.0" % Test
+val `org.scalatestplus_scalacheck`                   = "org.scalatestplus"          %% "scalacheck-1-19"         % s"$scalaTestVersion.0" % Test
 val `org.tpolecat_doobie-h2`                         = "org.tpolecat"               %% "doobie-h2"               % "1.0.0-RC5"
 val `org.typelevel_cats-core`                        = "org.typelevel"              %% "cats-core"               % "2.13.0"
-val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.6.3"
+val `org.typelevel_cats-effect`                      = "org.typelevel"              %% "cats-effect"             % "3.7.0"
 
 def is213Version(version: String): Boolean = version.startsWith("2.13")
 

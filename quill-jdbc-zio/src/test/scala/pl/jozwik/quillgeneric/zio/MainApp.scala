@@ -49,7 +49,6 @@ object MainApp extends ZIOAppDefault with StrictLogging {
           logger.error(s"$e")
           e
         })
-        .exitCode
     } yield {
       logger.debug(s"$c")
     }

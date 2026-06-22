@@ -112,6 +112,7 @@ cdc_raw_directory: target/embeddedCassandra/cdc
 # ignore: ignore fatal errors and let requests fail, as in pre-1.2 Cassandra
 disk_failure_policy: stop
 
+disk_access_mode: standard
 
 # Maximum size of the key cache in memory.
 #
