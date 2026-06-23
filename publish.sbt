@@ -1,21 +1,7 @@
-ThisBuild / developers := List(
-  Developer(
-    id = "ajozwik",
-    name = "Andrzej Jozwik",
-    email = "andrzej.jozwik@gmail.com",
-    url = url("https://github.com/ajozwik")
-  )
-)
-
-ThisBuild / publishTo := sonatypePublishTo.value
-
-Test / publishArtifact := false
-
-ThisBuild / licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php"))
-
 val organizationUrl = "https://github.com/ajozwik"
+val projectUrl      = s"$organizationUrl/quill-generic"
 
-val projectUrl = s"$organizationUrl/quill-generic"
+ThisBuild / organizationHomepage := Option(url(organizationUrl))
 
 ThisBuild / scmInfo := Option(
   ScmInfo(
@@ -24,8 +10,30 @@ ThisBuild / scmInfo := Option(
   )
 )
 
-ThisBuild / organizationHomepage := Option(url(organizationUrl))
+ThisBuild / developers := List(
+  Developer(
+    id = "ajozwik",
+    name = "Andrzej Jozwik",
+    email = "andrzej.jozwik@gmail.com",
+    url = url(organizationUrl)
+  )
+)
+
+ThisBuild / description := "Generic repository for quill"
+
+ThisBuild / licenses := Seq("MIT License" -> url("https://www.opensource.org/licenses/mit-license.php"))
 
 ThisBuild / homepage := Option(url(projectUrl))
+
+ThisBuild / pomIncludeRepository := { _ => false }
+ThisBuild / publishMavenStyle    := true
+
+ThisBuild / publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if (isSnapshot.value) Option("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
+
+Test / publishArtifact := false
 
 ThisBuild / versionScheme := Option("semver-spec")
